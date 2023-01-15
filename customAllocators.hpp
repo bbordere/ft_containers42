@@ -1,0 +1,68 @@
+#include <queue>
+#include <sys/mman.h>
+#include <limits>
+
+template <typename T>
+class QueueAllocator 
+{
+	public:
+		typedef T value_type;
+
+		QueueAllocator(void) {};
+
+		T* allocate(std::size_t n) 
+		{
+			if (!n)
+				return (NULL);
+			if (n > max_size())
+				throw std::bad_alloc();
+
+			if (_free_list.empty())
+			{
+				size_t size = _block_size * sizeof(T);
+				void* newBlock = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+				if(newBlock == MAP_FAILED)
+					throw std::bad_alloc();
+				for (std::size_t i = 0; i < _block_size; i += sizeof(T))
+					_free_list.push(reinterpret_cast<T*>(newBlock) + i);
+			}
+			T* res = _free_list.front();
+			_free_list.pop();
+			return res;
+		}
+
+		void deallocate(T* p, std::size_t n)
+		{
+			_free_list.push(p);
+		}
+
+		template <typename U, typename ...Args>
+		void construct(U* p, Args&&... args)
+		{
+			::new(p) U(std::forward<Args>(args)...);
+		}
+
+		template <typename U>
+		void destroy(U* p)
+		{
+			p->~U();
+		}
+
+		std::size_t max_size() const
+		{
+			return std::numeric_limits<std::size_t>::max() / sizeof(T);
+		}
+
+		~QueueAllocator()
+		{
+			while(!_free_list.empty())
+			{
+				munmap(_free_list.front(), _block_size * sizeof(T));
+				_free_list.pop();
+			}
+		}
+
+	private:
+		std::queue<T*> _free_list;
+		const std::size_t _block_size = 1024;
+};
