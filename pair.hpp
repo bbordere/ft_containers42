@@ -1,6 +1,8 @@
 #ifndef __PAIR_HPP__
 #define __PAIR_HPP__
 
+#include <iterator>
+
 namespace ft
 {
 	template <typename T1, typename T2>
@@ -74,13 +76,13 @@ namespace ft
 	{
 		return (!(l < r));
 	}
-}
 
-template <class T, class U>
-std::ostream &operator<<(std::ostream &stream, ft::pair<T, U> const &pair)
-{
-	stream << '(' << pair.first << ", " << pair.second << ')';
-	return (stream);
+	template <class T, class U>
+	std::ostream &operator<<(std::ostream &stream, ft::pair<T, U> const &pair)
+	{
+		stream << '(' << pair.first << ", " << pair.second << ')';
+		return (stream);
+	}
 }
 
 #endif

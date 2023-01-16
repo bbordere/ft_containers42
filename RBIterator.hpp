@@ -16,7 +16,7 @@ class RBIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 		typedef	T*				pointer;
 		typedef RBIterator<T>	iterator;
 
-	private:
+	public:
 		node_ptr _ptr;
 
 	public:
@@ -75,29 +75,35 @@ class RBIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 
 		pointer operator->(void) const { return (&_ptr->_val);}
 
+		iterator *operator=(iterator const &assign)
+		{
+			_ptr = assign._ptr;
+			return (*this);
+		}
+
 		iterator	&operator++(void)
 		{
-			_ptr = _increment(_ptr);
+			_ptr = node::_increment(_ptr);
 			return (*this);
 		}
 
 		iterator	operator++(int)
 		{
 			iterator temp = *this;
-			_ptr = _increment(_ptr);
+			_ptr = node::_increment(_ptr);
 			return (temp);
 		}
 
 		iterator	&operator--(void)
 		{
-			_ptr = _decrement(_ptr);
+			_ptr = node::_decrement(_ptr);
 			return (*this);
 		}
 
 		iterator	operator--(int)
 		{
 			iterator temp = *this;
-			_ptr = _decrement(_ptr);
+			_ptr = node::_decrement(_ptr);
 			return (temp);
 		}
 		node_ptr base() const
@@ -119,5 +125,68 @@ class RBIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 		}
 };
 
+
+template <class T>
+class RBConstIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
+{
+	public:
+		typedef RBNode<T>				node;
+		typedef	node*					node_ptr;
+		typedef	T						value_type;
+		typedef	const T&				reference;
+		typedef	const T*				pointer;
+		typedef RBIterator<T>			iterator;
+		typedef RBConstIterator<T>		const_iterator;
+
+	public:
+		node_ptr _ptr;
+
+	public:
+		RBConstIterator(void): _ptr(NULL) {}
+		RBConstIterator(node_ptr ptr): _ptr(ptr) {}
+		RBConstIterator(const iterator &it): _ptr(it._ptr) {}
+
+		reference operator*(void) const { return (_ptr->_val);}
+
+		pointer operator->(void) const { return (&_ptr->_val);}
+
+		const_iterator	&operator++(void)
+		{
+			_ptr = node::_increment(_ptr);
+			return (*this);
+		}
+
+		const_iterator	operator++(int)
+		{
+			const_iterator temp = *this;
+			_ptr = node::_increment(_ptr);
+			return (temp);
+		}
+
+		const_iterator	&operator--(void)
+		{
+			_ptr = node::_decrement(_ptr);
+			return (*this);
+		}
+
+		const_iterator	operator--(int)
+		{
+			const_iterator temp = *this;
+			_ptr = node::_decrement(_ptr);
+			return (temp);
+		}
+		node_ptr base() const
+		{
+			return (_ptr);
+		}
+
+		friend bool	operator==(const_iterator const& x, const_iterator const& y) {
+			return x.base() == y.base();
+		}
+
+		friend bool	operator!=(const_iterator const& x, const_iterator const& y) {
+			return x.base() != y.base();
+		}
+};
 
 #endif

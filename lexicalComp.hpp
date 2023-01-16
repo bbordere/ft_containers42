@@ -64,35 +64,6 @@ namespace ft
 	}
 }
 
-template <class T, class U>
-class pairKeyComp
-{
-	public:
-		bool	operator()(ft::pair<T, U> const &lhs, ft::pair<T, U> const &rhs) const
-		{
-			return (lhs.first < rhs.first);
-		}
-};
-
-template <class T>
-struct	KeyEqual
-{
-	bool	operator()(T const &x, T const &y) const
-	{
-		return (x == y);
-	}
-};
-
-template <class T, class U>
-struct	KeyEqual<ft::pair<T, U>>
-{
-	bool	operator()(ft::pair<T, U> const &lhs, ft::pair<T, U> const &rhs) const
-	{
-		return (lhs.first == rhs.first);
-	}
-};
-
-
 // int main(int argc, char const *argv[])
 // {
 // 	std::vector<char> al1 = {'a', 'b', 'c'};

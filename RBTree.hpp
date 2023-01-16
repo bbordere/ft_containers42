@@ -19,7 +19,7 @@ class RBTree
 		typedef	RBIterator<value_type>			iterator;
 
 
-		typedef	RBIterator<value_type const>	const_iterator; // NOT WORKING NEED REWORK NODE STRUCTURE REWORK
+		typedef	RBConstIterator<value_type>	const_iterator; // NOT WORKING NEED REWORK NODE STRUCTURE REWORK
 
 	private:
 	public:
@@ -33,9 +33,26 @@ class RBTree
 	RBTree(void): _alloc(alloc_type())
 	{
 		_nil = createNil();
-		_comp = Compare();
 		_root = _nil;
+		_comp = Compare();
 		_size = 0;
+	}
+
+	RBTree(Compare const &comp, Alloc const& alloc)
+	{
+		_alloc = alloc;
+		_nil = createNil();
+		_comp = comp;
+		_root = _nil;
+		_size = 0;	
+	}
+
+	RBTree(RBTree const &copy): _alloc(copy._alloc)
+	{
+		_nil = createNil();
+		_root = _nil;
+		_comp = copy._comp;
+		*this = copy;
 	}
 
 	void	clearTree(node_ptr node)
@@ -121,7 +138,30 @@ class RBTree
 		else
 			parent->_right = newNode;
 		fixInsert(newNode);
+		_size++;
 		return (newNode);
+	}
+
+	void	insert(const_iterator first, const_iterator last)
+	{
+		while (first != last)
+		{
+			insert(*first);
+			first++;
+		}
+	}
+
+	RBTree &operator=(RBTree const &assign)
+	{
+		if (this != &assign)
+		{
+			if (_root != _nil)
+				clearTree(_root);
+			_keyEqual = assign._keyEqual;
+			if (assign._root != assign._nil)
+				insert(assign.begin(), assign.end());
+		}
+		return (*this);
 	}
 
 	void lRotate(node_ptr x)
@@ -230,7 +270,7 @@ class RBTree
 		v->_parent = u->_parent;
 	}
 
-	node_ptr	getMin(node_ptr	node)
+	node_ptr	getMin(node_ptr	node) const
 	{
 		node_ptr	temp = node;
 		while(temp->_left != _nil)
@@ -369,6 +409,7 @@ class RBTree
 			fixDelete(fix);
 		_nil->_parent = _root;
 		destroyNode(toDel);
+		_size--;
 		return (true);
 	}
 
@@ -382,9 +423,47 @@ class RBTree
 		return(iterator(_nil));
 	}
 
+	const_iterator	begin(void) const
+	{
+		return (const_iterator(getMin(_root)));
+	}
 
+	const_iterator	end(void) const
+	{
+		return(const_iterator(_nil));
+	}
 
+	iterator	lower_bound(value_type const &key)
+	{
+		iterator it = begin();
+		while (it != end() && _comp(*it, key))
+			++it;
+		return (--it);
+	}
 
+	const_iterator	lower_bound(value_type const &key) const
+	{
+		const_iterator it = begin();
+		while (it != end() && _comp(*it, key))
+			++it;
+		return (--it);
+	}
+
+	iterator	upper_bound(value_type const &key)
+	{
+		iterator it = begin();
+		while (it != end() && (_comp(*it, key) || _keyEqual(*it, key)))
+			++it;
+		return (it);
+	}
+
+	const_iterator	upper_bound(value_type const &key) const
+	{
+		const_iterator it = begin();
+		while (it != end() && (_comp(*it, key) || _keyEqual(*it, key)))
+			++it;
+		return (it);
+	}
 
 
 

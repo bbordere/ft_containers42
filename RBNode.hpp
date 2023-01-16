@@ -10,8 +10,8 @@ template <typename T>
 struct RBNode
 {
 	typedef T 			value_type;
-	typedef RBNode<T>	*node_ptr;
 	typedef RBNode<T>	node;
+	typedef node		*node_ptr;
 
 	value_type	_val;
 	node_ptr	_parent;
@@ -23,11 +23,7 @@ struct RBNode
 
 	RBNode(value_type const &val, node_ptr parent, bool color): _val(val), _parent(parent), _left(NULL), _right(NULL), _color(color) {}
 
-
 	RBNode(value_type const &val): _val(val), _parent(NULL), _left(NULL), _right(NULL), _color(RED) {}
-
-	RBNode(node const &copy): _val(copy._val), _parent(copy._parent), _left(copy._left), _right(copy._right), _color(copy._color) {}
-	RBNode(node const *copy): _val(copy->_val), _parent(copy->_parent), _left(copy->_left), _right(copy->_right), _color(copy->_color) {}
 
 	node	&operator=(node const &assign)
 	{
@@ -47,6 +43,54 @@ struct RBNode
 		_right - assign->_right;
 		_color = assign->_color;
 		return (*this);
+	}
+
+	static	bool	_isNil(node_ptr node) {return (!node->_right && !node->_left);}
+
+	static node_ptr	_increment(node_ptr node)
+	{
+		if (_isNil(node))
+			node = node->_parent;
+		else if (!_isNil(node->_right)) 
+		{
+			node = node->_right;
+			while (!_isNil(node->_left))
+				node = node->_left;
+		}			
+		else 
+		{
+			node_ptr	y = node->_parent;
+			while (!_isNil(y) && node == y->_right) 
+			{
+				node = y;
+				y = y->_parent;
+				}
+			node = y;
+		}
+		return node;
+	}
+
+	static node_ptr	_decrement(node_ptr node)
+	{
+		if (_isNil(node))
+			node = node->_parent;
+		else if (!_isNil(node->_left)) 
+		{
+			node = node->_left;
+			while (!_isNil(node->_right))
+				node = node->_right;
+		}			
+		else 
+		{
+			node_ptr	y = node->_parent;
+			while (!_isNil(y) && node == y->_left) 
+			{
+				node = y;
+				y = y->_parent;
+				}
+			node = y;
+		}
+		return node;
 	}
 
 	bool	operator==(node const &other) const {return (_val == other._val && _parent == other._parent);}
