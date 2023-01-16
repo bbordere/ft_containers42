@@ -38,7 +38,8 @@ namespace ft
 		}
 	};
 
-	template <class Key, class T, class Compare = pairKeyComp<Key, T>, class Alloc = std::allocator<ft::pair<Key, T> > >
+	// template <class Key, class T, class Compare = pairKeyComp<Key, T>, class Alloc = std::allocator<ft::pair<Key, T> > >
+	template <class Key, class T, class Compare = std::less<ft::pair<Key, T>>, class Alloc = std::allocator<ft::pair<Key, T> > >
 	class map
 	// RBTree<ft::pair<char, int> , KeyEqual<ft::pair<char, int>>, pairKeyComp<char, int>, QueueAllocator<RBNode<ft::pair<char, int>>>> tree;
 	{
@@ -58,6 +59,9 @@ namespace ft
 
 			typedef RBIterator<value_type>		iterator;
 			typedef RBConstIterator<value_type> const_iterator;
+
+			typedef RBReverseIterator<iterator> reverse_iterator;
+			typedef RBReverseIterator<const_iterator> const_reverse_iterator;
 
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef std::size_t												size_type;
@@ -91,12 +95,25 @@ namespace ft
 
 			~map() {}
 
-			iterator find(Key const &key)
+			iterator find(key_type const &key)
 			{
 				node_ptr ptr = _tree.search(ft::make_pair(key, T()));
 				if (ptr == _tree._nil)
 					return (_tree.end());
 				return (iterator(ptr));
+			}
+
+			const_iterator find(key_type const &key) const
+			{
+				node_ptr ptr = _tree.search(ft::make_pair(key, T()));
+				if (ptr == _tree._nil)
+					return (_tree.end());
+				return (const_iterator(ptr));
+			}
+
+			size_type	count(key_type const &k) const
+			{
+				return (_tree.search(ft::make_pair(k, mapped_type())) == _tree._nil ? 0 : 1);
 			}
 
 			ft::pair<iterator, bool> insert(value_type const &val)
@@ -112,6 +129,62 @@ namespace ft
 				_tree.insert(first, last);
 			}
 
+			iterator insert (iterator position, const value_type& val)
+			{
+				static_cast<void>(position);
+				return (insert(val).first);
+			}
+
+			void	erase(iterator position)
+			{
+				_tree.deleteNode(*position);
+			}
+
+			void	erase(const_iterator position)
+			{
+				_tree.deleteNode(*position);
+			}
+
+			size_type erase(key_type const &key)
+			{
+				size_type oldSize = _tree._size;
+				_tree.deleteNode(ft::make_pair(key, mapped_type()));
+				return (oldSize - _tree._size);
+			}
+
+			void	erase(iterator first, iterator last)
+			{
+				if (first == begin() && last == end())
+				{
+					clear();
+					return;
+				}
+				while (first != last)
+					erase(first++);
+			}
+
+			void	erase(const_iterator first, const_iterator last)
+			{
+				if (first == begin() && last == end())
+				{
+					clear();
+					return;
+				}
+				while (first != last)
+					erase(first++);
+			}
+
+			void	clear(void)
+			{
+				_tree.clearTree(_tree._root);
+				_tree._root = _tree._nil;
+				_tree._root->_parent = _tree._nil;
+			}
+
+			void	swap(map &other)
+			{
+				_tree.swap(other._tree);
+			}
 
 			iterator begin(void)
 			{
@@ -122,6 +195,38 @@ namespace ft
 			{
 				return (_tree.end());
 			}
+
+			const_iterator begin(void) const
+			{
+				return (_tree.begin());
+			}
+
+			const_iterator end(void) const
+			{
+				return (_tree.end());
+			}
+
+
+			reverse_iterator rbegin(void)
+			{
+				return (reverse_iterator(end()));
+			}
+
+			reverse_iterator rend(void)
+			{
+				return (reverse_iterator(begin()));
+			}
+
+			const_reverse_iterator rbegin(void) const
+			{
+				return (_tree.end());
+			}
+
+			const_reverse_iterator rend(void) const
+			{
+				return (_tree.begin());
+			}
+
 
 			bool	empty(void) const
 			{
@@ -157,6 +262,31 @@ namespace ft
 					return (insert(ft::make_pair(key, mapped_type())).first->second);
 				return (node->_val.second);
 			}
+
+			ft::pair<iterator, iterator>	equal_range(key_type const &k)
+			{
+				return (ft::make_pair(lower_bound(k), upper_bound(k)));
+			}
+
+			ft::pair<const_iterator, const_iterator>	equal_range(key_type const &k) const
+			{
+				return (ft::make_pair(lower_bound(k), upper_bound(k)));
+			}
+
+			key_compare key_comp(void) const
+			{
+				return (key_compare());
+			}
+
+			val_compare val_comp(void) const
+			{
+				return (val_compare());
+			}
+
+			allocator_type get_allocator(void) const
+			{
+				return (allocator_type());
+			}
 	};
 
 }
@@ -164,6 +294,11 @@ namespace ft
 template <class Key, class T, class Compare, class Allocator>
 std::ostream &operator<<(std::ostream &stream, ft::map<Key, T, Compare, Allocator> &map)
 {
+	if (map.empty())
+	{
+		stream << "{}";
+		return (stream);
+	}
 	auto it = map.begin();
 	stream << '{';
 	while (it != map.end())

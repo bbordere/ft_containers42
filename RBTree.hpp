@@ -38,9 +38,8 @@ class RBTree
 		_size = 0;
 	}
 
-	RBTree(Compare const &comp, Alloc const& alloc)
+	RBTree(Compare const &comp, Alloc const& alloc): _alloc(alloc)
 	{
-		_alloc = alloc;
 		_nil = createNil();
 		_comp = comp;
 		_root = _nil;
@@ -78,6 +77,16 @@ class RBTree
 		_alloc.deallocate(node, 1);
 	}
 
+	void swap(RBTree &other)
+	{
+		std::swap(_root, other._root);
+		std::swap(_nil, other._nil);
+		std::swap(_alloc, other._alloc);
+		std::swap(_size, other._size);
+		std::swap(_comp, other._comp);
+		std::swap(_keyEqual, other._keyEqual);
+	}
+
 	node_ptr	createNil(void)
 	{
 		node_ptr nill = _alloc.allocate(1);
@@ -99,7 +108,7 @@ class RBTree
 		return (newNode);
 	}
 
-	node_ptr	search(value_type val)
+	node_ptr	search(value_type const &val) const
 	{
 		node_ptr	node = _root;
 		while (node != _nil)
@@ -256,7 +265,7 @@ class RBTree
 			}
 		}
 		_root->_color = BLACK;
-		_nil->_parent = _root;
+		_nil->_parent = node;
 	}
 
 	void	transplant(node_ptr u, node_ptr v)
@@ -438,7 +447,7 @@ class RBTree
 		iterator it = begin();
 		while (it != end() && _comp(*it, key))
 			++it;
-		return (--it);
+		return (it);
 	}
 
 	const_iterator	lower_bound(value_type const &key) const

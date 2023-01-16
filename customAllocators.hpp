@@ -7,6 +7,10 @@ class QueueAllocator
 {
 	public:
 		typedef T value_type;
+		typedef T* pointer;
+		typedef T const * const_pointer;
+		typedef T& reference;
+		typedef T const & const_reference;
 
 		QueueAllocator(void) {};
 
