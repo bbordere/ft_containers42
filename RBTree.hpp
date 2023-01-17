@@ -6,7 +6,7 @@
 #include <iostream>
 
 
-template <class T, class KeyEqual, class Compare = std::less<T>, class Alloc = std::allocator<RBNode<T>>>
+template <class T, class KeyEqual, class Compare = std::less<T>, class Alloc = std::allocator<T>>
 class RBTree
 {
 
@@ -17,20 +17,21 @@ class RBTree
 		typedef	Alloc		alloc_type;
 
 		typedef	RBIterator<value_type>			iterator;
+		typedef	RBConstIterator<value_type>	const_iterator;
 
+		typedef typename Alloc::template rebind<RBNode<value_type>>::other	node_allocator;
 
-		typedef	RBConstIterator<value_type>	const_iterator; // NOT WORKING NEED REWORK NODE STRUCTURE REWORK
 
 	private:
 	public:
 		node_ptr	_root;
 		node_ptr	_nil;
-		alloc_type	_alloc;
+		node_allocator	_alloc;
 		std::size_t	_size;
 		Compare		_comp;
 		KeyEqual	_keyEqual;
 
-	RBTree(void): _alloc(alloc_type())
+	RBTree(void): _alloc(node_allocator())
 	{
 		_nil = createNil();
 		_root = _nil;
@@ -38,7 +39,7 @@ class RBTree
 		_size = 0;
 	}
 
-	RBTree(Compare const &comp, Alloc const& alloc): _alloc(alloc)
+	RBTree(Compare const &comp, Alloc const& alloc): _alloc(node_allocator())
 	{
 		_nil = createNil();
 		_comp = comp;

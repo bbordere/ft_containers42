@@ -11,7 +11,8 @@
 #include "map.hpp"
 
 #include "customAllocators.hpp"
-
+#include "randomAccessIterators.hpp"
+#include "vector.hpp"
 
 int main()
 {
@@ -113,14 +114,36 @@ int main()
 //   ft::map<char,int>::reverse_iterator rit;
 //   for (rit=mymap.rbegin(); rit!=mymap.rend(); ++rit)
 //     std::cout << rit->first << " => " << rit->second << '\n';
+
 	// ft::map<int, int, std::less<ft::pair<int, int>>, QueueAllocator<ft::pair<int, int>> > map;
-	ft::map<int, int> map;
-	for (int i = 0; i < 500000; i++)
-		map.insert(ft::make_pair(i, i * 2));
-	std::cout << map._tree.isValidTree() << std::endl;
+	// // ft::map<int, int> map;
+	// // ft::map<int, int> map;
+	// for (int i = 0; i < 50000; i++)
+	// 	map.insert(ft::make_pair(i, i * 2));
+	// // std::cout << map._tree.isValidTree() << std::endl;
+	// // std::cout << map << std::endl;
+
+	// int i[16] = {};
+	// ft::randomAccessIterators<int> it;
+	// it._ptr = &i[0];
+	// *it = 45;
+	// ++it;
+	// --it;
+	// it++;
+	// it--;
+	// std::cout << ++(*it) << std::endl;
+
+	ft::vector<float> vec(10, 56.323);
+	ft::vector<float>::iterator test = vec.begin();
+	ft::vector<float>::const_iterator test2 = vec.begin();
+	std::cout << (test == test2) << std::endl;
+	std::cout << (test != test2) << std::endl;
+	std::cout << (test >= test2) << std::endl;
+	std::cout << (test > test2) << std::endl;
+	std::cout << (test <= test2) << std::endl;
+	std::cout << (test < test2) << std::endl;
 
 
-
-  return 0;
+	return 0;
 }
 

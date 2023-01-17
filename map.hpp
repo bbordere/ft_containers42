@@ -46,7 +46,7 @@ namespace ft
 		public:
 			typedef Key							key_type;
 			typedef T							mapped_type;
-			typedef	ft::pair<const Key, T>		value_type;
+			typedef	ft::pair<Key, T>		value_type;
 			typedef Compare						key_compare;
 			typedef pairKeyComp<Key, T>			val_compare;
 			typedef Alloc						allocator_type;
@@ -70,7 +70,7 @@ namespace ft
 			typedef	RBNode<value_type>			node;
 			typedef	node*						node_ptr;
 
-			typedef RBTree<value_type, KeyEqual<value_type>, key_compare> treeType;
+			typedef RBTree<value_type, KeyEqual<value_type>, key_compare, allocator_type> treeType;
 
 		private:
 		public:

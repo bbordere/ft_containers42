@@ -12,7 +12,13 @@ class QueueAllocator
 		typedef T& reference;
 		typedef T const & const_reference;
 
-		QueueAllocator(void) {};
+		QueueAllocator(void) {}
+
+		template <class Type>
+		struct rebind
+		{
+  			typedef QueueAllocator<Type> other;
+		};
 
 		T* allocate(std::size_t n) 
 		{
@@ -68,5 +74,5 @@ class QueueAllocator
 
 	private:
 		std::queue<T*> _free_list;
-		const std::size_t _block_size = 1024;
+		static const std::size_t _block_size = 1024;
 };
