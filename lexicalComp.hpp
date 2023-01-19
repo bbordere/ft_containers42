@@ -12,12 +12,12 @@ namespace ft
 	{
 		while ((first1 != last1) && (first2 != last2))
 		{
-			first1++;
-			first2++;
 			if (*first1 < *first2)
 				return (true);
 			if (*first2 < *first1)
 				return (false);
+			first1++;
+			first2++;
 		}
 		return ((first1 == last1) && (first2 != last2));
 	}
@@ -27,12 +27,12 @@ namespace ft
 	{
 		while ((first1 != last1) && (first2 != last2))
 		{
-			first1++;
-			first2++;
 			if (comp(*first1 < *first2))
 				return (true);
 			if (comp(*first2 < *first1))
 				return (false);
+			first1++;
+			first2++;
 		}
 		return ((first1 == last1) && (first2 != last2));
 	}

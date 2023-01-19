@@ -11,8 +11,10 @@ class QueueAllocator
 		typedef T const * const_pointer;
 		typedef T& reference;
 		typedef T const & const_reference;
+		typedef std::size_t    size_type;
+		typedef std::ptrdiff_t difference_type;
 
-		QueueAllocator(void) {}
+		QueueAllocator(void): _block_size(1024) {}
 
 		template <class Type>
 		struct rebind
@@ -20,13 +22,21 @@ class QueueAllocator
   			typedef QueueAllocator<Type> other;
 		};
 
+		pointer address (reference value) const
+		{
+			return &value;
+		}
+		const_pointer address (const_reference value) const
+		{
+			return &value;
+		}
+
 		T* allocate(std::size_t n) 
 		{
 			if (!n)
 				return (NULL);
 			if (n > max_size())
 				throw std::bad_alloc();
-
 			if (_free_list.empty())
 			{
 				size_t size = _block_size * sizeof(T);
@@ -46,10 +56,9 @@ class QueueAllocator
 			_free_list.push(p);
 		}
 
-		template <typename U, typename ...Args>
-		void construct(U* p, Args&&... args)
+		void construct (pointer p, const_reference val)
 		{
-			::new(p) U(std::forward<Args>(args)...);
+			new((void *)p) T(val);
 		}
 
 		template <typename U>
@@ -74,5 +83,5 @@ class QueueAllocator
 
 	private:
 		std::queue<T*> _free_list;
-		static const std::size_t _block_size = 1024;
+		std::size_t _block_size;
 };

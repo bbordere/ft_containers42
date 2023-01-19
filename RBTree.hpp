@@ -6,7 +6,7 @@
 #include <iostream>
 
 
-template <class T, class KeyEqual, class Compare = std::less<T>, class Alloc = std::allocator<T>>
+template <class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 class RBTree
 {
 
@@ -19,17 +19,15 @@ class RBTree
 		typedef	RBIterator<value_type>			iterator;
 		typedef	RBConstIterator<value_type>	const_iterator;
 
-		typedef typename Alloc::template rebind<RBNode<value_type>>::other	node_allocator;
+		typedef typename Alloc::template rebind<RBNode<value_type> >::other	node_allocator;
 
 
-	private:
-	public:
-		node_ptr	_root;
-		node_ptr	_nil;
-		node_allocator	_alloc;
-		std::size_t	_size;
-		Compare		_comp;
-		KeyEqual	_keyEqual;
+		public:
+			node_ptr	_root;
+			node_ptr	_nil;
+			node_allocator	_alloc;
+			std::size_t	_size;
+			Compare		_comp;
 
 	RBTree(void): _alloc(node_allocator())
 	{
@@ -39,21 +37,20 @@ class RBTree
 		_size = 0;
 	}
 
-	RBTree(Compare const &comp, Alloc const& alloc): _alloc(node_allocator())
+	explicit RBTree(Compare const &comp, Alloc const& alloc = node_allocator()): _alloc(alloc), _comp(comp)
 	{
 		_nil = createNil();
-		_comp = comp;
 		_root = _nil;
 		_size = 0;	
 	}
 
-	RBTree(RBTree const &copy): _alloc(copy._alloc)
-	{
-		_nil = createNil();
-		_root = _nil;
-		_comp = copy._comp;
-		*this = copy;
-	}
+	// RBTree(RBTree const &copy): _alloc(copy._alloc)
+	// {
+	// 	_nil = createNil();
+	// 	_root = _nil;
+	// 	_comp = copy._comp;
+	// 	*this = copy;
+	// }
 
 	void	clearTree(node_ptr node)
 	{
@@ -85,7 +82,6 @@ class RBTree
 		std::swap(_alloc, other._alloc);
 		std::swap(_size, other._size);
 		std::swap(_comp, other._comp);
-		std::swap(_keyEqual, other._keyEqual);
 	}
 
 	node_ptr	createNil(void)
@@ -102,8 +98,10 @@ class RBTree
 	node_ptr	createNode(value_type val, node_ptr parent)
 	{
 		node_ptr	newNode = _alloc.allocate(1);
-		_alloc.construct(newNode, val, parent, RED);
+		// _alloc.construct(newNode, val, parent, RED);
+		_alloc.construct(newNode, val);
 
+		newNode->_parent = parent;
 		newNode->_left = _nil;
 		newNode->_right = _nil;
 		return (newNode);
@@ -114,7 +112,7 @@ class RBTree
 		node_ptr	node = _root;
 		while (node != _nil)
 		{
-			if (_keyEqual(node->_val, val))
+			if (!_comp(val, node->_val) && !_comp(node->_val, val))
 				return (node);
 			else if (_comp(node->_val, val))
 				node = node->_right;
@@ -167,7 +165,6 @@ class RBTree
 		{
 			if (_root != _nil)
 				clearTree(_root);
-			_keyEqual = assign._keyEqual;
 			if (assign._root != assign._nil)
 				insert(assign.begin(), assign.end());
 		}
@@ -462,7 +459,7 @@ class RBTree
 	iterator	upper_bound(value_type const &key)
 	{
 		iterator it = begin();
-		while (it != end() && (_comp(*it, key) || _keyEqual(*it, key)))
+		while (it != end() && (_comp(*it, key) || (!_comp(*it, key) && !_comp(key, *it))))
 			++it;
 		return (it);
 	}
@@ -470,7 +467,7 @@ class RBTree
 	const_iterator	upper_bound(value_type const &key) const
 	{
 		const_iterator it = begin();
-		while (it != end() && (_comp(*it, key) || _keyEqual(*it, key)))
+		while (it != end() && (_comp(*it, key) || (!_comp(*it, key) && !_comp(key, *it))))
 			++it;
 		return (it);
 	}

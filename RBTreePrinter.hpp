@@ -51,8 +51,8 @@ void printTree(std::ostream &stream, RBNode<T>* node, RBNode<T>* nil, subTree *p
 	printTree(stream, node->_left, nil, &sub, false);
 }
 
-template <class T, class KeyEqual, class Compare, class Alloc>
-std::ostream &operator<<(std::ostream &stream, RBTree<T, KeyEqual, Compare, Alloc> & tree)
+template <class T, class Compare, class Alloc>
+std::ostream &operator<<(std::ostream &stream, RBTree<T, Compare, Alloc> & tree)
 {
 	printTree(stream, tree._root, tree._nil, NULL, false);
 	stream << std::endl;

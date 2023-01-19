@@ -4,15 +4,36 @@
 #include "RBTreePrinter.hpp"
 #include "pair.hpp"
 #include <iostream>
+#include <string>
 #include <vector>
 #include <set>
+#include <map>
 #include <algorithm>
 #include "lexicalComp.hpp"
 #include "map.hpp"
+// #include "stack.hpp"
 
 #include "customAllocators.hpp"
 #include "randomAccessIterators.hpp"
 #include "vector.hpp"
+#include "reverseIterators.hpp"
+
+#include <stack>
+
+template <typename T>
+std::ostream &operator<<(std::ostream &stream, std::vector<T> const &vec)
+{
+	if (vec.empty())
+	{
+		stream << "[]";
+		return (stream);
+	}
+	stream << '[';
+	for (typename std::vector<T>::iterator it = vec.begin(); it != vec.end() - 1; it++)
+		stream << *it << ", ";
+	stream << *(vec.end() - 1) << ']';
+	return (stream);	
+}
 
 int main()
 {
@@ -75,7 +96,7 @@ int main()
 	// // std::cout << map << std::endl;
 
 
-	// ft::map<int, std::string, std::less<ft::pair<int, std::string> >> myMap;
+	// ft::map<int, std::string> myMap;
 	// myMap.insert(ft::make_pair(1, "un"));
 	// myMap.insert(ft::make_pair(2, "deux"));
 	// myMap.insert(ft::make_pair(3, "trois"));
@@ -86,6 +107,7 @@ int main()
 	// myMap.insert(ft::make_pair(8, "huit"));
 	// myMap.insert(ft::make_pair(9, "neuf"));
 	// myMap.insert(myMap.begin(), ft::make_pair(10, "dix"));
+	// std::cout << myMap;
 
 	// // std::cout << myMap << std::endl;
 	// // myMap.erase(myMap.begin());
@@ -120,30 +142,157 @@ int main()
 	// // ft::map<int, int> map;
 	// for (int i = 0; i < 50000; i++)
 	// 	map.insert(ft::make_pair(i, i * 2));
-	// // std::cout << map._tree.isValidTree() << std::endl;
-	// // std::cout << map << std::endl;
+	// std::cout << map._tree.isValidTree() << std::endl;
+	// std::cout << map << std::endl;
 
-	// int i[16] = {};
-	// ft::randomAccessIterators<int> it;
-	// it._ptr = &i[0];
-	// *it = 45;
-	// ++it;
-	// --it;
-	// it++;
-	// it--;
-	// std::cout << ++(*it) << std::endl;
+	// ft::vector<float, QueueAllocator<float>> vec(100000, 56.323);
+	// ft::vector<int> vec(static_cast<std::size_t>(100), 42);
+	// ft::vector<int> vec2(vec.begin(), vec.end());
+	// ft::vector<int> vec3;
+	// vec3 = vec;
+	// ft::vector<int> vec4(vec3);
+	// std::cout << vec4 << std::endl;
 
-	ft::vector<float> vec(10, 56.323);
-	ft::vector<float>::iterator test = vec.begin();
-	ft::vector<float>::const_iterator test2 = vec.begin();
-	std::cout << (test == test2) << std::endl;
-	std::cout << (test != test2) << std::endl;
-	std::cout << (test >= test2) << std::endl;
-	std::cout << (test > test2) << std::endl;
-	std::cout << (test <= test2) << std::endl;
-	std::cout << (test < test2) << std::endl;
+	// ft::vector<float>::iterator test = vec.begin();
+	// ft::vector<float>::const_iterator test2 = vec.begin();
+	// std::cout << (test == test2) << std::endl;
+	// std::cout << (test != test2) << std::endl;
+	// std::cout << (test >= test2) << std::endl;
+	// std::cout << (test > test2) << std::endl;
+	// std::cout << (test <= test2) << std::endl;
+	// std::cout << (test < test2) << std::endl;
 
+	// ft::vector<int> v(vec.begin(), vec.end());
 
+	// ft::vector<int> vec;
+	// for (int i = 0; i < 50; i++)
+	// 	vec.push_back(i % 2);
+	// std::cout << vec << std::endl;
+	// vec.resize(55);
+	// std::cout << vec << std::endl;
+	// std::cout << vec.size() << std::endl;
+	// vec.resize(1);
+	// std::cout << vec << std::endl;
+	// std::cout << vec.size() << std::endl;
+	// std::cout << vec.capacity() << std::endl;
+
+	// ft::vector<int> vec;
+	// for (int i = 0; i < 50; i++)
+	// 	vec.push_back(i);
+	// std::cout << vec.back() << std::endl;
+	// vec.pop_back();
+	// std::cout << vec.back() << std::endl;
+	// std::cout << vec << std::endl;
+
+	// ft::vector<int> vec;
+	// for (int i = 0; i < 12; i++)
+	// 	vec.push_back(i);
+	// std::cout << vec << std::endl;
+	// vec.insert(vec.begin(), 5, 42);
+	// std::cout << vec << std::endl;
+	// vec.insert(vec.begin(), 56);
+	// std::cout << vec << std::endl;
+	// vec.insert(vec.end(), 10, 6969);
+	// std::cout << vec << std::endl;
+
+	// ft::vector<int> vec;
+	// for (int i = 0; i < 10; i++)
+	// 	vec.push_back(i);
+	// ft::vector<int> fill(15, 69);
+
+	// vec.insert(vec.end(), fill.begin(), fill.end());
+	// std::cout << vec << std::endl;
+	// ft::vector<int> first;
+	// ft::vector<int> second;
+	// ft::vector<int> third;
+
+	// first.assign (7,100);             // 7 ints with a value of 100
+
+	// ft::vector<int>::iterator it;
+	// it=first.begin()+1;
+
+	// second.assign (it,first.end()-1); // the 5 central values of first
+
+	// int myints[] = {1776,7,4};
+	// third.assign (myints,myints+3);   // assigning from array.
+
+	// std::cout << "Size of first: " << int (first.size()) << '\n';
+	// std::cout << first << std::endl;
+	// std::cout << "Size of second: " << int (second.size()) << '\n';
+	// std::cout << second << std::endl;
+	// std::cout << "Size of third: " << int (third.size()) << '\n';
+	// std::cout << third << std::endl;
+
+	// ft::vector<int> myvector;
+
+	// // set some values (from 1 to 10)
+	// for (int i=1; i<=10; i++) myvector.push_back(i);
+
+	// // erase the 6th element
+	// myvector.erase (myvector.begin()+5);
+
+	// // erase the first 3 elements:
+	// myvector.erase (myvector.begin(),myvector.begin()+3);
+
+	// std::cout << "myvector contains:";
+	// for (unsigned i=0; i<myvector.size(); ++i)
+	// 	std::cout << ' ' << myvector[i];
+	// std::cout << '\n';
+
+	// ft::vector<int> foo (3,100);   // three ints with a value of 100
+	// ft::vector<int> bar (5,200);   // five ints with a value of 200
+
+	// foo.swap(bar);
+
+	// std::cout << "foo contains:";
+	// for (unsigned i=0; i<foo.size(); i++)
+	// std::cout << ' ' << foo[i];
+	// std::cout << '\n';
+
+	// std::cout << "bar contains:";
+	// for (unsigned i=0; i<bar.size(); i++)
+	// std::cout << ' ' << bar[i];
+	// std::cout << '\n';
+
+	// ft::vector<int> foo (3,100);   // three ints with a value of 100
+	// ft::vector<int> bar (3,100);   // two ints with a value of 200
+
+	// if (foo==bar) std::cout << "foo and bar are equal\n";
+	// if (foo!=bar) std::cout << "foo and bar are not equal\n";
+	// if (foo< bar) std::cout << "foo is less than bar\n";
+	// if (foo> bar) std::cout << "foo is greater than bar\n";
+	// if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
+	// if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+
+	// unsigned int i;
+	// ft::vector<int> foo (3,100);   // three ints with a value of 100
+	// ft::vector<int> bar (5,200);   // five ints with a value of 200
+
+	// foo.swap(bar);
+
+	// std::cout << "foo contains:";
+	// for (ft::vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
+	// std::cout << ' ' << *it;
+	// std::cout << '\n';
+
+	// std::cout << "bar contains:";
+	// for (ft::vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
+	// std::cout << ' ' << *it;
+	// std::cout << '\n';
+	
+
+	// ft::stack<int> foo;
+	// ft::stack<int> bar;
+
+	// foo.push(12);
+	// bar.push(12);
+
+	// if (foo==bar) std::cout << "foo and bar are equal\n";
+	// if (foo!=bar) std::cout << "foo and bar are not equal\n";
+	// if (foo< bar) std::cout << "foo is less than bar\n";
+	// if (foo> bar) std::cout << "foo is greater than bar\n";
+	// if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
+	// if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
 	return 0;
 }
 
