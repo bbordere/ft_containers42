@@ -1,8 +1,8 @@
 CC = c++
 
-CFLAGS = -g3 -Ofast -std=c++98 -Wall -Wextra -Werror #-std=c++98
+CFLAGS = -g3 -std=c++98 -Wall -Wextra -Werror -MMD -Ofast
 
-FILES = main.cpp 
+FILES = main.cpp
 
 OBJS = $(FILES:.cpp=.o)
 
@@ -25,3 +25,5 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+
+-include $(FILES:%.cpp=%.d)

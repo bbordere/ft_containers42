@@ -44,13 +44,12 @@ class RBTree
 		_size = 0;	
 	}
 
-	// RBTree(RBTree const &copy): _alloc(copy._alloc)
-	// {
-	// 	_nil = createNil();
-	// 	_root = _nil;
-	// 	_comp = copy._comp;
-	// 	*this = copy;
-	// }
+	RBTree(RBTree const &copy): _alloc(copy._alloc), _comp(copy._comp)
+	{
+		_nil = createNil();
+		_root = _nil;
+		*this = copy;
+	}
 
 	void	clearTree(node_ptr node)
 	{

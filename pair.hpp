@@ -2,6 +2,7 @@
 #define __PAIR_HPP__
 
 #include <iterator>
+#include <iostream>
 
 namespace ft
 {

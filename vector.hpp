@@ -5,6 +5,8 @@
 #include "randomAccessIterators.hpp"
 #include "reverseIterators.hpp"
 #include "is_integral.hpp"
+#include "lexicalComp.hpp"
+#include <stdexcept>
 
 namespace ft
 {
