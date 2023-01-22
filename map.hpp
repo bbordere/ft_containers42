@@ -95,14 +95,18 @@ namespace ft
 			template <class InputIterator>
 			map (InputIterator first, InputIterator last,
 				const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_tree(comp, alloc)
+					_tree(treeType(value_compare(comp), alloc))
 			{
 				insert(first, last);
 			}
 
 			map (map const &copy): _tree(copy._tree) {}
 
-			map &operator=(map const &assign) {_tree = assign._tree;}
+			map &operator=(map const &assign)
+			{
+				_tree = assign._tree;
+				return (*this);
+			}
 
 			~map() {}
 
@@ -129,13 +133,18 @@ namespace ft
 
 			ft::pair<iterator, bool> insert(value_type const &val)
 			{
+				// node_ptr pos = _tree.insert(val);
+				// if (pos == _tree._nil)
+				// 	return (ft::make_pair(find(val.first), false));
+				// return (ft::make_pair(find(val.first), true));
 				node_ptr pos = _tree.insert(val);
 				if (pos == _tree._nil)
 					return (ft::make_pair(find(val.first), false));
-				return (ft::make_pair(find(val.first), true));
+				return (ft::make_pair(iterator(pos), true));
 			}
 
-			void	insert(iterator first, iterator last)
+			template <class InputIterator>
+			void	insert(InputIterator first, InputIterator last)
 			{
 				_tree.insert(first, last);
 			}
@@ -190,6 +199,7 @@ namespace ft
 				_tree.clearTree(_tree._root);
 				_tree._root = _tree._nil;
 				_tree._root->_parent = _tree._nil;
+				_tree._size = 0;
 			}
 
 			void	swap(map &other)
@@ -266,6 +276,18 @@ namespace ft
 				return (res);
 			}
 
+			const_iterator lower_bound(key_type const &key) const
+			{
+				const_iterator res = _tree.lower_bound(ft::make_pair(key, T()));
+				return (res);
+			}
+
+			const_iterator upper_bound(key_type const &key) const
+			{
+				const_iterator res = _tree.upper_bound(ft::make_pair(key, T()));
+				return (res);
+			}
+
 			mapped_type	&operator[](key_type const &key)
 			{
 				node_ptr node = _tree.search(ft::make_pair(key, mapped_type()));
@@ -289,7 +311,7 @@ namespace ft
 				return (key_compare());
 			}
 
-			value_compare val_comp(void) const
+			value_compare value_comp(void) const
 			{
 				return (value_compare());
 			}

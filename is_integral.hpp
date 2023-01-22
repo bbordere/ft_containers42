@@ -1,3 +1,5 @@
+#ifndef __IS_INTEGRAL_HPP__
+#define __IS_INTEGRAL_HPP__
 namespace ft
 {
 	template <typename T, T val>
@@ -79,6 +81,8 @@ namespace ft
 	
 
 }
+
+#endif
 // #include <iostream>
 
 // template <unsigned int n>

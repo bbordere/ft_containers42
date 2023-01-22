@@ -111,17 +111,17 @@ class RBIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 			return (_ptr);
 		}
 
-		operator RBIterator<T const>(void) const
-		{
-			return (RBIterator<T const>(this->_ptr));
-		}
-
 		friend bool	operator==(iterator const& x, iterator const& y) {
 			return x.base() == y.base();
 		}
 
 		friend bool	operator!=(iterator const& x, iterator const& y) {
 			return x.base() != y.base();
+		}
+
+		operator RBIterator<T const>(void) const
+		{
+			return (RBIterator<T const>(_ptr));
 		}
 };
 
@@ -186,6 +186,11 @@ class RBConstIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 
 		friend bool	operator!=(const_iterator const& x, const_iterator const& y) {
 			return x.base() != y.base();
+		}
+
+		operator RBIterator<T const>(void) const
+		{
+			return (RBIterator<T const>(_ptr));
 		}
 };
 

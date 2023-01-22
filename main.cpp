@@ -1,298 +1,449 @@
-#include "RBNode.hpp"
-#include "RBTree.hpp"
-#include "RBIterator.hpp"
-#include "RBTreePrinter.hpp"
-#include "pair.hpp"
 #include <iostream>
 #include <string>
-#include <vector>
-#include <set>
-#include <map>
-#include <algorithm>
-#include "lexicalComp.hpp"
-#include "map.hpp"
-// #include "stack.hpp"
+#include <deque>
+#if 0 //CREATE A REAL STL EXAMPLE
+	#include <map>
+	#include <stack>
+	#include <vector>
+	namespace ft = std;
+#else
+	#include "map.hpp"
+	#include "stack.hpp"
+	#include "vector.hpp"
+#endif
 
-#include "customAllocators.hpp"
-#include "randomAccessIterators.hpp"
-#include "vector.hpp"
-#include "reverseIterators.hpp"
+#include <stdlib.h>
 
-#include <stack>
-
-template <typename T>
-std::ostream &operator<<(std::ostream &stream, std::vector<T> const &vec)
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
 {
-	if (vec.empty())
+	int idx;
+	char buff[BUFFER_SIZE];
+};
+
+
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+
+template<typename T>
+class MutantStack : public ft::stack<T>
+{
+public:
+	MutantStack() {}
+	MutantStack(const MutantStack<T>& src) { *this = src; }
+	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
 	{
-		stream << "[]";
-		return (stream);
+		this->c = rhs.c;
+		return *this;
 	}
-	stream << '[';
-	for (typename std::vector<T>::iterator it = vec.begin(); it != vec.end() - 1; it++)
-		stream << *it << ", ";
-	stream << *(vec.end() - 1) << ']';
-	return (stream);	
-}
+	~MutantStack() {}
 
-int main()
-{
-	// RBTree<int, std::less<int>, MyAllocator<RBNode<int>>> tree; //8,872,464
-	// QueueAllocator<RBNode<int>> aloc;
+	typedef typename ft::stack<T>::container_type::iterator iterator;
 
-	// RBTree<ft::pair<char, int> , KeyEqual<ft::pair<char, int>>, pairKeyComp<char, int>, QueueAllocator<RBNode<ft::pair<char, int>>>> tree;
+	iterator begin() { return this->c.begin(); }
+	iterator end() { return this->c.end(); }
+};
 
-	// typedef RBTree<int, ft::KeyEqual<int>, std::less<int>, QueueAllocator<RBNode<int>>> RBTCustom;
-	// RBTCustom tree;
+// int main(int argc, char** argv) {
+// 	if (argc != 2)
+// 	{
+// 		std::cerr << "Usage: ./test seed" << std::endl;
+// 		std::cerr << "Provide a seed please" << std::endl;
+// 		std::cerr << "Count value:" << COUNT << std::endl;
+// 		return 1;
+// 	}
+// 	const int seed = atoi(argv[1]);
+// 	srand(seed);
 
-	// RBTree<int, KeyEqual<int>> tree;
+// 	ft::vector<std::string> vector_str;
+// 	ft::vector<int> vector_int;
+// 	ft::stack<int> stack_int;
+// 	ft::vector<Buffer> vector_buffer;
+// 	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
+// 	ft::map<int, int> map_int;
 
-	// std::srand(time(0));
-	// // std::vector<int> values(25);
-	// std::vector<int> values(25);
-	// std::generate(values.begin(), values.end(), std::rand);
+// 	for (int i = 0; i < COUNT; i++)
+// 	{
+// 		vector_buffer.push_back(Buffer());
+// 	}
 
-	// for (auto val : values)
-	// 	tree.insert(val % 1024);
-	// std::cout << tree;
+// 	for (int i = 0; i < COUNT; i++)
+// 	{
+// 		const int idx = rand() % COUNT;
+// 		vector_buffer[idx].idx = 5;
+// 	}
+// 	ft::vector<Buffer>().swap(vector_buffer);
 
-	// std::cout <<(tree.isValidTree() ? "" : "NOT VALID");
-	// std::cout << tree;
-
-	// tree.insert(ft::make_pair('b', 1));
-	// tree.insert(ft::make_pair('c', 1));
-	// tree.insert(ft::make_pair('c', 1));
-	// tree.insert(ft::make_pair('c', 1));
-	// tree.insert(ft::make_pair('a', 23));
-	// std::cout << tree;
-
-	// std::cout << *tree.search(ft::make_pair('1', int())) << std::endl;
-	// RBTCustom::iterator test = tree.begin();
-	// while (test != tree.end())
-	// {
-	// 	std::cout << *test << std::endl;
-	// 	test++;
-	// }
-
-	// ft::map<char, int> myMap;
-	// for (char c = 'a'; c != 'z' + 1; c++)
-	// 	myMap.insert(ft::make_pair(c, static_cast<int>(c)));
-	// myMap.insert(ft::make_pair('a', 345));
-	// std::cout << myMap << std::endl;
-	// std::cout << myMap._tree <<(myMap._tree.isValidTree() ? "" : "NOT VALID") << std::endl;
-	// // std::cout << myMap.size() << ' ' << myMap.max_size();
-
-	// // std::cout << *myMap.lower_bound('b');
-	// // std::cout << *myMap.upper_bound('d');
-
-	// std::cout << myMap['a'];
-	// myMap['0'];
-	// std::cout << myMap['0'];
-	// std::cout << myMap._tree ;
-
-	// // ft::map<int, int> map;
-	// // for (auto val : values)
-	// // 	map.insert(ft::make_pair(val % 1024, val % 2048));
-	// // std::cout << map << std::endl;
-
-
-	// ft::map<int, std::string> myMap;
-	// myMap.insert(ft::make_pair(1, "un"));
-	// myMap.insert(ft::make_pair(2, "deux"));
-	// myMap.insert(ft::make_pair(3, "trois"));
-	// myMap.insert(ft::make_pair(4, "quatre"));
-	// myMap.insert(ft::make_pair(5, "cinq"));
-	// myMap.insert(ft::make_pair(6, "six"));
-	// myMap.insert(ft::make_pair(7, "sept"));
-	// myMap.insert(ft::make_pair(8, "huit"));
-	// myMap.insert(ft::make_pair(9, "neuf"));
-	// myMap.insert(myMap.begin(), ft::make_pair(10, "dix"));
-	// std::cout << myMap;
-
-	// // std::cout << myMap << std::endl;
-	// // myMap.erase(myMap.begin());
-	// // std::cout << myMap << std::endl;
-	// // myMap.erase(5);
-	// // std::cout << myMap << std::endl;
-	// // myMap.erase(myMap.begin(), myMap.end());
-	// // std::cout << myMap << std::endl;
-
-	// // ft::map<int, std::string, std::less<ft::pair<int, std::string> >> myMap2;
-	// // myMap2.swap(myMap);
-	// std::cout << myMap << " " << myMap.count(11) << " " << myMap.count(5) << std::endl;
-
-// 	ft::map<char,int> mymap;
-
-//   mymap['x'] = 100;
-//   mymap['y'] = 200;
-//   mymap['z'] = 300;
-//   auto test = mymap.begin();
-// //   std::cout << *mymap.end()._ptr << std::endl;
-// //   std::cout << mymap << std::endl;
-// 	// std::cout << *test << std::endl;
-// 	// --test;
-// 	// std::cout << *test << std::endl;
-//   // show content:
-//   ft::map<char,int>::reverse_iterator rit;
-//   for (rit=mymap.rbegin(); rit!=mymap.rend(); ++rit)
-//     std::cout << rit->first << " => " << rit->second << '\n';
-
-	// ft::map<int, int, std::less<ft::pair<int, int>>, QueueAllocator<ft::pair<int, int>> > map;
-	// // ft::map<int, int> map;
-	// // ft::map<int, int> map;
-	// for (int i = 0; i < 50000; i++)
-	// 	map.insert(ft::make_pair(i, i * 2));
-	// std::cout << map._tree.isValidTree() << std::endl;
-	// std::cout << map << std::endl;
-
-	// ft::vector<float, QueueAllocator<float>> vec(100000, 56.323);
-	// ft::vector<int> vec(static_cast<std::size_t>(100), 42);
-	// ft::vector<int> vec2(vec.begin(), vec.end());
-	// ft::vector<int> vec3;
-	// vec3 = vec;
-	// ft::vector<int> vec4(vec3);
-	// std::cout << vec4 << std::endl;
-
-	// ft::vector<float>::iterator test = vec.begin();
-	// ft::vector<float>::const_iterator test2 = vec.begin();
-	// std::cout << (test == test2) << std::endl;
-	// std::cout << (test != test2) << std::endl;
-	// std::cout << (test >= test2) << std::endl;
-	// std::cout << (test > test2) << std::endl;
-	// std::cout << (test <= test2) << std::endl;
-	// std::cout << (test < test2) << std::endl;
-
-	// ft::vector<int> v(vec.begin(), vec.end());
-
-	// ft::vector<int> vec;
-	// for (int i = 0; i < 50; i++)
-	// 	vec.push_back(i % 2);
-	// std::cout << vec << std::endl;
-	// vec.resize(55);
-	// std::cout << vec << std::endl;
-	// std::cout << vec.size() << std::endl;
-	// vec.resize(1);
-	// std::cout << vec << std::endl;
-	// std::cout << vec.size() << std::endl;
-	// std::cout << vec.capacity() << std::endl;
-
-	// ft::vector<int> vec;
-	// for (int i = 0; i < 50; i++)
-	// 	vec.push_back(i);
-	// std::cout << vec.back() << std::endl;
-	// vec.pop_back();
-	// std::cout << vec.back() << std::endl;
-	// std::cout << vec << std::endl;
-
-	// ft::vector<int> vec;
-	// for (int i = 0; i < 12; i++)
-	// 	vec.push_back(i);
-	// std::cout << vec << std::endl;
-	// vec.insert(vec.begin(), 5, 42);
-	// std::cout << vec << std::endl;
-	// vec.insert(vec.begin(), 56);
-	// std::cout << vec << std::endl;
-	// vec.insert(vec.end(), 10, 6969);
-	// std::cout << vec << std::endl;
-
-	// ft::vector<int> vec;
-	// for (int i = 0; i < 10; i++)
-	// 	vec.push_back(i);
-	// ft::vector<int> fill(15, 69);
-
-	// vec.insert(vec.end(), fill.begin(), fill.end());
-	// std::cout << vec << std::endl;
-	// ft::vector<int> first;
-	// ft::vector<int> second;
-	// ft::vector<int> third;
-
-	// first.assign (7,100);             // 7 ints with a value of 100
-
-	// ft::vector<int>::iterator it;
-	// it=first.begin()+1;
-
-	// second.assign (it,first.end()-1); // the 5 central values of first
-
-	// int myints[] = {1776,7,4};
-	// third.assign (myints,myints+3);   // assigning from array.
-
-	// std::cout << "Size of first: " << int (first.size()) << '\n';
-	// std::cout << first << std::endl;
-	// std::cout << "Size of second: " << int (second.size()) << '\n';
-	// std::cout << second << std::endl;
-	// std::cout << "Size of third: " << int (third.size()) << '\n';
-	// std::cout << third << std::endl;
-
-	// ft::vector<int> myvector;
-
-	// // set some values (from 1 to 10)
-	// for (int i=1; i<=10; i++) myvector.push_back(i);
-
-	// // erase the 6th element
-	// myvector.erase (myvector.begin()+5);
-
-	// // erase the first 3 elements:
-	// myvector.erase (myvector.begin(),myvector.begin()+3);
-
-	// std::cout << "myvector contains:";
-	// for (unsigned i=0; i<myvector.size(); ++i)
-	// 	std::cout << ' ' << myvector[i];
-	// std::cout << '\n';
-
-	// ft::vector<int> foo (3,100);   // three ints with a value of 100
-	// ft::vector<int> bar (5,200);   // five ints with a value of 200
-
-	// foo.swap(bar);
-
-	// std::cout << "foo contains:";
-	// for (unsigned i=0; i<foo.size(); i++)
-	// std::cout << ' ' << foo[i];
-	// std::cout << '\n';
-
-	// std::cout << "bar contains:";
-	// for (unsigned i=0; i<bar.size(); i++)
-	// std::cout << ' ' << bar[i];
-	// std::cout << '\n';
-
-	// ft::vector<int> foo (3,100);   // three ints with a value of 100
-	// ft::vector<int> bar (3,100);   // two ints with a value of 200
-
-	// if (foo==bar) std::cout << "foo and bar are equal\n";
-	// if (foo!=bar) std::cout << "foo and bar are not equal\n";
-	// if (foo< bar) std::cout << "foo is less than bar\n";
-	// if (foo> bar) std::cout << "foo is greater than bar\n";
-	// if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
-	// if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
-
-	// unsigned int i;
-	// ft::vector<int> foo (3,100);   // three ints with a value of 100
-	// ft::vector<int> bar (5,200);   // five ints with a value of 200
-
-	// foo.swap(bar);
-
-	// std::cout << "foo contains:";
-	// for (ft::vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
-	// std::cout << ' ' << *it;
-	// std::cout << '\n';
-
-	// std::cout << "bar contains:";
-	// for (ft::vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
-	// std::cout << ' ' << *it;
-	// std::cout << '\n';
+// 	try
+// 	{
+// 		for (int i = 0; i < COUNT; i++)
+// 		{
+// 			const int idx = rand() % COUNT;
+// 			vector_buffer.at(idx);
+// 			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" <<std::endl;
+// 		}
+// 	}
+// 	catch(const std::exception& e)
+// 	{
+// 		//NORMAL ! :P
+// 	}
 	
+// 	for (int i = 0; i < COUNT; ++i)
+// 	{
+// 		map_int.insert(ft::make_pair(rand(), rand()));
+// 	}
 
-	// ft::stack<int> foo;
-	// ft::stack<int> bar;
+// 	int sum = 0;
+// 	for (int i = 0; i < 10000; i++)
+// 	{
+// 		int access = rand();
+// 		sum += map_int[access];
+// 	}
+// 	std::cout << "should be constant with the same seed: " << sum << std::endl;
 
-	// foo.push(12);
-	// bar.push(12);
+// 	{
+// 		ft::map<int, int> copy = map_int;
+// 	}
+// 	MutantStack<char> iterable_stack;
+// 	for (char letter = 'a'; letter <= 'z'; letter++)
+// 		iterable_stack.push(letter);
+// 	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+// 	{
+// 		std::cout << *it;
+// 	}
+// 	std::cout << std::endl;
+// 	return (0);
+// }
 
-	// if (foo==bar) std::cout << "foo and bar are equal\n";
-	// if (foo!=bar) std::cout << "foo and bar are not equal\n";
-	// if (foo< bar) std::cout << "foo is less than bar\n";
-	// if (foo> bar) std::cout << "foo is greater than bar\n";
-	// if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
-	// if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
-	return 0;
+template <typename T, typename U>
+std::ostream &operator<<(std::ostream &stream, std::pair<T, U> const &pair)
+{
+	stream << '(' << pair.first << ", " << pair.second << ')';
+	return (stream);
 }
 
+#include <map>
+#include "RBTreePrinter.hpp"
+#include "set.hpp"
+#include <set>
+#include "customAllocators.hpp"
+int main(void)
+{
+	std::vector<int> vec2;
+	std::vector<int> vec1;
+
+	for (int i = 0; i < 5000; i++)
+		vec1.push_back(i);
+	for (int i = 0; i < 500; i++)
+		vec2 = vec1;
+}
+
+
+
+// #include <iostream>
+// #include <cstdlib>
+// #include <sys/time.h>
+// // #include <chrono> // can be used instead of sys/time.h, but is not c++98 compliant
+
+
+// #define TESTED_NAMESPACE ft
+// // #define STD 0
+// #ifdef STD
+// # undef TESTED_NAMESPACE
+// # define TESTED_NAMESPACE std
+// #include <vector>
+// #include <map>
+// #include <stack>
+// #else
+
+// #endif
+
+
+// int main()
+// {
+// // # SET_TEST_START #
+// 	size_t test_val; // uncomment all the commented lines until '# SET_TEST_END #' to enable custom testing for the vector
+// 	// std::cout << "test value: ";
+// 	// std::string test_str;
+// 	// std::getline(std::cin, test_str);
+// 	// if (test_str.length() == 0)
+// 		test_val = 50000000;
+// 	// else
+// 	// 	test_val = std::atoll(test_str.c_str());
+
+// 	// std::cout << "test value set: " << test_val << std::endl;
+
+// 	// std::cout << "resize value: ";
+// 	size_t resize_val;
+// 	// std::string resize_str;
+// 	// std::getline(std::cin, resize_str);
+// 	// if (resize_str.length() == 0)
+// 		resize_val = 500000050;
+// 	// else
+// 	// 	resize_val = std::atoll(resize_str.c_str());
+
+// 	// std::cout << "resize value set: " << resize_val << std::endl;
+// // # SET_TEST_END #
+
+// 	struct timeval start, end;
+// 	long seconds;
+// 	long microseconds;
+
+// 	std::cout << std::endl << "----------------------------------------" << std::endl << std::endl;
+
+// 	{
+// 		// ##### Test of TESTED_NAMESPACE::vector #####
+// 		#ifndef STD
+// 			std::cout << "#####Test of my ft::vector#####" << std::endl;
+// 		#else
+// 			std::cout << "#####Test of the std::vector#####" << std::endl;
+// 		#endif
+
+// 		gettimeofday(&start, NULL);
+// 		// std::chrono::steady_clock::time_point end;
+// 		// std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+// 		TESTED_NAMESPACE::vector< int > *vct_1;
+// 		try
+// 		{
+// 			std::cout << "\tcreate vct_1 now with size " << test_val << std::endl;
+// 			vct_1 = new TESTED_NAMESPACE::vector< int >(test_val);
+// 		}
+// 		catch (std::exception &e)
+// 		{
+// 			std::cerr << "\tvct_1 exception caught!!!! " << e.what() << std::endl;
+// 			goto next_vct;
+// 		}
+// 		std::cout << "\tmax_size: " << vct_1->max_size() << std::endl;
+// 		std::cout << "\tvct_1 size: " << vct_1->size() << std::endl;
+// 		std::cout << "\tvct_1 capacity: " << vct_1->capacity() << std::endl;
+// 		try
+// 		{
+// 			std::cout << "\tresizing vct_1 now to " << resize_val << std::endl;
+// 			vct_1->resize(resize_val);
+// 		}
+// 		catch (std::exception &e)
+// 		{
+// 			std::cerr << "\tvct_1 exception caught!!!! " << e.what() << std::endl;
+// 		}
+// 		std::cout << "\tvct_1 size: " << vct_1->size() << std::endl;
+// 		std::cout << "\tvct_1 capacity: " << vct_1->capacity() << std::endl;
+
+// 		std::cout << "\tdeleting vct_1 now" << std::endl;
+
+// 		delete vct_1;
+// 		vct_1 = NULL;
+
+// 		next_vct:
+// 		TESTED_NAMESPACE::vector<int> vct_2;
+// 		TESTED_NAMESPACE::vector< int >::iterator it;
+// 		std::cout << "\n\tfilling vct_2 now" << std::endl;
+// 		for (size_t i = 0; i < test_val * 2; ++i)
+// 		{
+// 			try
+// 			{
+// 				vct_2.push_back(i);
+// 			}
+// 			catch (std::exception &e)
+// 			{
+// 				std::cerr << "\tvct_2 exception caught!!!! " << e.what() << std::endl;
+// 				break ;
+// 			}
+// 		}
+// 		std::cout << "\tvct_2 size: " << vct_2.size() << std::endl;
+// 		std::cout << "\tvct_2 capacity: " << vct_2.capacity() << std::endl;
+// 		it = vct_2.begin();
+// 		std::cout << "\tprinting the first 5 elements of vct_1" << std::endl;
+// 		for (size_t i = 0; i < 5 && it != vct_2.end(); ++i)
+// 			std::cout << "\telem " << i << ": " << *it++ << std::endl;
+
+// 		std::cout << "\terasing vct_2 now" << std::endl;
+// 		vct_2.erase(vct_2.begin(), vct_2.end());;
+// 		std::cout << "\tvct_2 size: " << vct_2.size() << std::endl;
+// 		std::cout << "\tvct_2 capacity: " << vct_2.capacity() << std::endl;
+
+// 		gettimeofday(&end, NULL);
+// 		// end = std::chrono::steady_clock::now();
+
+// 		seconds = (end.tv_sec - start.tv_sec);
+// 		microseconds = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+// 		#ifndef STD
+// 			std::cout << std::endl << "#####ft::vector: " << (microseconds / 1000000) << "," << (microseconds % 1000000) << " seconds#####" << std::endl;
+// 			// std::cout << std::endl << "\tft::vector took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds to run." << std::endl;
+// 		#else
+// 			std::cout << std::endl << "#####std::vector: " << (microseconds / 1000000) << "," << (microseconds % 1000000) << " seconds#####" << std::endl;
+// 			// std::cout << std::endl << "\tstd::vector took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds to run." << std::endl;
+// 		#endif
+// 	// # LEAK_CHECK_START # //when checking, make sure fsanitize is disabled in the makefile CXXFLAGS
+// 		#ifdef LEAK
+// 			#ifndef STD
+// 				system("leaks ft_containers | tail -3");
+// 			#else
+// 				system("leaks std_containers | tail -3");
+// 			#endif
+// 		#endif
+// 	// # LEAK_CHECK_END #
+// 	}
+
+// 	std::cout << std::endl << "----------------------------------------" << std::endl << std::endl;
+
+// 	{
+// 		// ##### Test of TESTED_NAMESPACE::stack #####
+// 		#ifndef STD
+// 			std::cout << "#####Test of my ft::stack#####" << std::endl;
+// 		#else
+// 			std::cout << "#####Test of the std::stack#####" << std::endl;
+// 		#endif
+// 		gettimeofday(&start, NULL);
+// 		// std::chrono::steady_clock::time_point end;
+// 		// std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
+// 		std::cout << "\tcreate st_1" << std::endl;
+// 		TESTED_NAMESPACE::stack<int>st_1;
+
+// 		std::cout << "\tst_1 size: " << st_1.size() << std::endl;
+
+// 		std::cout << "\tfill with " << test_val << " elements" << std::endl;
+// 		for (size_t i = 0; i < test_val; i++)
+// 			st_1.push(i + 42);
+
+// 		std::cout << "\tst_1 size: " << st_1.size() << std::endl;
+
+// 		std::cout << "\tpopping all elements" << std::endl;
+// 		for (size_t i = 0; i < test_val; i++)
+// 			st_1.pop();
+
+// 		std::cout << "\tst_1 size: " << st_1.size() << std::endl << std::endl;
+
+// 		std::cout << "\tcreate st_2" << std::endl;
+// 		TESTED_NAMESPACE::stack<int> *st_2 = new TESTED_NAMESPACE::stack<int>;
+
+// 		std::cout << "\tst_2 size: " << st_2->size() << std::endl;
+
+// 		std::cout << "\tfill with " << test_val * 2 << "elements" << std::endl;
+// 		for (size_t i = 0; i < test_val * 2 ; i++)
+// 			st_2->push(i + 42);
+
+// 		std::cout << "\tst_2 size: " << st_2->size() << std::endl;
+
+// 		std::cout << "\tpopping half of the elements" << std::endl;
+// 		for (size_t i = 0; i < test_val; i++)
+// 			st_2->pop();
+
+// 		std::cout << "\tst_2 size: " << st_2->size() << std::endl;
+// 		std::cout << "\tremaining elements should be handled by the destructor" << std::endl;
+// 		delete st_2;
+// 		st_2 = NULL;
+
+// 		gettimeofday(&end, NULL);
+// 		// end = std::chrono::steady_clock::now();
+
+// 		seconds = (end.tv_sec - start.tv_sec);
+// 		microseconds = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+// 		#ifndef STD
+// 			std::cout << std::endl << "#####ft::stack: " << (microseconds / 1000000) << "," << (microseconds % 1000000) << " seconds#####" << std::endl;
+// 			// std::cout << std::endl << "\tft::vector took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds to run." << std::endl;
+// 		#else
+// 			std::cout << std::endl << "#####std::stack: " << (microseconds / 1000000) << "," << (microseconds % 1000000) << " seconds#####" << std::endl;
+// 			// std::cout << std::endl << "\tstd::vector took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds to run." << std::endl;
+// 		#endif
+// 	// # LEAK_CHECK_START # //when checking, make sure fsanitize is disabled in the makefile CXXFLAGS
+// 		#ifdef LEAK
+// 			#ifndef STD
+// 				system("leaks ft_containers | tail -3");
+// 			#else
+// 				system("leaks std_containers | tail -3");
+// 			#endif
+// 		#endif
+// 	// # LEAK_CHECK_END #
+// 	}
+
+// 	std::cout << std::endl << "----------------------------------------" << std::endl << std::endl;
+
+// 	{
+// 		// ##### Test of TESTED_NAMESPACE::map #####
+// 		#ifndef STD
+// 			std::cout << "#####Test of my ft::map#####" << std::endl;
+// 		#else
+// 			std::cout << "#####Test of the std::map#####" << std::endl;
+// 		#endif
+
+// 		gettimeofday(&start, NULL);
+// 		// std::chrono::steady_clock::time_point end;
+// 		// std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
+// 		TESTED_NAMESPACE::map<int, int> *map_1 = new TESTED_NAMESPACE::map<int, int>;
+// 		std::cout << "\tinserting " << test_val / 100 << " elements into map_1" << std::endl;
+// 		for (size_t i = 0; i < test_val / 100; ++i)
+// 		{
+// 			map_1->insert(TESTED_NAMESPACE::make_pair(i, i + 1));
+// 		}
+// 		std::cout << "\tmax_size: " << map_1->max_size() << std::endl;
+// 		std::cout << "\tmap size: " << map_1->size() << std::endl;
+
+// 		std::cout << "\titerating over map using the iterator" << std::endl;
+// 		TESTED_NAMESPACE::map<int, int>::const_iterator it = map_1->begin();
+// 		for (size_t i = 0; i < 15 && it != map_1->end(); ++i)
+// 		{
+// 			std::cout << "\tkey: " << it->first << "\tvalue: " << it->second << std::endl;
+// 			++it;
+// 		}
+// 		std::cout << "\toutput for adding `make_pair(0, 55)`, a duplicate element(this output is a bool): " << map_1->insert(TESTED_NAMESPACE::make_pair(0, 55)).second << std::endl;
+// 		std::cout << "\tthe insertion of duplicate elements should not change the value of the key:" << std::endl;
+// 		it = map_1->begin();
+// 		std::cout << "\tkey: " << it->first << "\tvalue: " << it->second << std::endl;
+// 		std::cout << "\tmap size: " << map_1->size() << std::endl;
+// 		std::cout << "\tthe deletion of the elements is now up to the destructor" << std::endl;
+// 		delete map_1;
+// 		map_1 = NULL;
+
+// 		TESTED_NAMESPACE::map<int, int> map_2;
+// 		std::cout << "\tinserting " << test_val / 100 << " elements into map_2" << std::endl;
+// 		for (size_t i = 0; i < test_val / 100; ++i)
+// 		{
+// 			map_2.insert(TESTED_NAMESPACE::make_pair(i, i + 1));
+// 		}
+// 		std::cout << "\tmax_size: " << map_2.max_size() << std::endl;
+// 		std::cout << "\tmap size: " << map_2.size() << std::endl;
+
+// 		std::cout << "\titerating over map using the iterator" << std::endl;
+// 		TESTED_NAMESPACE::map<int, int>::const_iterator it_2 = map_2.begin();
+// 		for (size_t i = 0; i < 15 && it_2 != map_2.end(); ++i)
+// 		{
+// 			std::cout << "\tkey: " << it_2->first << "\tvalue: " << it_2->second << std::endl;
+// 			++it_2;
+// 		}
+// 		std::cout << "\toutput for adding `make_pair(0, 55)`, a duplicate element(this output is a bool): " << map_2.insert(TESTED_NAMESPACE::make_pair(0, 55)).second << std::endl;
+// 		std::cout << "\tthe insertion of duplicate elements should not change the value of the key" << std::endl;
+// 		it_2 = map_2.begin();
+// 		std::cout << "\tkey: " << it_2->first << "\tvalue: " << it_2->second << std::endl;
+// 		std::cout << "\tmap size: " << map_2.size() << std::endl;
+// 		std::cout << "\tclearing map_2" << std::endl;
+// 		map_2.clear();
+// 		std::cout << "\tmap size: " << map_2.size();
+// 		gettimeofday(&end, NULL);
+// 		// end = std::chrono::steady_clock::now();
+
+// 		seconds = (end.tv_sec - start.tv_sec);
+// 		microseconds = ((seconds * 1000000) + end.tv_usec) - (start.tv_usec);
+// 		#ifndef STD
+// 			std::cout << std::endl << "#####ft::map: " << (microseconds / 1000000) << "," << (microseconds % 1000000) << " seconds#####" << std::endl;
+// 			// std::cout << std::endl << "\tft::vector took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds to run." << std::endl;
+// 		#else
+// 			std::cout << std::endl << "#####std::map: " << (microseconds / 1000000) << "," << (microseconds % 1000000) << " seconds#####" << std::endl;
+// 			// std::cout << std::endl << "\tstd::vector took " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds to run." << std::endl;
+// 		#endif
+// 	// # LEAK_CHECK_START # //when checking, make sure fsanitize is disabled in the makefile CXXFLAGS
+// 		#ifdef LEAK
+// 			#ifndef STD
+// 				system("leaks ft_containers | tail -3");
+// 			#else
+// 				system("leaks std_containers | tail -3");
+// 			#endif
+// 		#endif
+// 	// # LEAK_CHECK_END #
+// 	}
+
+// 	std::cout << std::endl << "----------------------------------------" << std::endl << std::endl;
+
+// 	return (0);
+// }

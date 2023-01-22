@@ -31,7 +31,7 @@ namespace ft
 			typedef std::size_t												size_type;
 
 		private:
-		public:
+		// public:
 			pointer			_arr;
 			size_type 		_size;
 			size_type 		_capacity;
@@ -40,7 +40,7 @@ namespace ft
 		public:
 			explicit vector(allocator_type const &alloc = allocator_type()): _arr(NULL), _size(0), _capacity(0), _alloc(alloc) {}
 
-			explicit vector (size_type n, value_type const &val = value_type(), allocator_type const &alloc = allocator_type())
+			explicit vector (size_type n, value_type const &val = value_type(), allocator_type const &alloc = allocator_type()): _alloc(alloc)
 			{
 				_arr = _alloc.allocate(n);
 				_capacity = n;
@@ -76,21 +76,23 @@ namespace ft
 				_deleteArr(_arr);
 			}
 
-			vector &operator=(vector const &assign)
+			vector &operator=(vector const &other)
 			{
-				if (_arr)
-					_deleteArr();
-				_size = assign._size;
-				_alloc = assign._alloc;
-				_capacity = assign._capacity;
-				_arr = _alloc.allocate(_capacity);
+				if (&other == this)
+					return (*this);
+
+				if (_capacity < other._size)
+				{
+					_deleteArr(_arr);
+					_arr = _alloc.allocate(other._size);
+				}
+				_size = other._size;
+				_capacity = other._capacity;
+				_alloc = other._alloc;
 				for (size_type i = 0; i < _size; i++)
-					_alloc.construct(_arr + i, assign[i]);
+					_alloc.construct(_arr + i, other._arr[i]);
 				return (*this);
 			}
-
-			
-
 
 
 			/*ITERATORS*/

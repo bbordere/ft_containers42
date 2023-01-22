@@ -37,7 +37,7 @@ class RBTree
 		_size = 0;
 	}
 
-	explicit RBTree(Compare const &comp, Alloc const& alloc = node_allocator()): _alloc(alloc), _comp(comp)
+	explicit RBTree(Compare const &comp, Alloc const& alloc = node_allocator()): _alloc(), _comp(comp)
 	{
 		_nil = createNil();
 		_root = _nil;
@@ -51,6 +51,20 @@ class RBTree
 		*this = copy;
 	}
 
+	RBTree &operator=(RBTree const &assign)
+	{
+		if (this != &assign)
+		{
+			if (_root != _nil)
+			{
+				clearTree(_root);
+				_root = _nil;
+			}
+			if (assign._root != assign._nil)
+				insert(assign.begin(), assign.end());
+		}
+		return (*this);
+	}
 	void	clearTree(node_ptr node)
 	{
 		if (node != _nil)
@@ -58,7 +72,6 @@ class RBTree
 			clearTree(node->_left);
 			clearTree(node->_right);
 			destroyNode(node);
-			node = _nil;
 		}
 	}
 	
@@ -123,19 +136,17 @@ class RBTree
 
 	node_ptr	insert(value_type val)
 	{
-		node_ptr pos = search(val);
-		if (pos != _nil)
-			return (_nil);
-		
 		node_ptr parent = _nil;
-		pos = _root;
+		node_ptr pos = _root;
 		while (pos != _nil)
 		{
 			parent = pos;
 			if (_comp(val, pos->_val))
 				pos = pos->_left;
-			else
+			else if (_comp(pos->_val, val))
 				pos = pos->_right;
+			else
+				return (_nil);
 		}
 		node_ptr newNode = createNode(val, parent);
 		if (parent == _nil)
@@ -149,25 +160,14 @@ class RBTree
 		return (newNode);
 	}
 
-	void	insert(const_iterator first, const_iterator last)
+	template <class InputIterator>
+	void	insert(InputIterator first, InputIterator last)
 	{
 		while (first != last)
 		{
 			insert(*first);
 			first++;
 		}
-	}
-
-	RBTree &operator=(RBTree const &assign)
-	{
-		if (this != &assign)
-		{
-			if (_root != _nil)
-				clearTree(_root);
-			if (assign._root != assign._nil)
-				insert(assign.begin(), assign.end());
-		}
-		return (*this);
 	}
 
 	void lRotate(node_ptr x)
@@ -278,6 +278,8 @@ class RBTree
 
 	node_ptr	getMin(node_ptr	node) const
 	{
+		if (node == _nil)
+			return (_nil);
 		node_ptr	temp = node;
 		while(temp->_left != _nil)
 			temp = temp->_left;
@@ -452,7 +454,7 @@ class RBTree
 		const_iterator it = begin();
 		while (it != end() && _comp(*it, key))
 			++it;
-		return (--it);
+		return (it);
 	}
 
 	iterator	upper_bound(value_type const &key)

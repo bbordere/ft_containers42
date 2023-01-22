@@ -1,6 +1,7 @@
 CC = c++
 
-CFLAGS = -g3 -std=c++98 -Wall -Wextra -Werror -MMD -Ofast
+CFLAGS = -g3 -std=c++98 -Wall -Wextra -Werror -MMD -O0
+# CFLAGS = -g3 -MMD
 
 FILES = main.cpp
 
@@ -24,6 +25,9 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+bench:
+	$(CC) benchmark98.cpp -march=native -g3 -o bench -std=c++98 -O3
+
+.PHONY: all clean fclean re bench
 
 -include $(FILES:%.cpp=%.d)

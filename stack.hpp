@@ -19,6 +19,12 @@ namespace ft
 			{
 				return (c.size() == 0);
 			}
+
+			size_type size() const
+			{
+				return (c.size());
+			}
+
 			~stack(void)
 			{
 				c.clear();
@@ -39,9 +45,9 @@ namespace ft
 				c.push_back(val);
 			}
 
-			void	pop(value_type const &val)
+			void	pop(void)
 			{
-				c.pop_back(val);
+				c.pop_back();
 			}
 
 			template <class T1, class C1>
