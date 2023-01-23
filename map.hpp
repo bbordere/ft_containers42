@@ -20,24 +20,6 @@ namespace ft
 			}
 	};
 
-	template <class T>
-	struct	KeyEqual
-	{
-		bool	operator()(T const &x, T const &y) const
-		{
-			return (x == y);
-		}
-	};
-
-	template <class T, class U>
-	struct	KeyEqual<ft::pair<T, U> >
-	{
-		bool	operator()(ft::pair<T, U> const &lhs, ft::pair<T, U> const &rhs) const
-		{
-			return (lhs.first == rhs.first);
-		}
-	};
-
 	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<Key, T> > >
 	class map
 	{
@@ -63,7 +45,7 @@ namespace ft
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef std::size_t												size_type;
 
-			class value_compare: public std::binary_function <value_type, value_type, bool>
+			class value_compare
 			{
 				private:
 					friend class map;

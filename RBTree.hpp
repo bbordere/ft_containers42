@@ -37,7 +37,7 @@ class RBTree
 		_size = 0;
 	}
 
-	explicit RBTree(Compare const &comp, Alloc const& alloc = node_allocator()): _alloc(), _comp(comp)
+	explicit RBTree(Compare const &comp, Alloc const& alloc = node_allocator()): _alloc(alloc), _comp(comp)
 	{
 		_nil = createNil();
 		_root = _nil;
@@ -48,6 +48,7 @@ class RBTree
 	{
 		_nil = createNil();
 		_root = _nil;
+		_size = 0;
 		*this = copy;
 	}
 
@@ -262,7 +263,10 @@ class RBTree
 			}
 		}
 		_root->_color = BLACK;
-		_nil->_parent = node;
+		if (!_nil->_parent)
+			_nil->_parent = node;
+		else if (_nil->_parent && _nil->_parent->_val.first < node->_val.first)
+			_nil->_parent = node;
 	}
 
 	void	transplant(node_ptr u, node_ptr v)
@@ -283,6 +287,16 @@ class RBTree
 		node_ptr	temp = node;
 		while(temp->_left != _nil)
 			temp = temp->_left;
+		return (temp);
+	}
+
+	node_ptr	getMax(node_ptr	node) const
+	{
+		if (node == _nil)
+			return (_nil);
+		node_ptr	temp = node;
+		while(temp->_right != _nil)
+			temp = temp->_right;
 		return (temp);
 	}
 
@@ -415,9 +429,9 @@ class RBTree
 		}
 		if (oriColor == BLACK)
 			fixDelete(fix);
-		_nil->_parent = _root;
 		destroyNode(toDel);
 		_size--;
+		_nil->_parent = getMax(_root);
 		return (true);
 	}
 

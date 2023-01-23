@@ -1,5 +1,8 @@
 #include <bits/stdc++.h>
 #include <sys/time.h>
+#include "ft_containers.hpp"
+// #include "Hvector.hpp"
+
 
 template <class Container>
 long	hardTestVector(int iterations)
@@ -66,7 +69,7 @@ void	testVector(void)
 	std::cout << "Average Routine time: " << (sum / nbCycle) << " ms" << std::endl;
 }
 
-template <class Container>
+template <class Container, class makePair>
 long	hardTestMap(int iterations)
 {
 	srand(time(NULL));
@@ -77,7 +80,9 @@ long	hardTestMap(int iterations)
 		Container map;
 		// std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();/**/
 		for (int i = 0; i < 500; i++)
-			map.insert({rand(), rand()});
+		{
+			map.insert(makePair(rand(), rand()));
+		}
 		// std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();/**/
 		// std::cout << "Inserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/**/
 
@@ -93,7 +98,9 @@ long	hardTestMap(int iterations)
 		Container map;
 		// std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();/**/
 		for (int i = 0; i < iterations; i++)
-			map.insert({rand(), rand()});
+		{
+			map.insert(makePair(rand(), rand()));
+		}
 		// std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();/**/
 		// std::cout << "Inserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/**/
 		// start = std::chrono::high_resolution_clock::now();/**/
@@ -102,7 +109,9 @@ long	hardTestMap(int iterations)
 		// std::cout << "Clearing: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/**/
 		// start = std::chrono::high_resolution_clock::now();/**/
 		for (int i = 0; i < iterations; i++)
-			map.insert({rand(), rand()});
+		{
+			map.insert(makePair(rand(), rand()));
+		}
 		// end = std::chrono::high_resolution_clock::now();/**/
 		// std::cout << "Reinserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/**/
 		// start = std::chrono::high_resolution_clock::now();/**/
@@ -117,14 +126,14 @@ long	hardTestMap(int iterations)
 	return ((end.tv_sec * 1000 + end.tv_usec / 1000) - (begin.tv_sec * 1000 + begin.tv_usec / 1000));
 }
 
-template<class Container, int nbIter, int nbCycle>
-void	testMap(void)
+template<class Container, class FT, int nbIter, int nbCycle>
+void	testMap()
 {
 	double sum = 0;
 	long tmp;
 	for (int i = 0; i < nbCycle; i++)
 	{
-		tmp = hardTestMap<Container>(nbIter);
+		tmp = hardTestMap<Container, FT>(nbIter);
 		sum += tmp;
 	}
 	std::cout << "Average Routine time: " << (sum / nbCycle)<< " ms" << std::endl;
@@ -255,7 +264,6 @@ void	testStack(void)
 	std::cout << "Average Routine time: " << (sum / nbCycle) << " ms" << std::endl;
 }
 
-#include "ft_containers.hpp"
 // #include "42-ft_containers/includes/vector.hpp"
 #include "customAllocators.hpp"
 int main(void)
@@ -265,24 +273,25 @@ int main(void)
 	const int it = 500000;
 	const int cycles = 10;
 
-	std::cout << "ft::map: " << std::endl; 
-	testMap<ft::map<int, int>,  it, cycles>();
-	std::cout << "std::map: "  << std::endl; 
-	testMap<std::map<int, int>, it, cycles>();
-	std::cout << std::endl;
+	// std::cout << "ft::map: " << std::endl; 
+	// testMap<ft::map<int, int>, ft::make_pair, it, cycles>();
+	// std::cout << "std::map: "  << std::endl; 
+	// testMap<std::map<int, int>, std::make_pair, it, cycles>();
+	// std::cout << std::endl;
+
 	std::cout << "ft::vector: " << std::endl; 
 	testVector<ft::vector<int>,  it, cycles>();
 	std::cout << "std::vector: " << std::endl; 
 	testVector<std::vector<int>, it, cycles>();
 	std::cout << std::endl;
-	std::cout << "ft::set: " << std::endl; 
-	testSet<ft::set<int>,  it, cycles>();
-	std::cout << "std::set: " << std::endl; 
-	testSet<std::set<int>, it, cycles>();
-	std::cout << std::endl;
-	std::cout << "ft::stack: " << std::endl;
-	testStack<ft::stack<int>,  it, cycles>();
-	std::cout << "std::stack: " << std::endl;
-	testStack<std::stack<int, std::vector<int> >,  it, cycles>();
+	// std::cout << "ft::set: " << std::endl; 
+	// testSet<ft::set<int>,  it, cycles>();
+	// std::cout << "std::set: " << std::endl; 
+	// testSet<std::set<int>, it, cycles>();
+	// std::cout << std::endl;
+	// std::cout << "ft::stack: " << std::endl;
+	// testStack<ft::stack<int>,  it, cycles>();
+	// std::cout << "std::stack: " << std::endl;
+	// testStack<std::stack<int, std::vector<int> >,  it, cycles>();
 	return 0;
 }

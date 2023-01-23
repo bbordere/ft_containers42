@@ -56,7 +56,7 @@ namespace ft
 			template <class T1, class C1>
 			friend bool operator<(stack<T1, C1> const &lhs, stack<T1, C1> const &rhs);
 
-		public:
+		protected:
 			container_type c;
 
 	};

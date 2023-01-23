@@ -1,50 +1,55 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 0 //CREATE A REAL STL EXAMPLE
-	#include <map>
-	#include <stack>
-	#include <vector>
-	namespace ft = std;
-#else
-	#include "map.hpp"
-	#include "stack.hpp"
-	#include "vector.hpp"
-#endif
 
-#include <stdlib.h>
+// #ifdef STD //CREATE A REAL STL EXAMPLE
+// 	#include <map>
+// 	#include <stack>
+// 	#include <vector>
+// 	namespace ft = std;
+// #else
+// 	#include "map.hpp"
+// 	#include "stack.hpp"
+// 	#include "vector.hpp"
+// #endif
 
-#define MAX_RAM 4294967296
-#define BUFFER_SIZE 4096
-struct Buffer
-{
-	int idx;
-	char buff[BUFFER_SIZE];
-};
+// #include <stdlib.h>
+
+// #define MAX_RAM 4294967296
+// // #define MAX_RAM 42949672
+// #define BUFFER_SIZE 4096
+// struct Buffer
+// {
+// 	int idx;
+// 	char buff[BUFFER_SIZE];
+// };
 
 
-#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+// #define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
-template<typename T>
-class MutantStack : public ft::stack<T>
-{
-public:
-	MutantStack() {}
-	MutantStack(const MutantStack<T>& src) { *this = src; }
-	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
-	{
-		this->c = rhs.c;
-		return *this;
-	}
-	~MutantStack() {}
+// template<typename T>
+// class MutantStack : public ft::stack<T>
+// {
+// public:
+// 	MutantStack() {}
+// 	MutantStack(const MutantStack<T>& src) { *this = src; }
+// 	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
+// 	{
+// 		this->c = rhs.c;
+// 		return *this;
+// 	}
+// 	~MutantStack() {}
 
-	typedef typename ft::stack<T>::container_type::iterator iterator;
+// 	typedef typename ft::stack<T>::container_type::iterator iterator;
 
-	iterator begin() { return this->c.begin(); }
-	iterator end() { return this->c.end(); }
-};
+// 	iterator begin() { return this->c.begin(); }
+// 	iterator end() { return this->c.end(); }
+// };
 
 // int main(int argc, char** argv) {
+// 	#ifdef STD
+// 	std::cout << "STD" << std::endl;
+// 	#endif
 // 	if (argc != 2)
 // 	{
 // 		std::cerr << "Usage: ./test seed" << std::endl;
@@ -115,28 +120,28 @@ public:
 // 	return (0);
 // }
 
-template <typename T, typename U>
-std::ostream &operator<<(std::ostream &stream, std::pair<T, U> const &pair)
-{
-	stream << '(' << pair.first << ", " << pair.second << ')';
-	return (stream);
-}
+// template <typename T, typename U>
+// std::ostream &operator<<(std::ostream &stream, std::pair<T, U> const &pair)
+// {
+// 	stream << '(' << pair.first << ", " << pair.second << ')';
+// 	return (stream);
+// }
 
-#include <map>
-#include "RBTreePrinter.hpp"
-#include "set.hpp"
-#include <set>
-#include "customAllocators.hpp"
-int main(void)
-{
-	std::vector<int> vec2;
-	std::vector<int> vec1;
+// #include <map>
+// #include "RBTreePrinter.hpp"
+// #include "set.hpp"
+// #include <set>
+// #include "customAllocators.hpp"
+// int main(void)
+// {
+// 	std::vector<int> vec2;
+// 	std::vector<int> vec1;
 
-	for (int i = 0; i < 5000; i++)
-		vec1.push_back(i);
-	for (int i = 0; i < 500; i++)
-		vec2 = vec1;
-}
+// 	for (int i = 0; i < 5000; i++)
+// 		vec1.push_back(i);
+// 	for (int i = 0; i < 500; i++)
+// 		vec2 = vec1;
+// }
 
 
 
@@ -447,3 +452,11 @@ int main(void)
 
 // 	return (0);
 // }
+
+#include "ft_containers.hpp"
+#include "RBTreePrinter.hpp"
+#include <bits/stdc++.h>
+
+int main(void)
+{
+}

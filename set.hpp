@@ -37,7 +37,7 @@ namespace ft
 
 
 		private:
-		public:
+		// public:
 			treeType _tree;
 		
 		public:
