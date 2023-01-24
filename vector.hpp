@@ -21,11 +21,11 @@ namespace ft
 			typedef typename allocator_type::pointer pointer;
 			typedef typename allocator_type::const_pointer const_pointer;
 
-			typedef ft::randomAccessIterators<value_type> iterator;
-			typedef ft::randomAccessIterators<value_type const> const_iterator;
+			typedef ft::randomAccessIterators<value_type>		iterator;
+			typedef ft::randomAccessIterators<value_type const>	const_iterator;
 
-			typedef ft::reverseIterator<iterator> reverse_iterator;
-			typedef ft::reverseIterator<const_iterator> const_reverse_iterator;
+			typedef ft::reverseIterator<iterator>		reverse_iterator;
+			typedef ft::reverseIterator<const_iterator>	const_reverse_iterator;
 
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef std::size_t												size_type;
@@ -124,25 +124,23 @@ namespace ft
 
 			reverse_iterator rbegin()
 			{
-				return (reverse_iterator(_arr));
+				return (reverse_iterator(end()));
 			}
 
 			const_reverse_iterator rbegin() const
 			{
-				return (const_reverse_iterator(_arr));
+				return (const_reverse_iterator(end()));
 			}
 
 			reverse_iterator rend()
 			{
-				return (reverse_iterator(_arr + _size));
+				return (reverse_iterator(begin()));
 			}
 
 			const_reverse_iterator rend() const
 			{
-				return (const_reverse_iterator(_arr + _size));
+				return (const_reverse_iterator(begin()));
 			}
-
-
 
 
 			/*CAPACITY*/

@@ -111,9 +111,7 @@ class RBTree
 	node_ptr	createNode(value_type val, node_ptr parent)
 	{
 		node_ptr	newNode = _alloc.allocate(1);
-		// _alloc.construct(newNode, val, parent, RED);
 		_alloc.construct(newNode, val);
-
 		newNode->_parent = parent;
 		newNode->_left = _nil;
 		newNode->_right = _nil;
@@ -215,6 +213,10 @@ class RBTree
 
 	void	fixInsert(node_ptr node)
 	{
+		if (!_nil->_parent)
+			_nil->_parent = node;
+		else if (_nil->_parent && _comp(_nil->_parent->_val, node->_val))
+			_nil->_parent = node;
 		while (node->_parent->_color == RED)
 		{
 			if (node->_parent == node->_parent->_parent->_right)
@@ -263,11 +265,6 @@ class RBTree
 			}
 		}
 		_root->_color = BLACK;
-		if (!_nil->_parent)
-			_nil->_parent = node;
-		// else if (_nil->_parent && _nil->_parent->_val.first < node->_val.first)
-		else if (_nil->_parent && _comp(_nil->_parent->_val, node->_val))
-			_nil->_parent = node;
 	}
 
 	void	transplant(node_ptr u, node_ptr v)

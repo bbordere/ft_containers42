@@ -284,11 +284,11 @@ int main(void)
 	const int it = 500000;
 	const int cycles = 10;
 
-	std::cout << "ft::map: " << std::endl; 
-	testMap<ft::map<int, int>, ft::make_pair, it, cycles>();
-	std::cout << "std::map: "  << std::endl; 
-	testMap<std::map<int, int>, std::make_pair, it, cycles>();
-	std::cout << std::endl;
+	// std::cout << "ft::map: " << std::endl; 
+	// testMap<ft::map<int, int>, ft::make_pair, it, cycles>();
+	// std::cout << "std::map: "  << std::endl; 
+	// testMap<std::map<int, int>, std::make_pair, it, cycles>();
+	// std::cout << std::endl;
 
 	std::cout << "ft::vector: " << std::endl; 
 	testVector<ft::vector<int16_t>,  it, cycles>();
