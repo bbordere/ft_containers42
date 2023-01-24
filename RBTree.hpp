@@ -16,8 +16,8 @@ class RBTree
 		typedef	T			value_type;
 		typedef	Alloc		alloc_type;
 
-		typedef	RBIterator<value_type>			iterator;
-		typedef	RBConstIterator<value_type>	const_iterator;
+		typedef	ft::RBIterator<value_type>			iterator;
+		typedef	ft::RBConstIterator<value_type>	const_iterator;
 
 		typedef typename Alloc::template rebind<RBNode<value_type> >::other	node_allocator;
 
@@ -265,7 +265,8 @@ class RBTree
 		_root->_color = BLACK;
 		if (!_nil->_parent)
 			_nil->_parent = node;
-		else if (_nil->_parent && _nil->_parent->_val.first < node->_val.first)
+		// else if (_nil->_parent && _nil->_parent->_val.first < node->_val.first)
+		else if (_nil->_parent && _comp(_nil->_parent->_val, node->_val))
 			_nil->_parent = node;
 	}
 

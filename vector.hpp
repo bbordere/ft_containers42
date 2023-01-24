@@ -66,6 +66,7 @@ namespace ft
 
 			vector (vector const &copy): _arr(NULL), _size(copy._size), _capacity(copy._capacity), _alloc(copy._alloc)
 			{
+				// _copy_element(_arr, _arr + _size, copy._arr);
 				_arr = _alloc.allocate(_capacity);
 				for (size_type i = 0; i < _size; i++)
 					_alloc.construct(_arr + i, copy[i]);
@@ -76,24 +77,29 @@ namespace ft
 				_deleteArr(_arr);
 			}
 
+		// vector &operator=(vector const &other)
+			// {
+			// 	if (&other == this)
+			// 		return (*this);
+			// 	if (_capacity < other._size)
+			// 	{
+			// 		_deleteArr(_arr);
+			// 		_arr = _alloc.allocate(other._size);
+			// 	}
+			// 	_size = other._size;
+			// 	_capacity = other._capacity;
+			// 	_alloc = other._alloc;
+			// 	for (size_type i = 0; i < _size; i++)
+			// 		_alloc.construct(_arr + i, other._arr[i]);
+			// 	return (*this);
+			// }
 			vector &operator=(vector const &other)
 			{
-				if (&other == this)
-					return (*this);
-
-				if (_capacity < other._size)
-				{
-					_deleteArr(_arr);
-					_arr = _alloc.allocate(other._size);
-				}
+				reserve(other._size);
 				_size = other._size;
-				_capacity = other._capacity;
-				_alloc = other._alloc;
-				for (size_type i = 0; i < _size; i++)
-					_alloc.construct(_arr + i, other._arr[i]);
+				_copy_element(_arr, _arr + _size, other._arr);
 				return (*this);
 			}
-
 
 			/*ITERATORS*/
 			iterator begin()
@@ -196,10 +202,6 @@ namespace ft
 				_capacity = n;
 				_arr = newArr;
 			}
-
-
-
-
 			/*ELEMENT ACCESS*/
 
 			reference	operator[](size_type position)
@@ -478,7 +480,7 @@ std::ostream &operator<<(std::ostream &stream, ft::vector<T> const &vec)
 		return (stream);
 	}
 	stream << '[';
-	for (typename ft::vector<T>::iterator it = vec.begin(); it != vec.end() - 1; it++)
+	for (typename ft::vector<T>::const_iterator it = vec.begin(); it != vec.end() - 1; it++)
 		stream << *it << ", ";
 	stream << *(vec.end() - 1) << ']';
 	return (stream);	

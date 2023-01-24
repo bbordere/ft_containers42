@@ -31,7 +31,7 @@ fclean: clean
 re: fclean all
 
 bench:
-	$(CC) benchmark98.cpp -march=native -Ofast -g3 -o bench
+	$(CC) benchmark98.cpp -march=native -Wall -Wextra -Werror -std=c++98 -g3 -o bench -Ofast
 
 .PHONY: all clean fclean re bench
 

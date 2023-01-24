@@ -6,27 +6,17 @@
 #include "RBTree.hpp"
 #include "lexicalComp.hpp"
 #include "RBIterator.hpp"
+#include "reverseIterators.hpp"
 
 namespace ft
 {
-
-	template <class T, class U>
-	class pairKeyComp
-	{
-		public:
-			bool	operator()(ft::pair<T, U> const &lhs, ft::pair<T, U> const &rhs) const
-			{
-				return (lhs.first < rhs.first);
-			}
-	};
-
 	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<Key, T> > >
 	class map
 	{
 		public:
 			typedef Key							key_type;
 			typedef T							mapped_type;
-			typedef	ft::pair<Key, T>			value_type;
+			typedef	ft::pair<const Key, T>		value_type;
 			typedef Compare						key_compare;
 			typedef Alloc						allocator_type;
 
@@ -36,11 +26,11 @@ namespace ft
 			typedef typename allocator_type::const_pointer		const_pointer;
 
 
-			typedef RBIterator<value_type>		iterator;
-			typedef RBConstIterator<value_type> const_iterator;
+			typedef ft::RBIterator<value_type>		iterator;
+			typedef ft::RBConstIterator<value_type> const_iterator;
 
-			typedef RBReverseIterator<iterator> reverse_iterator;
-			typedef RBReverseIterator<const_iterator> const_reverse_iterator;
+			typedef ft::reverseIterator<iterator>		reverse_iterator;
+			typedef ft::reverseIterator<const_iterator> const_reverse_iterator;
 
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef std::size_t												size_type;

@@ -459,4 +459,14 @@
 
 int main(void)
 {
+	// ft::map<int, int> map;
+	// for (int i = 0; i < 10; i++)
+	// 	map.insert(ft::make_pair(i, i));
+	// for (ft::map<int, int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); it++)
+	// 	std::cout << *it << std::endl;
+	
+	ft::vector<int> vec(12, 56);
+	std::cout << *vec.rbegin() << std::endl;
+	// for (ft::vector<int>::reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
+	// 	std::cout << *it << std::endl;
 }

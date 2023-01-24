@@ -1,8 +1,17 @@
 #include <bits/stdc++.h>
 #include <sys/time.h>
 #include "ft_containers.hpp"
-// #include "Hvector.hpp"
+// #include "Tvector.hpp"
 
+
+// typedef struct bigStruct
+// {
+// 	int n;
+// 	double d;
+// 	void *ptr;
+// 	char charArr[8];
+// 	uint_fast64_t fastArr[4];
+// }	bigStruct;
 
 template <class Container>
 long	hardTestVector(int iterations)
@@ -15,7 +24,7 @@ long	hardTestVector(int iterations)
 		Container vec;
 		// std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();/*VEC*/
 		for (int i = 0; i < iterations; i++)
-			vec.push_back(i);
+			vec.push_back(typename Container::value_type());
 		// std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();/*VEC*/
 		// std::cout << "Inserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/*VEC*/
 
@@ -31,7 +40,8 @@ long	hardTestVector(int iterations)
 		Container vec;
 		// std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();/*VEC*/
 		for (int i = 0; i < iterations; i++)
-			vec.push_back(i);
+			vec.push_back(typename Container::value_type());
+
 
 		// std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();/*VEC*/
 		// std::cout << "Inserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/*VEC*/
@@ -41,7 +51,8 @@ long	hardTestVector(int iterations)
 		// std::cout << "Clearing: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/*VEC*/
 		// start = std::chrono::high_resolution_clock::now();/*VEC*/
 		for (int i = 0; i < iterations; i++)
-			vec.push_back(i);
+			vec.push_back(typename Container::value_type());
+
 		// end = std::chrono::high_resolution_clock::now();/*VEC*/
 		// std::cout << "Reinserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/*VEC*/
 		// start = std::chrono::high_resolution_clock::now();/*VEC*/
@@ -273,25 +284,26 @@ int main(void)
 	const int it = 500000;
 	const int cycles = 10;
 
-	// std::cout << "ft::map: " << std::endl; 
-	// testMap<ft::map<int, int>, ft::make_pair, it, cycles>();
-	// std::cout << "std::map: "  << std::endl; 
-	// testMap<std::map<int, int>, std::make_pair, it, cycles>();
-	// std::cout << std::endl;
+	std::cout << "ft::map: " << std::endl; 
+	testMap<ft::map<int, int>, ft::make_pair, it, cycles>();
+	std::cout << "std::map: "  << std::endl; 
+	testMap<std::map<int, int>, std::make_pair, it, cycles>();
+	std::cout << std::endl;
 
 	std::cout << "ft::vector: " << std::endl; 
-	testVector<ft::vector<int>,  it, cycles>();
+	testVector<ft::vector<int16_t>,  it, cycles>();
 	std::cout << "std::vector: " << std::endl; 
-	testVector<std::vector<int>, it, cycles>();
+	testVector<std::vector<int16_t>, it, cycles>();
 	std::cout << std::endl;
-	// std::cout << "ft::set: " << std::endl; 
-	// testSet<ft::set<int>,  it, cycles>();
-	// std::cout << "std::set: " << std::endl; 
-	// testSet<std::set<int>, it, cycles>();
-	// std::cout << std::endl;
-	// std::cout << "ft::stack: " << std::endl;
-	// testStack<ft::stack<int>,  it, cycles>();
-	// std::cout << "std::stack: " << std::endl;
-	// testStack<std::stack<int, std::vector<int> >,  it, cycles>();
+
+	std::cout << "ft::set: " << std::endl; 
+	testSet<ft::set<int>,  it, cycles>();
+	std::cout << "std::set: " << std::endl; 
+	testSet<std::set<int>, it, cycles>();
+	std::cout << std::endl;
+	std::cout << "ft::stack: " << std::endl;
+	testStack<ft::stack<int>,  it, cycles>();
+	std::cout << "std::stack: " << std::endl;
+	testStack<std::stack<int, std::vector<int> >,  it, cycles>();
 	return 0;
 }

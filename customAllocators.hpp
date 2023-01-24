@@ -53,6 +53,7 @@ class QueueAllocator
 
 		void deallocate(T* p, std::size_t n)
 		{
+			static_cast<void>(n);
 			_free_list.push(p);
 		}
 

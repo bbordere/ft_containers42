@@ -30,11 +30,10 @@ namespace ft
 
 			reverseIterator(iterator_type it): _it(it) {}
 
+			reverseIterator(reverseIterator const &copy): _it(copy._it) {}
+
 			template <class It>
-			reverseIterator(reverseIterator<It> const &copy)
-			{
-				*this = copy;
-			}
+			reverseIterator(reverseIterator<It> const &copy): _it(copy.base()) {}
 
 			~reverseIterator() {}
 
@@ -110,7 +109,7 @@ namespace ft
 				return (*this);
 			}	
 
-			pointer base() const
+			iterator_type base() const
 			{
 				return (_it);
 			}

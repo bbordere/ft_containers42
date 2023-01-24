@@ -63,6 +63,19 @@ namespace   ft
 		}
 		return res;
 	}
+
+	template<class InputIterator, class OutputIterator>
+	OutputIterator _copy_element (InputIterator first, InputIterator last, OutputIterator result)
+	{
+		while (first!=last)
+		{
+			// *result = *first;
+			*first = *result;
+			++result;
+			++first;
+		}
+		return result;
+	}
 }
 
 #endif

@@ -116,6 +116,46 @@ void	modifiersTest(void)
 	// std::cout << map3 << std::endl << std::endl; /*VERBOSE*/
 }
 
+void	capacityTest(void)
+{
+	NP::map<char, int> map;
+	std::cout << (map.empty() ? "Map is empty" : "Map isn't empty") << std::endl;
+	for (char c = 'a'; c <= 'z'; c++)
+		map.insert(NP::make_pair(c, static_cast<int>(c)));
+	std::cout << (map.empty() ? "Map is empty" : "Map isn't empty") << std::endl;
+	std::cout << "Current map size: " << map.size() << std::endl;
+	std::cout << "Max Alloc Size: " << map.max_size() << std::endl;
+}
+
+void	iteratorTest(void)
+{
+	NP::map<char, int> map;
+	for (char c = 'a'; c <= 'z'; c++)
+		map.insert(NP::make_pair(c, static_cast<int>(c)));
+	
+	std::cout << std::endl;
+	for (NP::map<char, int>::const_iterator it = map.begin(); it != map.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (NP::map<char, int>::iterator it = map.begin(); it != map.end(); it++)
+		(*it).second += 42;
+	std::cout << std::endl;
+	for (NP::map<char, int>::const_iterator it = map.begin(); it != map.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+
+	std::cout << std::endl;
+	for (NP::map<char, int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	for (NP::map<char, int>::reverse_iterator it = map.rbegin(); it != map.rend(); it++)
+		(*it).second -= 42;
+	std::cout << std::endl;
+	for (NP::map<char, int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+}
+
 void	speed(void)
 {
 	NP::map<unsigned long long, unsigned long long>map;
@@ -128,12 +168,11 @@ void	speed(void)
 
 int main(void)
 {
-	for (int i = 0; i < 35; i++)
-	{
-		takeTime();
-		modifiersTest();
-		speed();
-		std::cout << static_cast<double>(takeTime()) / 1000 << std::endl;
-	}
+	takeTime();
+	modifiersTest();
+	capacityTest();
+	iteratorTest();
+	speed();
+	std::cout << static_cast<double>(takeTime()) / 1000 << std::endl;
 }
 
