@@ -160,12 +160,12 @@ namespace ft
 					erase(first++);
 			}
 
-			void	swap(set &other)
+			void swap(set &other)
 			{
 				_tree.swap(other._tree);
 			}
 
-			void	clear(void)
+			void clear(void)
 			{
 				_tree.clearTree(_tree._root);
 				_tree._root = _tree._nil;
@@ -194,7 +194,7 @@ namespace ft
 				return (iterator(ptr));
 			}
 
-			size_type	count(value_type const &val) const
+			size_type count(value_type const &val) const
 			{
 				return (_tree.search(val) == _tree._nil ? 0 : 1);
 			}
@@ -211,7 +211,7 @@ namespace ft
 				return (res);
 			}
 
-			ft::pair<iterator, iterator>	equal_range(value_type const &val) const
+			ft::pair<iterator, iterator> equal_range(value_type const &val) const
 			{
 				return (ft::make_pair(lower_bound(val), upper_bound(val)));
 			}

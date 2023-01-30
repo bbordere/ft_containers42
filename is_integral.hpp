@@ -1,5 +1,6 @@
 #ifndef __IS_INTEGRAL_HPP__
 #define __IS_INTEGRAL_HPP__
+
 namespace ft
 {
 	template <typename T, T val>
@@ -54,9 +55,6 @@ namespace ft
 
 	template <>
 	struct is_integral<unsigned long long> : true_type {};
-
-
-
 
 	template<bool condition, class T = void>
 	struct enable_if {};

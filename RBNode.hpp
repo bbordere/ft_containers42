@@ -25,6 +25,8 @@ struct RBNode
 
 	RBNode(value_type const &val): _val(val), _parent(NULL), _left(NULL), _right(NULL), _color(RED) {}
 
+	RBNode(value_type const &val, bool color): _val(val), _parent(NULL), _left(NULL), _right(NULL), _color(color) {}
+
 	node	&operator=(node const &assign)
 	{
 		_val = assign._val;

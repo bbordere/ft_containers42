@@ -59,6 +59,7 @@ uint64_t takeTime()
 #include "../RBTreePrinter.hpp"
 void	modifiersTest(void)
 {
+	std::cout << "---- Modifiers test ----" << std::endl;
 	NP::map<int, std::string> map;
 	std::string numbers[] = {"Zero", "One", "Two", "Three", "Four", "Five"};
 	for (int i = 0; i < 6; i++)
@@ -118,6 +119,7 @@ void	modifiersTest(void)
 
 void	capacityTest(void)
 {
+	std::cout << "---- Capacity test ----" << std::endl;
 	NP::map<char, int> map;
 	std::cout << (map.empty() ? "Map is empty" : "Map isn't empty") << std::endl;
 	for (char c = 'a'; c <= 'z'; c++)
@@ -129,6 +131,7 @@ void	capacityTest(void)
 
 void	iteratorTest(void)
 {
+	std::cout << "---- Iterator test ----" << std::endl;
 	NP::map<char, int> map;
 	for (char c = 'a'; c <= 'z'; c++)
 		map.insert(NP::make_pair(c, static_cast<int>(c)));
@@ -153,17 +156,44 @@ void	iteratorTest(void)
 	std::cout << std::endl;
 	for (NP::map<char, int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); it++)
 		std::cout << *it << " ";
-	std::cout << std::endl;
+	std::cout << std::endl << std::endl;
+
+	std::cout << "ASCII code of 'a' is: " << map['a'] << std::endl << std::endl;
 }
 
 void	speed(void)
 {
+	std::cout << "---- Speed test ----" << std::endl;
 	NP::map<unsigned long long, unsigned long long>map;
 	for (unsigned long long i = 0; i < 3000000; i++)
 		map.insert(NP::make_pair(i, i * i));
 	map.find(2500000);
 	map.insert(map.end(), NP::make_pair(2500000, 42));
 	NP::map<unsigned long long, unsigned long long>map2(map);
+	map2.find(25000000);
+	NP::map<unsigned long long, unsigned long long>map3;
+	map3 = map2;
+	map3.find(42);
+}
+
+void	operationsTest(void)
+{
+	std::cout << "---- Operations test ----" << std::endl;
+	NP::map<unsigned long long, unsigned long long>map;
+	for (unsigned long long i = 0; i < 1000; i++)
+		map.insert(NP::make_pair(i, i * i));
+	NP::map<unsigned long long, unsigned long long>::const_iterator it = map.find(42);
+	std::cout << (it != map.end() ? "Found !" : "Not Found !") << std::endl;
+	it = map.find(424242);
+	std::cout << (it != map.end() ? "Found !" : "Not Found !") << std::endl;
+	std::cout << "21 appears " << map.count(21) << " times in map" << std::endl;
+	std::cout << "213124 appears " << map.count(213124) << " times in map" << std::endl;
+	std::cout << *map.lower_bound(42) << std::endl;
+	std::cout << *map.upper_bound(42) << std::endl;
+	NP::pair<NP::map<unsigned long long, unsigned long long>::iterator, NP::map<unsigned long long, unsigned long long>::iterator> range;
+	range = map.equal_range(42);
+	std::cout << "Range: " << *range.first << ", " << *range.second << std::endl;
+	
 }
 
 int main(void)
@@ -172,7 +202,8 @@ int main(void)
 	modifiersTest();
 	capacityTest();
 	iteratorTest();
+	operationsTest();
 	speed();
-	std::cout << static_cast<double>(takeTime()) / 1000 << std::endl;
+	std::cout << "Routime time: " << static_cast<double>(takeTime()) / 1000 << std::endl;
 }
 

@@ -52,6 +52,26 @@ class RBTree
 		*this = copy;
 	}
 
+	void	_dupTree(node_ptr &root, node_ptr parent, node_ptr otherRoot, node_ptr otherNil)
+	{
+		if (otherRoot == otherNil)
+		{
+			root = _nil;
+			return;
+		}
+		root = createNode(otherRoot->_val, otherRoot->_color);
+		root->_parent = parent;
+		_dupTree(root->_left, root, otherRoot->_left, otherNil);
+		_dupTree(root->_right, root, otherRoot->_right, otherNil);
+		// if (root == nil)
+		// 	return (_nil);
+		// node_ptr newNode = createNode(root->_val, root->_color);
+		// newNode->_parent = root;
+		// newNode->_left = _dupTree(root->_left, nil);
+		// newNode->_right = _dupTree(root->_right, nil);
+		// return (newNode);
+	}
+
 	RBTree &operator=(RBTree const &assign)
 	{
 		if (this != &assign)
@@ -62,7 +82,9 @@ class RBTree
 				_root = _nil;
 			}
 			if (assign._root != assign._nil)
-				insert(assign.begin(), assign.end());
+				_dupTree(_root, _nil, assign._root, assign._nil);
+			_nil->_parent = getMax(_root);
+			_size = assign._size;
 		}
 		return (*this);
 	}
@@ -118,6 +140,17 @@ class RBTree
 		return (newNode);
 	}
 
+	node_ptr	createNode(value_type val, bool color)
+	{
+		node_ptr	newNode = _alloc.allocate(1);
+		_alloc.construct(newNode, val);
+		newNode->_parent = _nil;
+		newNode->_left = _nil;
+		newNode->_right = _nil;
+		newNode->_color = color;
+		return (newNode);
+	}
+
 	node_ptr	search(value_type const &val) const
 	{
 		node_ptr	node = _root;
@@ -160,7 +193,7 @@ class RBTree
 	}
 
 	template <class InputIterator>
-	void	insert(InputIterator first, InputIterator last)
+	void	insert(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type = true)
 	{
 		while (first != last)
 		{

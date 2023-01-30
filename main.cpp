@@ -457,27 +457,65 @@
 #include "RBTreePrinter.hpp"
 #include <bits/stdc++.h>
 
+template <class T, class Compare, class Allocator>
+std::ostream &operator<<(std::ostream &stream, std::set<T, Compare, Allocator> const &set)
+{
+	stream << '{';
+	typename ft::set<T, Compare, Allocator>::const_iterator val = set.begin();
+	for (std::size_t i = 0; i < set.size() - 1; i++)
+	{
+		stream << *val << ", ";
+		++val;
+	}
+	stream << *val << '}';
+	return (stream);
+}
+
+#include "customAllocators.hpp"
 int main(void)
 {
-	ft::map<int, int> map;
-	for (int i = 0; i < 10; i++)
-	{
-		map.insert(ft::make_pair(i * 2, i));
-	}
-	for (ft::map<int, int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); ++it)
-		std::cout << *it << '\n';
-	for (ft::map<int, int>::reverse_iterator it = map.rbegin(); it != map.rend(); ++it)
-		(*it).second += 42;
-	for (ft::map<int, int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); ++it)
-		std::cout << *it << '\n';
-	ft::vector<int> vec;
-	for (int i = 0; i < 25; i++)
-		vec.push_back(i);
-	ft::vector<int>::const_reverse_iterator it = vec.rbegin();
-	for (ft::vector<int>::const_reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
-		std::cout << *it << '\n';
-	for (ft::vector<int>::reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
-		(*it) += 42;
-	for (ft::vector<int>::const_reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
-		std::cout << *it << '\n';
+	std::map<int, int> map;
+	for (int i = 0; i < 50000; i++)
+		map.insert(std::make_pair(i, i * 2));
+	std::map<int, int> map2(map);
+	// ft::map<int, int>::const_iterator end = ap2.end();
+	// for (ft::map<int, int>::const_iterator it = ap2.begin(); it != ap2.end(); it++)
+		// std::cout << &it << " " << &end << std::endl;
+	
+
+	// for (int i = 0; i < 10; i++)
+	// {
+	// 	map.insert(ft::make_pair(i * 2, i));
+	// }
+	// for (ft::map<int, int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); ++it)
+	// 	std::cout << *it << '\n';
+	// for (ft::map<int, int>::reverse_iterator it = map.rbegin(); it != map.rend(); ++it)
+	// 	(*it).second += 42;
+	// for (ft::map<int, int>::const_reverse_iterator it = map.rbegin(); it != map.rend(); ++it)
+	// 	std::cout << *it << '\n';
+	// ft::vector<int> vec;
+	// for (int i = 0; i < 25; i++)
+	// 	vec.push_back(i);
+	// ft::vector<int>::const_reverse_iterator it = vec.rbegin();
+	// for (ft::vector<int>::const_reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
+	// 	std::cout << *it << '\n';
+	// for (ft::vector<int>::reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
+	// 	(*it) += 42;
+	// for (ft::vector<int>::const_reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
+	// 	std::cout << *it << '\n';
+
+	// ft::set<int> set;
+	// std::set<int> setSTD;
+	// for (int i = 0; i < 500000; i++)
+	// {
+	// 	setSTD.insert(i);
+	// 	set.insert(i);
+	// }
+	// std::set<int>::iterator itSTD = setSTD.begin();
+	// for (ft::set<int>::iterator it = set.begin(); it != set.end(); it++)
+	// {
+	// 	if (*itSTD != *it)
+	// 		std::cout << "C LA MERDE" << std::endl;
+	// 	itSTD++;
+	// }
 }
