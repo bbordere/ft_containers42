@@ -35,7 +35,7 @@ namespace ft
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef std::size_t												size_type;
 
-			class value_compare
+			class value_compare: public std::binary_function<value_type, value_type, bool>
 			{
 				private:
 					friend class map;
@@ -262,10 +262,11 @@ namespace ft
 
 			mapped_type	&operator[](key_type const &key)
 			{
-				node_ptr node = _tree.search(ft::make_pair(key, mapped_type()));
-				if (node == _tree._nil)
-					return (insert(ft::make_pair(key, mapped_type())).first->second);
-				return (node->_val.second);
+				// // node_ptr node = _tree.search(ft::make_pair(key, mapped_type()));
+				// // if (node == _tree._nil)
+				// 	return (insert(ft::make_pair(key, mapped_type())).first->second);
+				// // return (node->_val.second);
+				return (insert(ft::make_pair(key, mapped_type())).first->second);
 			}
 
 			ft::pair<iterator, iterator>	equal_range(key_type const &k)
@@ -285,14 +286,55 @@ namespace ft
 
 			value_compare value_comp(void) const
 			{
-				return (value_compare());
+				return (value_compare(key_comp()));
 			}
 
 			allocator_type get_allocator(void) const
 			{
 				return (allocator_type());
 			}
+
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend bool	operator==(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y);
+
+			template <class _Key, class _T, class _Compare, class _Alloc>
+			friend bool	operator<(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y);
 	};
+
+	template <class _Key, class _T, class _Compare, class _Alloc>
+	bool	operator==(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y)
+	{
+		return (x._tree == y._tree);
+	}
+	template <class _Key, class _T, class _Compare, class _Alloc>
+	bool	operator<(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y)
+	{
+		return (x._tree < y._tree);
+	}
+
+	template <class _Key, class _T, class _Compare, class _Alloc>
+	bool	operator!=(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y)
+	{
+		return (!(x == y));
+	}
+
+	template <class _Key, class _T, class _Compare, class _Alloc>
+	bool	operator<=(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y)
+	{
+		return (!(y < x));
+	}
+
+	template <class _Key, class _T, class _Compare, class _Alloc>
+	bool	operator>(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y)
+	{
+		return (y < x);
+	}
+
+	template <class _Key, class _T, class _Compare, class _Alloc>
+	bool	operator>=(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y)
+	{
+		return (!(x < y));
+	}
 
 }
 

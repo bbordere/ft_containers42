@@ -41,7 +41,7 @@ namespace ft
 			reverseIterator &operator=(reverseIterator<It> const &assign)
 			{
 				if (*this != assign)
-					_it = assign._it.base();
+					_it = assign.base();
 				return (*this);
 			}
 
@@ -116,27 +116,36 @@ namespace ft
 	};
 
 	template <class T>
+	reverseIterator<T> operator+(typename reverseIterator<T>::difference_type n, reverseIterator<T> const &rhs)
+	{
+		return (rhs + n);
+	}
+	template <class Iter1, class Iter2>
+	typename reverseIterator<Iter1>::difference_type operator - ( const reverseIterator<Iter1>& l,
+																   const reverseIterator<Iter2>& r )		{		return  r.base() - l.base(); };
+
+	template <class T>
 	bool	operator<(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)
-	{
-		return lhs.base() < rhs.base();
-	}
-
-	template <class T>
-	bool	operator<=(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)
-	{
-		return lhs.base() <= rhs.base();
-	}
-
-	template <class T>
-	bool	operator>(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)
 	{
 		return lhs.base() > rhs.base();
 	}
 
 	template <class T>
-	bool	operator>=(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)
+	bool	operator<=(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)
 	{
 		return lhs.base() >= rhs.base();
+	}
+
+	template <class T>
+	bool	operator>(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)
+	{
+		return lhs.base() < rhs.base();
+	}
+
+	template <class T>
+	bool	operator>=(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)
+	{
+		return lhs.base() <= rhs.base();
 	}
 
 	template <class T>
@@ -155,25 +164,25 @@ namespace ft
 	template <class T, class U>
 	bool	operator<(reverseIterator<T> const& lhs, reverseIterator<U> const& rhs)
 	{
-		return lhs.base() < rhs.base();
+		return lhs.base() > rhs.base();
 	}
 
 	template <class T, class U>
 	bool	operator<=(reverseIterator<T> const& lhs, reverseIterator<U> const& rhs)
 	{
-		return lhs.base() <= rhs.base();
+		return lhs.base() >= rhs.base();
 	}
 
 	template <class T, class U>
 	bool	operator>(reverseIterator<T> const& lhs, reverseIterator<U> const& rhs)
 	{
-		return lhs.base() > rhs.base();
+		return lhs.base() < rhs.base();
 	}
 
 	template <class T, class U>
 	bool	operator>=(reverseIterator<T> const& lhs, reverseIterator<U> const& rhs)
 	{
-		return lhs.base() >= rhs.base();
+		return lhs.base() <= rhs.base();
 	}
 
 	template <class T, class U>

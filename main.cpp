@@ -456,12 +456,36 @@
 #include "ft_containers.hpp"
 #include "RBTreePrinter.hpp"
 #include <bits/stdc++.h>
+template <class T, class Key, class Compare, class Allocator>
+
+std::ostream &operator<<(std::ostream &stream, std::map<Key, T, Compare, Allocator> &map)
+{
+	stream << '{';
+	if (map.empty())
+	{
+		stream << '}';
+		return (stream);		
+	}
+	typename std::map<Key, T, Compare, Allocator>::iterator pair = map.begin();
+	for (std::size_t i = 0; i < map.size() - 1; i++)
+	{
+		stream << '\'' << (*pair).first << "': " << (*pair).second << ", ";
+		++pair;
+	}
+	stream << '\'' << (*pair).first << "': " << (*pair).second << '}';
+	return (stream);
+}
 
 template <class T, class Compare, class Allocator>
 std::ostream &operator<<(std::ostream &stream, std::set<T, Compare, Allocator> const &set)
 {
+	if (set.empty())
+	{
+		stream << "{}";
+		return (stream);
+	}
 	stream << '{';
-	typename ft::set<T, Compare, Allocator>::const_iterator val = set.begin();
+	typename std::set<T, Compare, Allocator>::const_iterator val = set.begin();
 	for (std::size_t i = 0; i < set.size() - 1; i++)
 	{
 		stream << *val << ", ";
@@ -471,13 +495,95 @@ std::ostream &operator<<(std::ostream &stream, std::set<T, Compare, Allocator> c
 	return (stream);
 }
 
+template <typename T>
+std::ostream &operator<<(std::ostream &stream, std::vector<T> const &vec)
+{
+	if (vec.empty())
+	{
+		stream << "[]";
+		return (stream);
+	}
+	stream << '[';
+	for (typename std::vector<T>::const_iterator it = vec.begin(); it != vec.end() - 1; it++)
+		stream << *it << ", ";
+	stream << *(vec.end() - 1) << ']';
+	return (stream);	
+}
+typedef std::set<int> _set;
+typedef _set::const_iterator const_it;
+typedef _set::iterator _it;
+
 #include "customAllocators.hpp"
 int main(void)
 {
-	std::map<int, int> map;
-	for (int i = 0; i < 50000; i++)
-		map.insert(std::make_pair(i, i * 2));
-	std::map<int, int> map2(map);
+	// ft::map<char, int> map;
+
+	// std::cout << (map['a'] = 97) << std::endl;
+	// std::cout << (map['a'] = 97) << std::endl;
+	// std::cout << (map['a'] = 97) << std::endl;
+	// std::cout << (map['a'] = 97) << std::endl;
+	// std::cout << (map['a'] = 97) << std::endl;
+	// std::cout << (map['b'] = 96) << std::endl;
+	// std::cout << map << std::endl;
+
+	_set set;
+	for (int i = 0; i < 10; i++)
+		set.insert(i);
+	std::cout << *set.find(1) << std::endl;
+
+	// _vec vct(5);
+	// _vec vct2;
+	// const int cut = 3;
+	// for (unsigned long int i = 0; i < vct.size(); ++i)
+	// 	vct[i] = (vct.size() - i) * 7;
+	// std::cout << vct << std::endl;
+	// std::cout << vct.size() << std::endl;
+	// vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
+	// std::cout << vct2 << std::endl;
+	// std::cout << vct2.size() << std::endl;
+
+// 	std::map<int, int> map;
+// 	for (int i = 0; i < 50000; i++)
+// 		map.insert(std::make_pair(i, i * 2));
+// 	std::map<int, int> map2(map);
+
+
+//  	ft::map<int, char> alice;
+// 	alice.insert(ft::make_pair(1, 'a'));
+// 	alice.insert(ft::make_pair(2, 'b'));
+// 	alice.insert(ft::make_pair(3, 'c'));
+
+//  	ft::map<int, char> bob;
+// 	bob.insert(ft::make_pair(7, 'Z'));
+// 	bob.insert(ft::make_pair(8, 'Y'));
+// 	bob.insert(ft::make_pair(9, 'X'));
+// 	bob.insert(ft::make_pair(10, 'W'));
+
+// 	ft::map<int, char> eve;
+// 	eve.insert(ft::make_pair(1, 'a'));
+// 	eve.insert(ft::make_pair(2, 'b'));
+// 	eve.insert(ft::make_pair(3, 'c'));
+	
+	
+//    std::cout << std::boolalpha;
+ 
+//     // Compare non equal containers
+//     std::cout << "alice == bob returns " << (alice == bob) << '\n';
+//     std::cout << "alice != bob returns " << (alice != bob) << '\n';
+//     std::cout << "alice <  bob returns " << (alice < bob) << '\n';
+//     std::cout << "alice <= bob returns " << (alice <= bob) << '\n';
+//     std::cout << "alice >  bob returns " << (alice > bob) << '\n';
+//     std::cout << "alice >= bob returns " << (alice >= bob) << '\n';
+ 
+//     std::cout << '\n';
+ 
+//     // Compare equal containers
+//     std::cout << "alice == eve returns " << (alice == eve) << '\n';
+//     std::cout << "alice != eve returns " << (alice != eve) << '\n';
+//     std::cout << "alice <  eve returns " << (alice < eve) << '\n';
+//     std::cout << "alice <= eve returns " << (alice <= eve) << '\n';
+//     std::cout << "alice >  eve returns " << (alice > eve) << '\n';
+//     std::cout << "alice >= eve returns " << (alice >= eve) << '\n';
 	// ft::map<int, int>::const_iterator end = ap2.end();
 	// for (ft::map<int, int>::const_iterator it = ap2.begin(); it != ap2.end(); it++)
 		// std::cout << &it << " " << &end << std::endl;

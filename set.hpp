@@ -2,7 +2,9 @@
 #define __SET_HPP__
 
 #include "RBTree.hpp"
+#include "lexicalComp.hpp"
 #include "RBIterator.hpp"
+#include "reverseIterators.hpp"
 #include <memory>
 
 namespace ft
@@ -170,6 +172,7 @@ namespace ft
 				_tree.clearTree(_tree._root);
 				_tree._root = _tree._nil;
 				_tree._root->_parent = _tree._nil;
+				_tree._size = 0;
 			}
 
 			/*OBSERVERS*/
@@ -186,7 +189,7 @@ namespace ft
 
 			/*OPERATIONS*/
 
-			iterator find(value_type const &key)
+			iterator find(value_type const &key) const
 			{
 				node_ptr ptr = _tree.search(key);
 				if (ptr == _tree._nil)
@@ -221,7 +224,49 @@ namespace ft
 			{
 				return (allocator_type());
 			}
+
+			template <class _T, class _Compare, class _Alloc>
+			friend bool	operator==(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y);
+
+			template <class _T, class _Compare, class _Alloc>
+			friend bool	operator<(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y);
+			
 	};
+
+	template <class _T, class _Compare, class _Alloc>
+	bool	operator==(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y)
+	{
+		return (x._tree == y._tree);
+	}
+	template <class _T, class _Compare, class _Alloc>
+	bool	operator<(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y)
+	{
+		return (x._tree < y._tree);
+	}
+
+	template <class _T, class _Compare, class _Alloc>
+	bool	operator!=(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y)
+	{
+		return (!(x == y));
+	}
+
+	template <class _T, class _Compare, class _Alloc>
+	bool	operator<=(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y)
+	{
+		return (!(y < x));
+	}
+
+	template <class _T, class _Compare, class _Alloc>
+	bool	operator>(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y)
+	{
+		return (y < x);
+	}
+
+	template <class _T, class _Compare, class _Alloc>
+	bool	operator>=(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y)
+	{
+		return (!(x < y));
+	}
 
 template <class T, class Compare, class Allocator>
 std::ostream &operator<<(std::ostream &stream, ft::set<T, Compare, Allocator> const &set)

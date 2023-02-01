@@ -156,6 +156,11 @@ namespace ft
 
 			void	resize(size_type n, value_type val = value_type())
 			{
+				if (!n)
+				{
+					clear();
+					return;
+				}
 				if (n > max_size())
 					throw std::length_error("Too large bro !");
 				if (n > _capacity)
@@ -254,7 +259,7 @@ namespace ft
 			void assign (It first, It last, typename ft::enable_if<!ft::is_integral<It>::value, bool>::type = true)
 			{
 				size_type i = 0;
-				resize(distance(first, last));
+				resize(ft::distance(first, last));
 				while (first != last)
 				{
 					_alloc.construct(_arr + i, *first);
@@ -285,74 +290,79 @@ namespace ft
 
 			void	pop_back()
 			{
-				_alloc.destroy(&back());
-				_size--;
+				_alloc.destroy(_arr + --_size);
 			}
 
 			iterator insert(iterator position, value_type const &val)
 			{
-				size_type offset = distance(begin(), position);
+				size_type offset = ft::distance(begin(), position);
 				insert(position, 1, val);
 				return (iterator(_arr + offset));
 			}
 
 			void insert(iterator position, size_type n, value_type const &val)
 			{
-				size_type offset = distance(begin(), position);
+				size_type startIndex = position - begin();
 				reserve(_size + n);
-				for (size_type i = 0; i < n; i++)
-					_alloc.construct(_arr + _size + i, val);
-				for (size_type i = _size - 1; i > 0 && i >= offset; i--)
-					_arr[i + n] = _arr[i];
-				if (offset == 0)
-					_arr[n] = _arr[0];
-				for (size_type i = offset; i < offset + n; i++)
-					_arr[i] = val;
+				for (size_type i = n + _size - 1; i > startIndex + n - 1; i--)
+				{
+					_alloc.construct(_arr + i, *(_arr + (i - n)));
+					_alloc.destroy(_arr + (i - n));
+				}
+				for (size_type i = startIndex; i < startIndex + n; i++)
+					_alloc.construct(_arr + i, val);
 				_size += n;
 			}
 
 			template<class It>
 			void	insert(iterator position, It first, It last, typename ft::enable_if<!ft::is_integral<It>::value, bool>::type = true)
 			{
-				size_type	 offset = distance(begin(), position);
-				size_type 	nbNewElements = distance(first, last);
-				pointer 	oldArr = _allocInsert(_size + nbNewElements);
-				for (size_type i = 0; i < nbNewElements; i++)
-					_alloc.construct(_arr + _size + i, 45);
-				for (size_type i = _size - 1; i > 0 && i >= offset; i--)
-					_arr[i + nbNewElements] = _arr[i];
-				if (offset == 0)
-					_arr[nbNewElements] = _arr[0];
-				for (size_type i = offset; i < offset + nbNewElements; i++)
-					_arr[i] = *first++;
-				_size += nbNewElements;
-				if (oldArr)
-					_deleteArr(oldArr);
+				size_type startIndex = position - begin();
+				size_type diff = ft::distance(first, last);
+
+				reserve(_size + diff);
+				for (size_type i = diff + _size - 1; i > startIndex + diff - 1; i--)
+				{
+					_alloc.construct(_arr + i, *(_arr + (i - diff)));
+					_alloc.destroy(_arr + (i - diff));
+				}
+				for (size_type i = startIndex; i < startIndex + diff; i++)
+				{
+					_alloc.construct(_arr + i, *first);
+					first++;
+				}
+				_size += diff;
 			}
 
 			iterator erase(iterator position)
 			{
 				iterator res = position;
 				_alloc.destroy(&*position);
+				_size--;
 				while (position != end())
 				{
 					*position = *(position + 1);
 					position++;
 				}
-				_size--;
 				return (res);
 			}
 
 			iterator erase(iterator first, iterator last)
 			{
-				iterator tmp = first;
-				while (tmp != last)
+				difference_type diff = last - first;
+
+				while (first != end() - diff)
 				{
-					_alloc.destroy(&*(tmp));
-					tmp++;
+					*first = first[diff];
+					++first;
 				}
-				assign(last, end());
-				return (tmp);
+				while (first != end())
+				{
+					_alloc.destroy(&(*first));
+					++first;
+				}
+				_size -= diff;
+				return (last - diff);
 			}
 
 			void	swap(vector &other)
@@ -377,13 +387,10 @@ namespace ft
 				return (_alloc);
 			}
 
-
-
-
 		private:
 			void	_deleteArr(pointer arr)
 			{
-				for (size_type i = 0; i < _capacity; i++)
+				for (size_type i = 0; i < _size; i++)
 					_alloc.destroy(arr + i);
 				_alloc.deallocate(arr, _capacity);
 			}
@@ -451,26 +458,8 @@ void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-template <typename T>
-std::ostream &operator<<(std::ostream &stream, ft::vector<T> const &vec)
+template <typename T, class Alloc>
+std::ostream &operator<<(std::ostream &stream, ft::vector<T, Alloc> const &vec)
 {
 	if (vec.empty())
 	{

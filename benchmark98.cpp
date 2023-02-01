@@ -80,7 +80,7 @@ void	testVector(void)
 	std::cout << "Average Routine time: " << (sum / nbCycle) << " ms" << std::endl;
 }
 
-template <class Container, class makePair>
+template <class Container>
 long	hardTestMap(int iterations)
 {
 	srand(time(NULL));
@@ -92,7 +92,7 @@ long	hardTestMap(int iterations)
 		// std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();/**/
 		for (int i = 0; i < 500; i++)
 		{
-			map.insert(makePair(rand(), rand()));
+			map[rand()] = rand();
 		}
 		// std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();/**/
 		// std::cout << "Inserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/**/
@@ -110,7 +110,7 @@ long	hardTestMap(int iterations)
 		// std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();/**/
 		for (int i = 0; i < iterations; i++)
 		{
-			map.insert(makePair(rand(), rand()));
+			map[rand()] = rand();
 		}
 		// std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();/**/
 		// std::cout << "Inserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/**/
@@ -121,7 +121,8 @@ long	hardTestMap(int iterations)
 		// start = std::chrono::high_resolution_clock::now();/**/
 		for (int i = 0; i < iterations; i++)
 		{
-			map.insert(makePair(rand(), rand()));
+			// map.insert({rand(), rand()});
+			map[rand()] = rand();
 		}
 		// end = std::chrono::high_resolution_clock::now();/**/
 		// std::cout << "Reinserting: " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1000 << " ms" << std::endl;/**/
@@ -137,14 +138,14 @@ long	hardTestMap(int iterations)
 	return ((end.tv_sec * 1000 + end.tv_usec / 1000) - (begin.tv_sec * 1000 + begin.tv_usec / 1000));
 }
 
-template<class Container, class FT, int nbIter, int nbCycle>
-void	testMap()
+template<class Container, int nbIter, int nbCycle>
+void	testMap(void)
 {
 	double sum = 0;
 	long tmp;
 	for (int i = 0; i < nbCycle; i++)
 	{
-		tmp = hardTestMap<Container, FT>(nbIter);
+		tmp = hardTestMap<Container>(nbIter);
 		sum += tmp;
 	}
 	std::cout << "Average Routine time: " << (sum / nbCycle)<< " ms" << std::endl;
@@ -276,7 +277,6 @@ void	testStack(void)
 }
 
 // #include "42-ft_containers/includes/vector.hpp"
-#include "customAllocators.hpp"
 int main(void)
 {
 	// testVector<ft::vector<int>, 10000000, 20>();
@@ -284,11 +284,12 @@ int main(void)
 	const int it = 500000;
 	const int cycles = 10;
 
-	// std::cout << "ft::map: " << std::endl; 
-	// testMap<ft::map<int, int>, ft::make_pair, it, cycles>();
-	// std::cout << "std::map: "  << std::endl; 
-	// testMap<std::map<int, int>, std::make_pair, it, cycles>();
-	// std::cout << std::endl;
+	std::cout << "ft::map: " << std::endl; 
+	testMap<ft::map<int, int>, it, cycles>();
+	// testMap<ft::map<int, int>, int, it, cycles>();
+	std::cout << "std::map: "  << std::endl; 
+	testMap<std::map<int, int>, it, cycles>();
+	std::cout << std::endl;
 
 	std::cout << "ft::vector: " << std::endl; 
 	testVector<ft::vector<int16_t>,  it, cycles>();

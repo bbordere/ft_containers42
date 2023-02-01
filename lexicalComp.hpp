@@ -27,9 +27,9 @@ namespace ft
 	{
 		while ((first1 != last1) && (first2 != last2))
 		{
-			if (comp(*first1 < *first2))
+			if (comp(*first1, *first2))
 				return (true);
-			if (comp(*first2 < *first1))
+			if (comp(*first2, *first1))
 				return (false);
 			first1++;
 			first2++;
@@ -62,6 +62,16 @@ namespace ft
 		}
 		return (true);
 	}
+
+	template <typename T>
+	inline void	swap(T &a, T &b)
+	{
+		T const	tmp = a;
+
+		a = b;
+		b = tmp;
+	}
+
 }
 
 // int main(int argc, char const *argv[])

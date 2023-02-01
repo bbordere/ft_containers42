@@ -73,6 +73,11 @@ namespace ft
 				return (randomAccessIterators(_ptr + n));
 			}
 
+			difference_type	operator+(randomAccessIterators const &n) const
+			{
+				return ((_ptr + n._ptr));
+			}
+
 			randomAccessIterators	&operator+=(difference_type n)
 			{
 				_ptr += n;
@@ -82,6 +87,11 @@ namespace ft
 			randomAccessIterators	operator-(difference_type n) const
 			{
 				return (randomAccessIterators(_ptr - n));
+			}
+
+			difference_type	operator-(randomAccessIterators const &n) const
+			{
+				return ((_ptr - n._ptr));
 			}
 
 			randomAccessIterators	&operator-=(difference_type n)
@@ -100,6 +110,16 @@ namespace ft
 				return (randomAccessIterators<T const>(this->_ptr));
 			}
 	};
+
+	template <class T>
+	randomAccessIterators<T> operator+(typename randomAccessIterators<T>::difference_type n, randomAccessIterators<T> const &rhs)
+	{
+		return (rhs + n);
+	}
+
+	template <class Iter1, class Iter2>
+	typename randomAccessIterators<Iter1>::difference_type operator - ( const randomAccessIterators<Iter1>& l,	
+																   const randomAccessIterators<Iter2>& r )		{		return  l.base() - r.base(); };
 
 	template <class T>
 	bool	operator<(randomAccessIterators<T> const& lhs, randomAccessIterators<T> const& rhs)

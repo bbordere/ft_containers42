@@ -3,6 +3,8 @@
 
 #include <memory>
 #include "RBIterator.hpp"
+#include "lexicalComp.hpp"
+#include "is_integral.hpp"
 #include <iostream>
 
 
@@ -557,5 +559,42 @@ class RBTree
 		return (getBlackHeight(_root) >= 0 && redChildAreBlack(_root));
 	}
 };
+
+template <class T, class Compare, class Alloc>
+bool operator==(RBTree<T, Compare, Alloc> const &x, RBTree<T, Compare, Alloc> const &y)
+{
+	return (x._size == y._size && ft::equal(x.begin(), x.end(), y.begin()));
+}
+
+template <class T, class Compare, class Alloc>
+bool operator!=(RBTree<T, Compare, Alloc> const &x, RBTree<T, Compare, Alloc> const &y)
+{
+	return (!(x == y));
+}
+
+template <class T, class Compare, class Alloc>
+bool operator<(RBTree<T, Compare, Alloc> const &x, RBTree<T, Compare, Alloc> const &y)
+{
+	return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));
+}
+
+template <class T, class Compare, class Alloc>
+bool operator<=(RBTree<T, Compare, Alloc> const &x, RBTree<T, Compare, Alloc> const &y)
+{
+	return (!(y < x));
+}
+
+template <class T, class Compare, class Alloc>
+bool operator>(RBTree<T, Compare, Alloc> const &x, RBTree<T, Compare, Alloc> const &y)
+{
+	return (y < x);
+}
+
+template <class T, class Compare, class Alloc>
+bool operator>=(RBTree<T, Compare, Alloc> const &x, RBTree<T, Compare, Alloc> const &y)
+{
+	return (!(x < y));
+}
+
 
 #endif

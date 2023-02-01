@@ -70,7 +70,7 @@ void	modifiersTest(void)
 		std::cout << "Not good result" << std::endl;
 	else
 		std::cout << "Good result" << std::endl;
-	// std::cout << map << std::endl; /*VERBOSE*/
+	std::cout << map << std::endl; /*VERBOSE*/
 	NP::pair<int, std::string> next[] = {
 									NP::make_pair<int, std::string>(7, "Seven"),
 									NP::make_pair<int, std::string>(8, "Eight"),
@@ -78,16 +78,16 @@ void	modifiersTest(void)
 									NP::make_pair<int, std::string>(10, "Ten")
 								};
 	map.insert(next, next + 4);
-	// std::cout << map << std::endl; /*VERBOSE*/
+	std::cout << map << std::endl; /*VERBOSE*/
 	map.insert(map.end(), NP::make_pair<int, std::string>(11, "Eleven"));
-	// std::cout << map << std::endl << std::endl; /*VERBOSE*/
+	std::cout << map << std::endl << std::endl; /*VERBOSE*/
 
 	NP::map<int, std::string> map2(map);
 	NP::map<int, std::string> map3;
 	map3 = map2;
-	// std::cout << map << std::endl; /*VERBOSE*/
-	// std::cout << map2 << std::endl; /*VERBOSE*/
-	// std::cout << map3 << std::endl << std::endl; /*VERBOSE*/
+	std::cout << map << std::endl; /*VERBOSE*/
+	std::cout << map2 << std::endl; /*VERBOSE*/
+	std::cout << map3 << std::endl << std::endl; /*VERBOSE*/
 	
 
 	map.erase(0);
@@ -101,20 +101,21 @@ void	modifiersTest(void)
 	it = map3.end();
 	--(--(--it));
 	map3.erase(it, map3.end());
-	// std::cout << map << std::endl; /*VERBOSE*/
-	// std::cout << map2 << std::endl; /*VERBOSE*/
-	// std::cout << map3 << std::endl << std::endl; /*VERBOSE*/
+	std::cout << map << std::endl; /*VERBOSE*/
+	std::cout << map2 << std::endl; /*VERBOSE*/
+	std::cout << map3 << std::endl << std::endl; /*VERBOSE*/
 
 	map.swap(map2);
-	// std::cout << map << std::endl; /*VERBOSE*/
-	// std::cout << map2 << std::endl << std::endl; /*VERBOSE*/
+	std::cout << map << std::endl; /*VERBOSE*/
+	std::cout << map2 << std::endl << std::endl; /*VERBOSE*/
 
+	map2 > map;
 	map.clear();
 	map2.clear();
 	map3.clear();
-	// std::cout << map << std::endl; /*VERBOSE*/
-	// std::cout << map2 << std::endl; /*VERBOSE*/
-	// std::cout << map3 << std::endl << std::endl; /*VERBOSE*/
+	std::cout << map << std::endl; /*VERBOSE*/
+	std::cout << map2 << std::endl; /*VERBOSE*/
+	std::cout << map3 << std::endl << std::endl; /*VERBOSE*/
 }
 
 void	capacityTest(void)
@@ -193,6 +194,37 @@ void	operationsTest(void)
 	NP::pair<NP::map<unsigned long long, unsigned long long>::iterator, NP::map<unsigned long long, unsigned long long>::iterator> range;
 	range = map.equal_range(42);
 	std::cout << "Range: " << *range.first << ", " << *range.second << std::endl;
+
+	NP::map<int, char> alice;
+	alice.insert(NP::make_pair(1, 'a'));
+	alice.insert(NP::make_pair(2, 'b'));
+	alice.insert(NP::make_pair(3, 'c'));
+
+	NP::map<int, char> bob;
+	bob.insert(NP::make_pair(7, 'Z'));
+	bob.insert(NP::make_pair(8, 'Y'));
+	bob.insert(NP::make_pair(9, 'X'));
+	bob.insert(NP::make_pair(10, 'W'));
+
+	NP::map<int, char> eve;
+	eve.insert(NP::make_pair(1, 'a'));
+	eve.insert(NP::make_pair(2, 'b'));
+	eve.insert(NP::make_pair(3, 'c'));	
+
+	std::cout << std::boolalpha;
+	std::cout << "alice == bob returns " << (alice == bob) << '\n';
+	std::cout << "alice != bob returns " << (alice != bob) << '\n';
+	std::cout << "alice <  bob returns " << (alice < bob) << '\n';
+	std::cout << "alice <= bob returns " << (alice <= bob) << '\n';
+	std::cout << "alice >  bob returns " << (alice > bob) << '\n';
+	std::cout << "alice >= bob returns " << (alice >= bob) << '\n';
+	std::cout << std::endl;
+	std::cout << "alice == eve returns " << (alice == eve) << '\n';
+	std::cout << "alice != eve returns " << (alice != eve) << '\n';
+	std::cout << "alice <  eve returns " << (alice < eve) << '\n';
+	std::cout << "alice <= eve returns " << (alice <= eve) << '\n';
+	std::cout << "alice >  eve returns " << (alice > eve) << '\n';
+	std::cout << "alice >= eve returns " << (alice >= eve) << '\n';
 	
 }
 
