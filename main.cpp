@@ -509,14 +509,75 @@ std::ostream &operator<<(std::ostream &stream, std::vector<T> const &vec)
 	stream << *(vec.end() - 1) << ']';
 	return (stream);	
 }
-typedef std::set<int> _set;
-typedef _set::const_iterator const_it;
-typedef _set::iterator _it;
+
+
+struct dumb
+{
+	int i;
+	double d;
+	std::string str;
+
+	dumb()
+	{
+		i = 0;
+		d = 0.0;
+		str = "";
+	}
+
+	~dumb(){}
+	dumb(int i, double d, std::string str)
+	{
+		this->i = i;
+		this->d = d;
+		this->str = str;
+	}
+
+	bool operator==(dumb const &other)
+	{
+		return (other.i == i && other.d == d && str == other.str);
+	}
+};
+
+bool operator==(dumb const &lhs, dumb const &rhs)
+{
+	return (lhs.d == rhs.d && lhs.i == rhs.i && lhs.str == rhs.str);
+}
+
+std::ostream &operator<<(std::ostream &ss, dumb const &d)
+{
+	ss << d.i << ' ' << d.d << ' ';
+	ss << d.str;
+	return (ss);
+}
+
+// typedef ft::vector<dumb> _vec;
+typedef ft::vector<dumb> _vec;
+typedef _vec::const_iterator const_it;
+typedef _vec::iterator _it;
 
 #include "customAllocators.hpp"
 int main(void)
 {
 	// ft::map<char, int> map;
+	// dumb test = {};
+	// test.str = "Ceci est un test";
+	// std::cout << test << '\n';
+
+	_vec vec(500000);
+	_vec vec2;
+
+	for (int i = 0; i < 500000; i++)
+		vec[i] = dumb(i, (double)(i * 2), std::string("Ceci est un test"));
+		// vec[i] = i;
+
+	for (int i = 0; i < 500; i++)
+	{
+		vec2 = vec;
+		std::cout << std::boolalpha << (vec == vec2) << '\n';
+	}
+	
+	// std::cout << vec2 << '\n';
+
 
 	// std::cout << (map['a'] = 97) << std::endl;
 	// std::cout << (map['a'] = 97) << std::endl;
@@ -526,10 +587,11 @@ int main(void)
 	// std::cout << (map['b'] = 96) << std::endl;
 	// std::cout << map << std::endl;
 
-	_set set;
-	for (int i = 0; i < 10; i++)
-		set.insert(i);
-	std::cout << *set.find(1) << std::endl;
+	// _set set;
+	// for (int i = 0; i < 10; i++)
+	// 	set.insert(i);
+	// std::cout << *set.find(1) << std::endl;
+
 
 	// _vec vct(5);
 	// _vec vct2;

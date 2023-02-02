@@ -284,12 +284,12 @@ int main(void)
 	const int it = 500000;
 	const int cycles = 10;
 
-	std::cout << "ft::map: " << std::endl; 
-	testMap<ft::map<int, int>, it, cycles>();
-	// testMap<ft::map<int, int>, int, it, cycles>();
-	std::cout << "std::map: "  << std::endl; 
-	testMap<std::map<int, int>, it, cycles>();
-	std::cout << std::endl;
+	// std::cout << "ft::map: " << std::endl; 
+	// testMap<ft::map<int, int>, it, cycles>();
+	// // testMap<ft::map<int, int>, int, it, cycles>();
+	// std::cout << "std::map: "  << std::endl; 
+	// testMap<std::map<int, int>, it, cycles>();
+	// std::cout << std::endl;
 
 	std::cout << "ft::vector: " << std::endl; 
 	testVector<ft::vector<int16_t>,  it, cycles>();
@@ -297,14 +297,14 @@ int main(void)
 	testVector<std::vector<int16_t>, it, cycles>();
 	std::cout << std::endl;
 
-	std::cout << "ft::set: " << std::endl; 
-	testSet<ft::set<int>,  it, cycles>();
-	std::cout << "std::set: " << std::endl; 
-	testSet<std::set<int>, it, cycles>();
-	std::cout << std::endl;
-	std::cout << "ft::stack: " << std::endl;
-	testStack<ft::stack<int>,  it, cycles>();
-	std::cout << "std::stack: " << std::endl;
-	testStack<std::stack<int, std::vector<int> >,  it, cycles>();
+	// std::cout << "ft::set: " << std::endl; 
+	// testSet<ft::set<int>,  it, cycles>();
+	// std::cout << "std::set: " << std::endl; 
+	// testSet<std::set<int>, it, cycles>();
+	// std::cout << std::endl;
+	// std::cout << "ft::stack: " << std::endl;
+	// testStack<ft::stack<int>,  it, cycles>();
+	// std::cout << "std::stack: " << std::endl;
+	// testStack<std::stack<int, std::vector<int> >,  it, cycles>();
 	return 0;
 }

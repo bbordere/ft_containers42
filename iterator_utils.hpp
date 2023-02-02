@@ -69,8 +69,8 @@ namespace   ft
 	{
 		while (first!=last)
 		{
-			// *result = *first;
-			*first = *result;
+			*result = *first;
+			// *first = *result;
 			++result;
 			++first;
 		}

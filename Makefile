@@ -30,9 +30,12 @@ fclean: clean
 
 re: fclean all
 
+test:
+	$(CC) test/mainMap.cpp -march=native -std=c++98 -Wall -Wextra -Werror -g3 -o test -O0
+
 bench:
 	$(CC) benchmark98.cpp -march=native -std=c++98 -Wall -Wextra -Werror -g3 -o bench -O0
 
-.PHONY: all clean fclean re bench
+.PHONY: all clean fclean re bench test
 
 -include $(FILES:%.cpp=%.d)

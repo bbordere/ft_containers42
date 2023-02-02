@@ -109,7 +109,6 @@ void	modifiersTest(void)
 	std::cout << map << std::endl; /*VERBOSE*/
 	std::cout << map2 << std::endl << std::endl; /*VERBOSE*/
 
-	map2 > map;
 	map.clear();
 	map2.clear();
 	map3.clear();

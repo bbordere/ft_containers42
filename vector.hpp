@@ -8,6 +8,8 @@
 #include "lexicalComp.hpp"
 #include <stdexcept>
 
+#include <stdint.h>
+
 namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> >
@@ -93,11 +95,54 @@ namespace ft
 			// 		_alloc.construct(_arr + i, other._arr[i]);
 			// 	return (*this);
 			// }
+
+			void *__memcpy(void *dst, const void *src, std::size_t n)
+			{
+				uint8_t		*sdst;
+				uint64_t		*ldst;
+
+				uint64_t	u64;
+				uint8_t		u8;
+
+				uint8_t		*ssrc;
+				uint64_t	*lsrc;
+
+				ssrc = (uint8_t *)src;
+				sdst = (uint8_t *)dst;
+
+				while (n-- && (((uint64_t)sdst & (uint64_t)-8) < (uint64_t)sdst))
+				{
+					u8 = (uint8_t)*ssrc++;
+					*(sdst++) = u8;			
+				}
+
+				ldst = (uint64_t *)((void *)sdst);
+				lsrc = (uint64_t *)((void *)ssrc);
+
+
+				while ((n / 8) > 0)
+				{
+					u64 = (uint64_t)*lsrc++;
+					// u64 = ( u64 << 32 ) | u64;
+					*(ldst++) = u64;
+					n -= 8;
+				}
+				sdst = (uint8_t *)ldst;
+				ssrc = (uint8_t *)lsrc;
+				while (n--)
+				{
+					u8 = (uint8_t)*ssrc++;
+					*(sdst++) = u8;
+				}
+				return (dst);
+			}
+				// memcpy(_arr, other._arr, _size * sizeof(value_type));
 			vector &operator=(vector const &other)
 			{
+				_alloc = other._alloc;
 				reserve(other._size);
 				_size = other._size;
-				_copy_element(_arr, _arr + _size, other._arr);
+				_copy_element(other._arr, other._arr + other._size, _arr);
 				return (*this);
 			}
 
