@@ -34,21 +34,19 @@ namespace ft
 
 		private:
 		// public:
+			allocator_type	_alloc;
 			pointer			_arr;
 			size_type 		_size;
 			size_type 		_capacity;
-			allocator_type	_alloc;
 		
 		public:
-			explicit vector(allocator_type const &alloc = allocator_type()): _arr(NULL), _size(0), _capacity(0), _alloc(alloc) {}
+			explicit vector(allocator_type const &alloc = allocator_type()): _alloc(alloc), _arr(NULL), _size(0), _capacity(0)  {}
 
-			explicit vector (size_type n, value_type const &val = value_type(), allocator_type const &alloc = allocator_type()): _alloc(alloc)
+			explicit vector (size_type n, value_type const &val = value_type(), allocator_type const &alloc = allocator_type()):
+							_alloc(alloc), _arr(_alloc.allocate(n)), _size(n), _capacity(n)
 			{
-				_arr = _alloc.allocate(n);
-				_capacity = n;
-				for (size_type i = 0; i < n; i++)
-					_alloc.construct(_arr + i, val);
-				_size = n;					
+				for (size_type i = 0; i < n; ++i)
+					_alloc.construct(_arr + i, val);			
 			}
 
 			template <class It>
@@ -59,18 +57,18 @@ namespace ft
 				_size = size;
 				_capacity = size;
 				_arr = _alloc.allocate(_capacity);
-				for (size_type i = 0; first != last; i++)
+				for (size_type i = 0; first != last; ++i)
 				{
 					_alloc.construct(_arr + i, *first);
 					++first;
 				}
 			}
 
-			vector (vector const &copy): _arr(NULL), _size(copy._size), _capacity(copy._capacity), _alloc(copy._alloc)
+			vector (vector const &copy): _alloc(copy._alloc), _arr(_alloc.allocate(copy._capacity)),
+					_size(copy._size), _capacity(copy._capacity)
 			{
 				// _copy_element(_arr, _arr + _size, copy._arr);
-				_arr = _alloc.allocate(_capacity);
-				for (size_type i = 0; i < _size; i++)
+				for (size_type i = 0; i < _size; ++i)
 					_alloc.construct(_arr + i, copy[i]);
 			}
 
@@ -137,12 +135,28 @@ namespace ft
 				return (dst);
 			}
 				// memcpy(_arr, other._arr, _size * sizeof(value_type));
+
+			template<class _T>
+			inline void copy_range(_T *begin, _T *end, _T *dest)
+			{
+				while (begin != end)
+				{
+					// new (dest) _T(*begin);
+					::new (static_cast<void *>(dest)) _T(*begin);
+					// std::_Construct()
+					begin++;
+					dest++;
+				}
+			}
+
+
 			vector &operator=(vector const &other)
 			{
 				_alloc = other._alloc;
 				reserve(other._size);
 				_size = other._size;
 				_copy_element(other._arr, other._arr + other._size, _arr);
+				// copy_range(other._arr, other._arr + other._size, _arr);
 				return (*this);
 			}
 
@@ -211,17 +225,17 @@ namespace ft
 				if (n > _capacity)
 				{
 					reserve(n);
-					for (size_type i = _size; i < n; i++)
+					for (size_type i = _size; i < n; ++i)
 						_alloc.construct(_arr + i, val);
 				}
 				else if (n < _size)
 				{
-					for (size_type i = _size - 1; i >= n; i--)
+					for (size_type i = _size - 1; i >= n; --i)
 						_alloc.destroy(_arr + i);
 				}
 				else
 				{
-					for (size_type i = _size; i < n; i++)
+					for (size_type i = _size; i < n; ++i)
 						_alloc.construct(_arr + i, val);
 				}
 				_size = n;
@@ -246,6 +260,10 @@ namespace ft
 				pointer newArr = _alloc.allocate(n);
 				for (size_type i = 0; i < _size; ++i)
 					_alloc.construct(newArr + i, _arr[i]);
+			// void *__memcpy(void *dst, const void *src, std::size_t n)
+
+			// 	__memcpy(newArr, _arr, _size * sizeof(value_type));
+				
 				_deleteArr(_arr);
 				_capacity = n;
 				_arr = newArr;
@@ -326,7 +344,7 @@ namespace ft
 				if (_size == _capacity)
 				{
 					reserve(_capacity == 0 ? 1 : _capacity * 2);
-					_alloc.construct(_arr + (_size == 0 ? 0 : _size), val);
+					_alloc.construct(_arr + _size, val);
 				}
 				else
 					_alloc.construct(_arr + _size, val);
@@ -349,12 +367,12 @@ namespace ft
 			{
 				size_type startIndex = position - begin();
 				reserve(_size + n);
-				for (size_type i = n + _size - 1; i > startIndex + n - 1; i--)
+				for (size_type i = n + _size - 1; i > startIndex + n - 1; --i)
 				{
 					_alloc.construct(_arr + i, *(_arr + (i - n)));
 					_alloc.destroy(_arr + (i - n));
 				}
-				for (size_type i = startIndex; i < startIndex + n; i++)
+				for (size_type i = startIndex; i < startIndex + n; ++i)
 					_alloc.construct(_arr + i, val);
 				_size += n;
 			}
@@ -366,12 +384,12 @@ namespace ft
 				size_type diff = ft::distance(first, last);
 
 				reserve(_size + diff);
-				for (size_type i = diff + _size - 1; i > startIndex + diff - 1; i--)
+				for (size_type i = diff + _size - 1; i > startIndex + diff - 1; --i)
 				{
 					_alloc.construct(_arr + i, *(_arr + (i - diff)));
 					_alloc.destroy(_arr + (i - diff));
 				}
-				for (size_type i = startIndex; i < startIndex + diff; i++)
+				for (size_type i = startIndex; i < startIndex + diff; ++i)
 				{
 					_alloc.construct(_arr + i, *first);
 					first++;
@@ -420,7 +438,7 @@ namespace ft
 
 			void	clear(void)
 			{
-				for (size_type i = 0; i < _capacity; i++)
+				for (size_type i = 0; i < _capacity; ++i)
 					_alloc.destroy(_arr + i);
 				_size = 0;
 			}
@@ -435,7 +453,7 @@ namespace ft
 		private:
 			void	_deleteArr(pointer arr)
 			{
-				for (size_type i = 0; i < _size; i++)
+				for (size_type i = 0; i < _size; ++i)
 					_alloc.destroy(arr + i);
 				_alloc.deallocate(arr, _capacity);
 			}
@@ -512,7 +530,7 @@ std::ostream &operator<<(std::ostream &stream, ft::vector<T, Alloc> const &vec)
 		return (stream);
 	}
 	stream << '[';
-	for (typename ft::vector<T>::const_iterator it = vec.begin(); it != vec.end() - 1; it++)
+	for (typename ft::vector<T>::const_iterator it = vec.begin(); it != vec.end() - 1; ++it)
 		stream << *it << ", ";
 	stream << *(vec.end() - 1) << ']';
 	return (stream);	

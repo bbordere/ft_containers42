@@ -515,43 +515,39 @@ struct dumb
 {
 	int i;
 	double d;
-	std::string str;
 
 	dumb()
 	{
 		i = 0;
 		d = 0.0;
-		str = "";
 	}
 
 	~dumb(){}
-	dumb(int i, double d, std::string str)
+	dumb(int i, double d)
 	{
 		this->i = i;
 		this->d = d;
-		this->str = str;
 	}
 
 	bool operator==(dumb const &other)
 	{
-		return (other.i == i && other.d == d && str == other.str);
+		return (other.i == i && other.d == d);
 	}
 };
 
 bool operator==(dumb const &lhs, dumb const &rhs)
 {
-	return (lhs.d == rhs.d && lhs.i == rhs.i && lhs.str == rhs.str);
+	return (lhs.d == rhs.d && lhs.i == rhs.i);
 }
 
 std::ostream &operator<<(std::ostream &ss, dumb const &d)
 {
 	ss << d.i << ' ' << d.d << ' ';
-	ss << d.str;
 	return (ss);
 }
 
-// typedef ft::vector<dumb> _vec;
-typedef ft::vector<dumb> _vec;
+typedef ft@ext:tonybaloney.vscode-pets::vector<dumb> _vec;
+// typedef ft::vector<int> _vec;
 typedef _vec::const_iterator const_it;
 typedef _vec::iterator _it;
 
@@ -567,15 +563,16 @@ int main(void)
 	_vec vec2;
 
 	for (int i = 0; i < 500000; i++)
-		vec[i] = dumb(i, (double)(i * 2), std::string("Ceci est un test"));
+		vec.push_back(dumb(i, (double)(i * 2)));
 		// vec[i] = i;
 
-	for (int i = 0; i < 500; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		vec2 = vec;
-		std::cout << std::boolalpha << (vec == vec2) << '\n';
+		// std::cout << std::boolalpha << (vec == vec2) << '\n';
 	}
 	
+	// std::cout << map << '\n';
 	// std::cout << vec2 << '\n';
 
 

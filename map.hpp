@@ -339,7 +339,7 @@ namespace ft
 }
 
 template <class Key, class T, class Compare, class Allocator>
-std::ostream &operator<<(std::ostream &stream, ft::map<Key, T, Compare, Allocator> &map)
+std::ostream &operator<<(std::ostream &stream, ft::map<Key, T, Compare, Allocator> const &map)
 {
 	stream << '{';
 	if (map.empty())
