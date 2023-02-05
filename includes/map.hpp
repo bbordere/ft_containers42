@@ -347,7 +347,7 @@ std::ostream &operator<<(std::ostream &stream, ft::map<Key, T, Compare, Allocato
 		stream << '}';
 		return (stream);		
 	}
-	typename ft::map<Key, T, Compare, Allocator>::iterator pair = map.begin();
+	typename ft::map<Key, T, Compare, Allocator>::const_iterator pair = map.begin();
 	for (std::size_t i = 0; i < map.size() - 1; i++)
 	{
 		stream << '\'' << (*pair).first << "': " << (*pair).second << ", ";

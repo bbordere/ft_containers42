@@ -1,41 +1,65 @@
-CC = c++
+NAME = ft_containers
+STD_NAME = std_containers
 
-CFLAGS = -g3 -std=c++98 -Wall -Wextra -Werror -MMD -O0 -D STD
-# CFLAGS = -g3 -MMD
+CXX = c++
 
-FILES = main.cpp
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -MMD
 
-OBJS = $(FILES:.cpp=.o)
+OBJ_DIR = obj/
+STD_OBJ_DIR = std_obj/
 
-NAME = containers
+SRCS_DIR = srcs/
+INC_DIR = includes/
 
-%.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+FILES = $(SRCS_DIR)main.cpp $(SRCS_DIR)mainMap.cpp $(SRCS_DIR)mainSet.cpp
+OBJS = $(patsubst $(SRCS_DIR)%.cpp, $(OBJ_DIR)%.o, $(FILES))
+STD_OBJS = $(patsubst $(SRCS_DIR)%.cpp, $(STD_OBJ_DIR)%.o, $(FILES))
 
-all: $(NAME)
+DEPS = $(OBJS:.o=.d)
+STD_DEPS = $(STD_OBJS:.o=.d)
 
-std: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+$(OBJ_DIR)%.o: $(SRCS_DIR)%.cpp
+	@mkdir -p $(OBJ_DIR)
+	@ printf "$(YELLOW)Compiling: " $@ $(RESET)
+	$(CXX) $(CXXFLAGS) -I $(INC_DIR) -c $< -o $@
+
+$(STD_OBJ_DIR)%.o: $(SRCS_DIR)%.cpp
+	@mkdir -p $(STD_OBJ_DIR)
+	@ printf "$(YELLOW)Compiling: " $@ $(RESET)
+	$(CXX) $(CXXFLAGS) -D NP=std -I $(INC_DIR) -c $< -o $@
+
+BLUE = \033[34m
+RESET = \033[0m
+GREEN =	\033[32m
+YELLOW = \033[33m
+
+all: $(NAME) $(STD_NAME)
+	@ printf "$(BLUE)    ____________   __________  _   ___________    _____   ____________  _____ $(RESET) \n"
+	@ printf "$(BLUE)   / ____/_  __/  / ____/ __ \/ | / /_  __/   |  /  _/ | / / ____/ __ \/ ___/ $(RESET) \n"
+	@ printf "$(BLUE)  / /_    / /    / /   / / / /  |/ / / / / /| |  / //  |/ / __/ / /_/ /\__ \  $(RESET) \n"
+	@ printf "$(BLUE) / __/   / /    / /___/ /_/ / /|  / / / / ___ |_/ // /|  / /___/ _, _/___/ /  $(RESET) \n"
+	@ printf "$(BLUE)/_/     /_/     \____/\____/_/ |_/ /_/ /_/  |_/___/_/ |_/_____/_/ |_|/____/   $(RESET) \n"
+                                                                             
+
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CXX) $(CXXFLAGS) -I $(INC_DIR) $(OBJS) -o $@
+
+$(STD_NAME): $(STD_OBJS)
+	$(CXX) $(CXXFLAGS) -D NP=std -I $(INC_DIR) $(STD_OBJS) -o $@
 
 clean:
-	rm -f $(OBJS)
-	rm -f main.d
+	@ rm -rf $(OBJ_DIR)
+	@ rm -rf $(STD_OBJ_DIR)
+	@ printf "$(GREEN)clean done ! $(RESET)\n"
 
 fclean: clean
-	rm -f $(NAME)
-	rm -f bench
+	@ rm -rf $(NAME)
+	@ rm -rf $(STD_NAME)
+	@ printf "$(GREEN)fclean done ! $(RESET)\n"
 
 re: fclean all
 
-test:
-	$(CC) test/mainMap.cpp -march=native -std=c++98 -Wall -Wextra -Werror -g3 -o test -O0
+.PHONY: re clean fclean all
 
-bench:
-	$(CC) benchmark98.cpp -march=native -std=c++98 -Wall -Wextra -Werror -g3 -o bench -O0
-
-.PHONY: all clean fclean re bench test
-
--include $(FILES:%.cpp=%.d)
+-include $(DEPS) $(STD_DEPS)

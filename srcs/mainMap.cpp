@@ -2,7 +2,7 @@
 #include <sys/time.h>
 #include <cstdlib>
 #include <stdint.h>
-#include "../ft_containers.hpp"
+#include "ft_containers.hpp"
 #include <bits/stdc++.h>
 #include <unistd.h>
 
@@ -56,7 +56,7 @@ uint64_t takeTime()
 #define NP ft
 #endif
 
-#include "../RBTreePrinter.hpp"
+#include "RBTreePrinter.hpp"
 void	modifiersTest(void)
 {
 	std::cout << "---- Modifiers test ----" << std::endl;
@@ -227,14 +227,13 @@ void	operationsTest(void)
 	
 }
 
-int main(void)
-{
-	takeTime();
-	modifiersTest();
-	capacityTest();
-	iteratorTest();
-	operationsTest();
-	speed();
-	std::cout << "Routime time: " << static_cast<double>(takeTime()) / 1000 << std::endl;
-}
+// int main(void)
+// {
+// 	takeTime();
+// 	modifiersTest();
+// 	capacityTest();
+// 	iteratorTest();
+// 	operationsTest();
+// 	speed();
+// }
 

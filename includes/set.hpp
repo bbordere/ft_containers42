@@ -271,6 +271,11 @@ namespace ft
 template <class T, class Compare, class Allocator>
 std::ostream &operator<<(std::ostream &stream, ft::set<T, Compare, Allocator> const &set)
 {
+	if (set.empty())
+	{
+		stream << "{}";
+		return (stream);
+	}
 	stream << '{';
 	typename ft::set<T, Compare, Allocator>::const_iterator val = set.begin();
 	for (std::size_t i = 0; i < set.size() - 1; i++)

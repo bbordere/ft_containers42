@@ -67,7 +67,7 @@ namespace   ft
 	template<class InputIterator, class OutputIterator>
 	inline OutputIterator _copy_element (InputIterator first, InputIterator last, OutputIterator result)
 	{
-		while (first!=last)
+		while (first != last)
 		{
 			*result = *first;
 			// *first = *result;

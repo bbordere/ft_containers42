@@ -152,10 +152,28 @@ namespace ft
 
 			vector &operator=(vector const &other)
 			{
-				_alloc = other._alloc;
-				reserve(other._size);
-				_size = other._size;
-				_copy_element(other._arr, other._arr + other._size, _arr);
+				if (&other != this)
+				{
+					_alloc = other._alloc;
+					assign(other.begin(), other.end());
+				}
+
+
+				// if (_arr)
+				// 	_deleteArr(_arr);
+				// _size = other._size;
+				// _capacity = other._capacity;
+				// _alloc = other._alloc;
+				// _arr = _alloc.allocate(_capacity);
+				// for (size_type i = 0; i < this->_size; ++i)
+				
+				
+				// 	this->_alloc.construct(this->_arr + i, other._arr[i]);
+				// _alloc = other._alloc;
+				// _capacity = other._capacity;
+				// reserve(other._size);
+				// _size = other._size;
+				// _copy_element(other._arr, other._arr + _size, _arr);
 				// copy_range(other._arr, other._arr + other._size, _arr);
 				return (*this);
 			}
@@ -215,6 +233,31 @@ namespace ft
 
 			void	resize(size_type n, value_type val = value_type())
 			{
+				// if (!n)
+				// {
+				// 	clear();
+				// 	return;
+				// }
+				// if (n > max_size())
+				// 	throw std::length_error("Too large bro !");
+				// if (n > _capacity * 2)
+				// {
+				// 	reserve(_capacity);
+				// 	for (size_type i = _size; i < n; ++i)
+				// 		_alloc.construct(_arr + i, val);
+				// }
+				// else if (n < _size)
+				// {
+				// 	for (size_type i = _size - 1; i >= n; --i)
+				// 		_alloc.destroy(_arr + i);
+				// }
+				// else
+				// {
+				// 	for (size_type i = _size; i < n; ++i)
+				// 		_alloc.construct(_arr + i, val);
+				// }
+				// _size = n;
+
 				if (!n)
 				{
 					clear();
@@ -222,23 +265,20 @@ namespace ft
 				}
 				if (n > max_size())
 					throw std::length_error("Too large bro !");
-				if (n > _capacity)
-				{
-					reserve(n);
-					for (size_type i = _size; i < n; ++i)
-						_alloc.construct(_arr + i, val);
-				}
-				else if (n < _size)
+				if (n < _size)
 				{
 					for (size_type i = _size - 1; i >= n; --i)
 						_alloc.destroy(_arr + i);
+					_size = n;
+					return;
 				}
-				else
-				{
-					for (size_type i = _size; i < n; ++i)
-						_alloc.construct(_arr + i, val);
-				}
-				_size = n;
+				if (n > _capacity * 2)
+					reserve(n);
+				else if (n > _capacity)
+					reserve(_capacity << 1);
+				for (size_type i = _size; i < n; ++i)
+					_alloc.construct(_arr + i, val);
+				_size = n;					
 			}
 
 			size_type capacity(void) const
@@ -254,16 +294,12 @@ namespace ft
 			void	reserve(size_type n)
 			{
 				if (n > max_size())
-					throw std::length_error("Too large bro !");
+					throw std::length_error("vector::reserve");
 				if (n <= _capacity)
 					return;
 				pointer newArr = _alloc.allocate(n);
 				for (size_type i = 0; i < _size; ++i)
 					_alloc.construct(newArr + i, _arr[i]);
-			// void *__memcpy(void *dst, const void *src, std::size_t n)
-
-			// 	__memcpy(newArr, _arr, _size * sizeof(value_type));
-				
 				_deleteArr(_arr);
 				_capacity = n;
 				_arr = newArr;
@@ -367,6 +403,7 @@ namespace ft
 			{
 				size_type startIndex = position - begin();
 				reserve(_size + n);
+				// resize(_size + n);
 				for (size_type i = n + _size - 1; i > startIndex + n - 1; --i)
 				{
 					_alloc.construct(_arr + i, *(_arr + (i - n)));
@@ -400,13 +437,13 @@ namespace ft
 			iterator erase(iterator position)
 			{
 				iterator res = position;
-				_alloc.destroy(&*position);
-				_size--;
-				while (position != end())
+				while (position != end() - 1)
 				{
 					*position = *(position + 1);
 					position++;
 				}
+				_alloc.destroy(&*position);
+				_size--;
 				return (res);
 			}
 
@@ -438,7 +475,7 @@ namespace ft
 
 			void	clear(void)
 			{
-				for (size_type i = 0; i < _capacity; ++i)
+				for (size_type i = 0; i < _size; ++i)
 					_alloc.destroy(_arr + i);
 				_size = 0;
 			}
