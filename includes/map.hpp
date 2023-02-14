@@ -302,6 +302,12 @@ namespace ft
 	};
 
 	template <class _Key, class _T, class _Compare, class _Alloc>
+	void swap(map<_Key, _T, _Compare, _Alloc> &lhs,map<_Key, _T, _Compare, _Alloc> &rhs)
+	{
+		lhs.swap(rhs);
+	}
+
+	template <class _Key, class _T, class _Compare, class _Alloc>
 	bool	operator==(map<_Key, _T, _Compare, _Alloc> const &x, map<_Key, _T, _Compare, _Alloc> const &y)
 	{
 		return (x._tree == y._tree);

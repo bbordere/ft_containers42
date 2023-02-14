@@ -1,3 +1,6 @@
+#ifndef __PRINTER_HPP__
+#define __PRINTER_HPP__
+
 #include <iostream>
 #include <string>
 #include "RBTree.hpp"
@@ -58,3 +61,5 @@ std::ostream &operator<<(std::ostream &stream, RBTree<T, Compare, Alloc> & tree)
 	stream << std::endl;
 	return (stream);
 }
+
+#endif

@@ -64,8 +64,8 @@ namespace ft
 				}
 			}
 
-			vector (vector const &copy): _alloc(copy._alloc), _arr(_alloc.allocate(copy._capacity)),
-					_size(copy._size), _capacity(copy._capacity)
+			vector (vector const &copy): _alloc(copy._alloc), _arr(_alloc.allocate(copy._size)),
+					_size(copy._size), _capacity(copy._size)
 			{
 				// _copy_element(_arr, _arr + _size, copy._arr);
 				for (size_type i = 0; i < _size; ++i)
@@ -267,17 +267,24 @@ namespace ft
 					throw std::length_error("Too large bro !");
 				if (n < _size)
 				{
-					for (size_type i = _size - 1; i >= n; --i)
+					for (size_type i = n; i < _size; i++)
 						_alloc.destroy(_arr + i);
-					_size = n;
-					return;
 				}
-				if (n > _capacity * 2)
-					reserve(n);
-				else if (n > _capacity)
-					reserve(_capacity << 1);
-				for (size_type i = _size; i < n; ++i)
-					_alloc.construct(_arr + i, val);
+				else if (n > _size)
+					insert(end(), n - _size, val);
+				// if (n < _size)
+				// {
+				// 	for (size_type i = _size - 1; i >= n; --i)
+				// 		_alloc.destroy(_arr + i);
+				// 	_size = n;
+				// 	return;
+				// }
+				// if (n > _capacity << 1)
+				// 	reserve(n);
+				// else if (n > _capacity)
+				// 	reserve(_capacity << 1);
+				// for (size_type i = _size; i < n; ++i)
+				// 	_alloc.construct(_arr + i, val);
 				_size = n;					
 			}
 
@@ -357,14 +364,18 @@ namespace ft
 			template <class It> 
 			void assign (It first, It last, typename ft::enable_if<!ft::is_integral<It>::value, bool>::type = true)
 			{
+				clear();
 				size_type i = 0;
-				resize(ft::distance(first, last));
+				size_type len = ft::distance(first, last);
+				if (_capacity < len)
+					reserve(len);
 				while (first != last)
 				{
 					_alloc.construct(_arr + i, *first);
 					first++;
 					i++;
 				}
+				_size = i;
 			}
 
 			void	assign(size_type n, value_type const &val)
@@ -379,7 +390,7 @@ namespace ft
 			{
 				if (_size == _capacity)
 				{
-					reserve(_capacity == 0 ? 1 : _capacity * 2);
+					reserve(_capacity == 0 ? 1 : _capacity << 1);
 					_alloc.construct(_arr + _size, val);
 				}
 				else
@@ -401,8 +412,19 @@ namespace ft
 
 			void insert(iterator position, size_type n, value_type const &val)
 			{
+				if (!n)
+					return;
 				size_type startIndex = position - begin();
-				reserve(_size + n);
+				if (_size + n >= _capacity)
+				{
+					if (!_capacity && n == 1)
+						reserve(1);
+					else if (_size << 1 < _size + n)
+						reserve(_size + n);
+					else
+						reserve(_size << 1);
+				}
+					
 				// resize(_size + n);
 				for (size_type i = n + _size - 1; i > startIndex + n - 1; --i)
 				{
@@ -420,7 +442,15 @@ namespace ft
 				size_type startIndex = position - begin();
 				size_type diff = ft::distance(first, last);
 
-				reserve(_size + diff);
+				if (_size + diff >= _capacity)
+				{
+					if (!_capacity && diff == 1)
+						reserve(1);
+					else if (_size << 1 < _size + diff)
+						reserve(_size + diff);
+					else
+						reserve(_size << 1);
+				}
 				for (size_type i = diff + _size - 1; i > startIndex + diff - 1; --i)
 				{
 					_alloc.construct(_arr + i, *(_arr + (i - diff)));
@@ -570,6 +600,7 @@ std::ostream &operator<<(std::ostream &stream, ft::vector<T, Alloc> const &vec)
 	for (typename ft::vector<T>::const_iterator it = vec.begin(); it != vec.end() - 1; ++it)
 		stream << *it << ", ";
 	stream << *(vec.end() - 1) << ']';
+	stream << ", size: " << vec.size() << ", capacity: " << vec.capacity();
 	return (stream);	
 }
 
