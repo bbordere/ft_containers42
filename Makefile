@@ -3,7 +3,7 @@ STD_NAME = std_containers
 
 CXX = c++
 
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -MMD
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -MMD -march=native -Og
 
 OBJ_DIR = obj/
 STD_OBJ_DIR = std_obj/

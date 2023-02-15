@@ -304,7 +304,7 @@ namespace ft
 					throw std::length_error("vector::reserve");
 				if (n <= _capacity)
 					return;
-				pointer newArr = _alloc.allocate(n);
+				pointer newArr = _alloc.allocate(n, _arr + n);
 				for (size_type i = 0; i < _size; ++i)
 					_alloc.construct(newArr + i, _arr[i]);
 				_deleteArr(_arr);
@@ -389,12 +389,9 @@ namespace ft
 			void	push_back(value_type const &val)
 			{
 				if (_size == _capacity)
-				{
 					reserve(_capacity == 0 ? 1 : _capacity << 1);
-					_alloc.construct(_arr + _size, val);
-				}
-				else
-					_alloc.construct(_arr + _size, val);
+				_alloc.construct(_arr + _size, val);
+				// ::new((void*)(_arr + _size)) value_type(val);
 				_size++;
 			}
 
@@ -523,21 +520,6 @@ namespace ft
 				for (size_type i = 0; i < _size; ++i)
 					_alloc.destroy(arr + i);
 				_alloc.deallocate(arr, _capacity);
-			}
-			
-			pointer	_allocInsert(size_type n)
-			{
-				pointer res = _arr;
-				if (n > max_size())
-					throw std::length_error("Too large bro !");
-				if (n <= _capacity)
-					return (NULL);
-				pointer newArr = _alloc.allocate(n);
-				for (size_type i = 0; i < _size; ++i)
-					_alloc.construct(newArr + i, _arr[i]);
-				_capacity = n;
-				_arr = newArr;
-				return (res);
 			}
 	};
 

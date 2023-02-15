@@ -56,39 +56,43 @@ std::ostream & operator<<( std::ostream & o, Awesome const & rhs ) { o << rhs.ge
 
 using std::cout;
 
+template <unsigned long long n>
+struct facto : integral_constant<unsigned long long, n * facto<n - 1>::value> {};
+
+template<>
+struct facto<0> : integral_constant<unsigned long long, 1> {};
+
+
 int main(void)
 {
-	// takeTime();
-	vector<int>			test(3, 3);
 
-	std::cout << "self assignation test\n";
-	vector<vector<int> >	self_assign;
-	vector<vector<int> >	*ptr = &self_assign;
-	vector<vector<int> >	*ptr2 = &self_assign;
+	std::cout << facto<24>::value << std::endl;
+	return 0;
+// 	// takeTime();
+// // 
+// 	modifiersTest();
+// 	capacityTest();
+// 	iteratorTest();
+// 	operationsTest();
+// // 
+// 	// speed();
+// // 
+// 	setModifiersTest();
+// 	setCapacityTest();
+// 	setIteratorTest();
+// // 
+// 	setSpeed();
 
-	self_assign.assign(4, test);
-	*ptr = *ptr2;
 
-	std::cout << std::boolalpha << (*ptr == *ptr2) << '\n';
-	vector<vector<int> > JOHN;
-	vector<vector<int> > BOB(5, test);
-
-	//ASSIGN RANGE
-	cout << "\nASSIGN RANGE\n";
-	vector<vector<int> >	assign_range;
-	assign_range.assign(8, test);
-	assign_range.assign(BOB.begin() + 1, BOB.end() - 2);
-
-	// modifiersTest();
-	// capacityTest();
-	// iteratorTest();
-	// operationsTest();
-
-	// // speed();
-
-	// setModifiersTest();
-	// setCapacityTest();
-	// setIteratorTest();
-
-	// setSpeed();
+	// clock_t	start, end;
+	// start = clock();
+	// vector<unsigned long> vec;
+	// for (int i = 0; i < 50000000; ++i)
+	// 	vec.push_back(i);
+	// vector<unsigned long> copy(vec);
+	// vector<unsigned long> assign(5000000, 4567);
+	// assign = copy;
+	// end = clock();
+	// double time = (double)(end - start) / CLOCKS_PER_SEC;
+	// std::cout << time * 1000 << " ms" << '\n';
 }

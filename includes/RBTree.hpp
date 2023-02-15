@@ -123,7 +123,7 @@ class RBTree
 
 	node_ptr	createNil(void)
 	{
-		node_ptr nill = _alloc.allocate(1);
+		node_ptr nill = _alloc.allocate(1, _nil);
 		_alloc.construct(nill, value_type());
 		nill->_color = BLACK;
 		nill->_left = NULL;
@@ -134,7 +134,7 @@ class RBTree
 
 	node_ptr	createNode(value_type val, node_ptr parent)
 	{
-		node_ptr	newNode = _alloc.allocate(1);
+		node_ptr	newNode = _alloc.allocate(1, _nil);
 		_alloc.construct(newNode, val);
 		newNode->_parent = parent;
 		newNode->_left = _nil;
@@ -144,7 +144,7 @@ class RBTree
 
 	node_ptr	createNode(value_type val, bool color)
 	{
-		node_ptr	newNode = _alloc.allocate(1);
+		node_ptr	newNode = _alloc.allocate(1, _nil);
 		_alloc.construct(newNode, val);
 		newNode->_parent = _nil;
 		newNode->_left = _nil;

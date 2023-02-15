@@ -66,7 +66,7 @@ struct RBNode
 			{
 				node = y;
 				y = y->_parent;
-				}
+			}
 			node = y;
 		}
 		return node;
@@ -89,7 +89,7 @@ struct RBNode
 			{
 				node = y;
 				y = y->_parent;
-				}
+			}
 			node = y;
 		}
 		return node;
