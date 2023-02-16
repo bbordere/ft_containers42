@@ -2,13 +2,6 @@
 #include "test.hpp"
 #include <bits/stdc++.h>
 
-#ifndef NP
-#define NP ft
-#endif
-
-
-
-
 template <typename T>
 std::ostream &operator<<(std::ostream &stream, std::vector<T> const &vec)
 {
@@ -25,74 +18,57 @@ std::ostream &operator<<(std::ostream &stream, std::vector<T> const &vec)
 	return (stream);
 }
 
-using namespace NP;
+void	vectorTests(void)
+{
+	insertVectorTest();
+	accessVectorTest();
+	iteratorVectorTest();
+	capacitySwapVectorTest();
+	compVectorTest();
+	speedVectorTest();
+}
 
+void	setTests(void)
+{
+	setModifiersTest();
+	setCapacityTest();
+	setIteratorTest();
+	setSpeed();
+}
 
-class Awesome {
-
-	public:
-
-		Awesome( void ) : _n( 42 ) { std::cout << "Default constructor" << std::endl; } //should not happen too often or else there is a wrong use of allocator (which calls the copy constructor)
-		Awesome( int n ) : _n( n ) { std::cout << "Int constructor" << std::endl; (void)n; }
-		Awesome( Awesome const &rhs ) : _n( 42 ) { *this = rhs;}
-		virtual ~Awesome(void) {}
-
-		Awesome &operator=( Awesome const & rhs ) { this->_n = rhs._n; return (*this); }
-		bool operator==( Awesome const & rhs ) const { return (this->_n == rhs._n); }
-		bool operator!=( Awesome const & rhs ) const { return (this->_n != rhs._n); }
-		bool operator>( Awesome const & rhs ) const { return (this->_n > rhs._n); }
-		bool operator<( Awesome const & rhs ) const { return (this->_n < rhs._n); }
-		bool operator>=( Awesome const & rhs ) const { return (this->_n >= rhs._n); }
-		bool operator<=( Awesome const & rhs ) const { return (this->_n <= rhs._n); }
-		void operator+=(int rhs){ _n += rhs; }
-		int get( void ) const { return this->_n; }
-
-	private:
-
-		int _n;
-};
-
-std::ostream & operator<<( std::ostream & o, Awesome const & rhs ) { o << rhs.get(); return o; }
-
-using std::cout;
-
-template <unsigned long long n>
-struct facto : integral_constant<unsigned long long, n * facto<n - 1>::value> {};
-
-template<>
-struct facto<0> : integral_constant<unsigned long long, 1> {};
-
+void	mapTests(void)
+{
+	mapModifiersTest();
+	mapCapacityTest();
+	mapIteratorTest();
+	mapOperationsTest();
+	mapSpeed();
+}
 
 int main(void)
 {
+	#ifndef NP
+		std::string const npName = "ft";
+		#define NP ft
+	#else
+		std::string const npName = "std";
+	#endif
+	clock_t	start, end;
+	start = clock();
+	vectorTests();
+	end = clock();
+	double timeVector = (double)(end - start) / CLOCKS_PER_SEC;
+	start = clock();
+	setTests();
+	end = clock();
+	double timeSet = (double)(end - start) / CLOCKS_PER_SEC;
 
-	std::cout << facto<24>::value << std::endl;
-	return 0;
-// 	// takeTime();
-// // 
-// 	modifiersTest();
-// 	capacityTest();
-// 	iteratorTest();
-// 	operationsTest();
-// // 
-// 	// speed();
-// // 
-// 	setModifiersTest();
-// 	setCapacityTest();
-// 	setIteratorTest();
-// // 
-// 	setSpeed();
+	start = clock();
+	mapTests();
+	end = clock();
+	double timeMap = (double)(end - start) / CLOCKS_PER_SEC;
 
-
-	// clock_t	start, end;
-	// start = clock();
-	// vector<unsigned long> vec;
-	// for (int i = 0; i < 50000000; ++i)
-	// 	vec.push_back(i);
-	// vector<unsigned long> copy(vec);
-	// vector<unsigned long> assign(5000000, 4567);
-	// assign = copy;
-	// end = clock();
-	// double time = (double)(end - start) / CLOCKS_PER_SEC;
-	// std::cout << time * 1000 << " ms" << '\n';
+	std::cout << npName << "::vector routine takes " << timeVector * 1000 << " ms" << '\n';
+	std::cout << npName << "::set routine takes " << timeSet * 1000 << " ms" << '\n';
+	std::cout << npName << "::map routine takes " << timeMap * 1000 << " ms" << '\n';
 }

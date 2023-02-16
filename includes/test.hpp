@@ -4,11 +4,11 @@
 /*MAIN MAP */
 
 void	takeTime(void);
-void	modifiersTest(void);
-void	capacityTest(void);
-void	iteratorTest(void);
-void	operationsTest(void);
-void	speed(void);
+void	mapModifiersTest(void);
+void	mapCapacityTest(void);
+void	mapIteratorTest(void);
+void	mapOperationsTest(void);
+void	mapSpeed(void);
 
 /*MAIN SET*/
 void	setModifiersTest(void);
@@ -16,4 +16,12 @@ void	setCapacityTest(void);
 void	setIteratorTest(void);
 void	setSpeed(void);
 
+
+/*MAIN VECTOR*/
+void	insertVectorTest(void);
+void	accessVectorTest(void);
+void	iteratorVectorTest(void);
+void	capacitySwapVectorTest(void);
+void	compVectorTest(void);
+void	speedVectorTest(void);
 #endif

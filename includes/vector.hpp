@@ -326,14 +326,14 @@ namespace ft
 			reference at(size_type n)
 			{
 				if (_size <= n)
-					throw std::out_of_range("WTF BRO");
+					throw std::out_of_range("vector::at : n >= this->size() !");
 				return (_arr[n]);
 			}
 
 			const_reference at(size_type n) const
 			{
 				if (_size <= n)
-					throw std::out_of_range("WTF BRO");
+					throw std::out_of_range("vector::at : n >= this->size() !");
 				return (_arr[n]);
 			}
 
@@ -357,7 +357,15 @@ namespace ft
 				return (*--end());
 			}
 
+			pointer data()
+			{
+				return (_arr);
+			}
 
+			const_pointer data() const
+			{
+				return (_arr);
+			}
 
 
 			/*MODIFIERS*/

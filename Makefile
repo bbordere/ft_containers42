@@ -3,7 +3,7 @@ STD_NAME = std_containers
 
 CXX = c++
 
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -MMD -march=native -Og
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -MMD -march=native
 
 OBJ_DIR = obj/
 STD_OBJ_DIR = std_obj/
@@ -11,7 +11,7 @@ STD_OBJ_DIR = std_obj/
 SRCS_DIR = srcs/
 INC_DIR = includes/
 
-FILES = $(SRCS_DIR)main.cpp $(SRCS_DIR)mainMap.cpp $(SRCS_DIR)mainSet.cpp
+FILES = $(SRCS_DIR)main.cpp $(SRCS_DIR)mainMap.cpp $(SRCS_DIR)mainSet.cpp $(SRCS_DIR)mainVector.cpp
 OBJS = $(patsubst $(SRCS_DIR)%.cpp, $(OBJ_DIR)%.o, $(FILES))
 STD_OBJS = $(patsubst $(SRCS_DIR)%.cpp, $(STD_OBJ_DIR)%.o, $(FILES))
 
