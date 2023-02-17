@@ -14,6 +14,14 @@ namespace ft
 			typedef	std::size_t	size_type;
 
 			explicit stack(container_type const &ct = container_type()): c(ct) {}
+
+			stack(stack const &other): c(other.c) {}
+
+			stack	&operator=(stack const &other)
+			{
+				c = other.c;
+				return (*this);
+			}
 			
 			bool	empty(void) const
 			{

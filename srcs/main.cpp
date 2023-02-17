@@ -45,6 +45,15 @@ void	mapTests(void)
 	mapSpeed();
 }
 
+void	stackTests(void)
+{
+	pushStackTest();
+	constructorStackTest();
+	constructor2StackTest();
+	compStackTest();
+	speedStackTest();
+}
+
 int main(void)
 {
 	#ifndef NP
@@ -68,7 +77,13 @@ int main(void)
 	end = clock();
 	double timeMap = (double)(end - start) / CLOCKS_PER_SEC;
 
+	start = clock();
+	stackTests();
+	end = clock();
+	double timeStack = (double)(end - start) / CLOCKS_PER_SEC;
+
 	std::cout << npName << "::vector routine takes " << timeVector * 1000 << " ms" << '\n';
 	std::cout << npName << "::set routine takes " << timeSet * 1000 << " ms" << '\n';
 	std::cout << npName << "::map routine takes " << timeMap * 1000 << " ms" << '\n';
+	std::cout << npName << "::stack routine takes " << timeStack * 1000 << " ms" << '\n';
 }

@@ -81,21 +81,3 @@ namespace ft
 }
 
 #endif
-// #include <iostream>
-
-// template <unsigned int n>
-// struct facto : integral_constant<unsigned int, n * facto<n - 1>::value> {};
-
-// template<>
-// struct facto<0> : integral_constant<unsigned int, 1> {};
-
-// int main()
-// {
-// 	integral_constant<int, 45>::value_type test = 78;
-// 	std::cout << test << std::endl;
-// 	std::cout << facto<5>::value << std::endl;
-// 	std::cout << is_integral<char *>::value << std::endl;
-// 	std::cout << is_integral<char>::value << std::endl;
-// 	return 0;
-// }
-
