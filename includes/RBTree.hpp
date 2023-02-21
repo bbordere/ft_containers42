@@ -323,7 +323,7 @@ class RBTree
 		return (temp);
 	}
 
-	node_ptr	getMax(node_ptr	node) const
+	node_ptr	 getMax(node_ptr	node) const
 	{
 		if (node == _nil)
 			return (_nil);

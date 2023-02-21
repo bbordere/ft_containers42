@@ -233,31 +233,6 @@ namespace ft
 
 			void	resize(size_type n, value_type val = value_type())
 			{
-				// if (!n)
-				// {
-				// 	clear();
-				// 	return;
-				// }
-				// if (n > max_size())
-				// 	throw std::length_error("Too large bro !");
-				// if (n > _capacity * 2)
-				// {
-				// 	reserve(_capacity);
-				// 	for (size_type i = _size; i < n; ++i)
-				// 		_alloc.construct(_arr + i, val);
-				// }
-				// else if (n < _size)
-				// {
-				// 	for (size_type i = _size - 1; i >= n; --i)
-				// 		_alloc.destroy(_arr + i);
-				// }
-				// else
-				// {
-				// 	for (size_type i = _size; i < n; ++i)
-				// 		_alloc.construct(_arr + i, val);
-				// }
-				// _size = n;
-
 				if (!n)
 				{
 					clear();
@@ -272,19 +247,6 @@ namespace ft
 				}
 				else if (n > _size)
 					insert(end(), n - _size, val);
-				// if (n < _size)
-				// {
-				// 	for (size_type i = _size - 1; i >= n; --i)
-				// 		_alloc.destroy(_arr + i);
-				// 	_size = n;
-				// 	return;
-				// }
-				// if (n > _capacity << 1)
-				// 	reserve(n);
-				// else if (n > _capacity)
-				// 	reserve(_capacity << 1);
-				// for (size_type i = _size; i < n; ++i)
-				// 	_alloc.construct(_arr + i, val);
 				_size = n;					
 			}
 
