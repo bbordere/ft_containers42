@@ -65,13 +65,6 @@ class RBTree
 		root->_parent = parent;
 		_dupTree(root->_left, root, otherRoot->_left, otherNil);
 		_dupTree(root->_right, root, otherRoot->_right, otherNil);
-		// if (root == nil)
-		// 	return (_nil);
-		// node_ptr newNode = createNode(root->_val, root->_color);
-		// newNode->_parent = root;
-		// newNode->_left = _dupTree(root->_left, nil);
-		// newNode->_right = _dupTree(root->_right, nil);
-		// return (newNode);
 	}
 
 	RBTree &operator=(RBTree const &assign)

@@ -1,6 +1,8 @@
 #ifndef __MAP_HPP__
 #define __MAP_HPP__
 
+#include <iterator>
+
 #include <memory>
 #include "pair.hpp"
 #include "RBTree.hpp"
@@ -105,10 +107,6 @@ namespace ft
 
 			ft::pair<iterator, bool> insert(value_type const &val)
 			{
-				// node_ptr pos = _tree.insert(val);
-				// if (pos == _tree._nil)
-				// 	return (ft::make_pair(find(val.first), false));
-				// return (ft::make_pair(find(val.first), true));
 				node_ptr pos = _tree.insert(val);
 				if (pos == _tree._nil)
 					return (ft::make_pair(find(val.first), false));

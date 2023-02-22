@@ -84,15 +84,13 @@ int main(int ac, char **av)
 	clock_t	start, end;
 // 
 	bool	checkLeak = containers.find("leak") != std::string::npos;
-	bool	testAll = containers.empty();
-	if (!testAll && checkLeak)
-		testAll = true;
+	bool	testAll = containers.empty() || containers == "leak";
 	if (testAll || containers.find("vector") != std::string::npos)
 	{
 		start = clock();
 		vectorTests(checkLeak);
 		end = clock();
-		timeVector = (double)(end - start) / CLOCKS_PER_SEC;
+		timeVector = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	}
 // 
 	if (testAll || containers.find("map") != std::string::npos)
@@ -100,7 +98,7 @@ int main(int ac, char **av)
 		start = clock();
 		mapTests(checkLeak);
 		end = clock();
-		timeMap = (double)(end - start) / CLOCKS_PER_SEC;
+		timeMap = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	}
 // 
 	if (testAll || containers.find("stack") != std::string::npos)
@@ -108,7 +106,7 @@ int main(int ac, char **av)
 		start = clock();
 		stackTests(checkLeak);
 		end = clock();
-		timeStack = (double)(end - start) / CLOCKS_PER_SEC;
+		timeStack = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	}
 // 
 	if (testAll || containers.find("set") != std::string::npos)
@@ -116,7 +114,7 @@ int main(int ac, char **av)
 		start = clock();
 		setTests(checkLeak);
 		end = clock();
-		timeSet = (double)(end - start) / CLOCKS_PER_SEC;
+		timeSet = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	}
 // 
 	if (timeVector != -1.0)
