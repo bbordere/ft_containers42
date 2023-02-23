@@ -34,6 +34,22 @@ namespace ft
 
 		private:
 		// public:
+			pointer		reserveNoDelete(size_type n, size_type &oldCap, size_type &oldSize)
+			{
+				pointer res = _arr;
+				oldCap = _capacity;
+				oldSize = _size;
+				if (n > max_size())
+					throw std::length_error("vector::reserve");
+				if (n <= _capacity)
+					return (NULL);
+				pointer newArr = _alloc.allocate(n, _arr + n);
+				for (size_type i = 0; i < _size; ++i)
+					_alloc.construct(newArr + i, _arr[i]);
+				_capacity = n;
+				_arr = newArr;
+				return (res);
+			}
 			allocator_type	_alloc;
 			pointer			_arr;
 			size_type 		_size;
@@ -273,6 +289,7 @@ namespace ft
 				_capacity = n;
 				_arr = newArr;
 			}
+
 			/*ELEMENT ACCESS*/
 
 			reference	operator[](size_type position)
@@ -361,7 +378,6 @@ namespace ft
 				if (_size == _capacity)
 					reserve(_capacity == 0 ? 1 : _capacity << 1);
 				_alloc.construct(_arr + _size, val);
-				// ::new((void*)(_arr + _size)) value_type(val);
 				_size++;
 			}
 
@@ -391,8 +407,6 @@ namespace ft
 					else
 						reserve(_size << 1);
 				}
-					
-				// resize(_size + n);
 				for (size_type i = n + _size - 1; i > startIndex + n - 1; --i)
 				{
 					_alloc.construct(_arr + i, *(_arr + (i - n)));
@@ -409,14 +423,18 @@ namespace ft
 				size_type startIndex = position - begin();
 				size_type diff = ft::distance(first, last);
 
+				pointer oldArr = NULL;
+				size_type oldCap = 0;
+				size_type oldSize = 0;
+
 				if (_size + diff >= _capacity)
 				{
 					if (!_capacity && diff == 1)
-						reserve(1);
+						oldArr = reserveNoDelete(1, oldCap, oldSize);
 					else if (_size << 1 < _size + diff)
-						reserve(_size + diff);
+						oldArr = reserveNoDelete(_size + diff, oldCap, oldSize);
 					else
-						reserve(_size << 1);
+						oldArr = reserveNoDelete(_size << 1, oldCap, oldSize);
 				}
 				for (size_type i = diff + _size - 1; i > startIndex + diff - 1; --i)
 				{
@@ -429,6 +447,9 @@ namespace ft
 					first++;
 				}
 				_size += diff;
+				for (size_type i = 0; i < oldSize; ++i)
+					_alloc.destroy(oldArr + i);
+				_alloc.deallocate(oldArr, oldCap);
 			}
 
 			iterator erase(iterator position)
