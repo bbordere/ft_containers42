@@ -137,7 +137,7 @@ class RBTree
 
 	node_ptr	createNode(value_type val, bool color)
 	{
-		node_ptr	newNode = _alloc.allocate(1, _nil);
+		node_ptr	newNode = _alloc.allocate(1, _nil->_parent);
 		_alloc.construct(newNode, val);
 		newNode->_parent = _nil;
 		newNode->_left = _nil;

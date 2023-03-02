@@ -125,5 +125,17 @@ int main(int ac, char **av)
 		std::cout << npName << "::map routine takes " << timeMap * 1000 << " ms" << '\n';
 	if (timeStack != -1.0)
 		std::cout << npName << "::stack routine takes " << timeStack * 1000 << " ms" << '\n';
+
+
+// (void)ac;
+// (void)av;
+// 	ft::vector<int> vec(5, 100);
+// 	vec.reserve(521);
+// 	int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+// 	// std::cout << vec << '\n';
+// 	vec.insert(vec.begin(), arr, arr+10);
+// 	vec.insert(vec.begin(), vec.begin(), vec.end());
+// 	std::cout << vec << '\n';
 // 
+
 }

@@ -121,8 +121,11 @@ namespace ft
 		return (rhs + n);
 	}
 	template <class Iter1, class Iter2>
-	typename reverseIterator<Iter1>::difference_type operator - ( const reverseIterator<Iter1>& l,
-																   const reverseIterator<Iter2>& r )		{		return  r.base() - l.base(); };
+	typename reverseIterator<Iter1>::difference_type operator-(reverseIterator<Iter1> const &lhs, reverseIterator<Iter2> const &rhs)
+	{
+		return  rhs.base() - lhs.base();
+	};
+		
 
 	template <class T>
 	bool	operator<(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)

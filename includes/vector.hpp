@@ -93,79 +93,6 @@ namespace ft
 				_deleteArr(_arr);
 			}
 
-		// vector &operator=(vector const &other)
-			// {
-			// 	if (&other == this)
-			// 		return (*this);
-			// 	if (_capacity < other._size)
-			// 	{
-			// 		_deleteArr(_arr);
-			// 		_arr = _alloc.allocate(other._size);
-			// 	}
-			// 	_size = other._size;
-			// 	_capacity = other._capacity;
-			// 	_alloc = other._alloc;
-			// 	for (size_type i = 0; i < _size; i++)
-			// 		_alloc.construct(_arr + i, other._arr[i]);
-			// 	return (*this);
-			// }
-
-			void *__memcpy(void *dst, const void *src, std::size_t n)
-			{
-				uint8_t		*sdst;
-				uint64_t		*ldst;
-
-				uint64_t	u64;
-				uint8_t		u8;
-
-				uint8_t		*ssrc;
-				uint64_t	*lsrc;
-
-				ssrc = (uint8_t *)src;
-				sdst = (uint8_t *)dst;
-
-				while (n-- && (((uint64_t)sdst & (uint64_t)-8) < (uint64_t)sdst))
-				{
-					u8 = (uint8_t)*ssrc++;
-					*(sdst++) = u8;			
-				}
-
-				ldst = (uint64_t *)((void *)sdst);
-				lsrc = (uint64_t *)((void *)ssrc);
-
-
-				while ((n / 8) > 0)
-				{
-					u64 = (uint64_t)*lsrc++;
-					// u64 = ( u64 << 32 ) | u64;
-					*(ldst++) = u64;
-					n -= 8;
-				}
-				sdst = (uint8_t *)ldst;
-				ssrc = (uint8_t *)lsrc;
-				while (n--)
-				{
-					u8 = (uint8_t)*ssrc++;
-					*(sdst++) = u8;
-				}
-				return (dst);
-			}
-				// memcpy(_arr, other._arr, _size * sizeof(value_type));
-
-			template<class _T>
-			inline void copy_range(_T *begin, _T *end, _T *dest)
-			{
-				while (begin != end)
-				{
-					// new (dest) _T(*begin);
-					::new (static_cast<void *>(dest)) _T(*begin);
-					// std::_Construct()
-					begin++;
-					dest++;
-				}
-			}
-
-
 			vector &operator=(vector const &other)
 			{
 				if (&other != this)
@@ -173,24 +100,6 @@ namespace ft
 					_alloc = other._alloc;
 					assign(other.begin(), other.end());
 				}
-
-
-				// if (_arr)
-				// 	_deleteArr(_arr);
-				// _size = other._size;
-				// _capacity = other._capacity;
-				// _alloc = other._alloc;
-				// _arr = _alloc.allocate(_capacity);
-				// for (size_type i = 0; i < this->_size; ++i)
-				
-				
-				// 	this->_alloc.construct(this->_arr + i, other._arr[i]);
-				// _alloc = other._alloc;
-				// _capacity = other._capacity;
-				// reserve(other._size);
-				// _size = other._size;
-				// _copy_element(other._arr, other._arr + _size, _arr);
-				// copy_range(other._arr, other._arr + other._size, _arr);
 				return (*this);
 			}
 

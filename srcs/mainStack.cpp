@@ -1,13 +1,13 @@
-#include <ft_containers.hpp>
-#include <stack>
-#include <vector>
 #include <iostream>
-#include <string>
 #include <iomanip>
 #include <deque>
 
 #ifndef NP
 	#define NP ft
+	#include <ft_containers.hpp>
+#else
+	#include <stack>
+	#include <vector>
 #endif
 using namespace NP;
 

@@ -49,7 +49,7 @@ namespace ft
 				public:
 					bool operator()	(const value_type& x, const value_type& y) const
 					{
-						return comp(x.first, y.first);
+						return (comp(x.first, y.first));
 					}
 			};
 

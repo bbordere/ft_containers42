@@ -74,14 +74,4 @@ namespace ft
 
 }
 
-// int main(int argc, char const *argv[])
-// {
-// 	std::vector<char> al1 = {'a', 'b', 'c'};
-// 	std::vector<char> al2 = {'a', 'b', 'd'};
-
-// 	std::cout << ft::lexicographical_compare(al1.begin(), al1.end(), al2.begin(), al2.end()) << std::endl;
-
-// 	return (0);
-// }
-
 #endif

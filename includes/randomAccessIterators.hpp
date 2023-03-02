@@ -118,8 +118,10 @@ namespace ft
 	}
 
 	template <class Iter1, class Iter2>
-	typename randomAccessIterators<Iter1>::difference_type operator - ( const randomAccessIterators<Iter1>& l,	
-																   const randomAccessIterators<Iter2>& r )		{		return  l.base() - r.base(); };
+	typename randomAccessIterators<Iter1>::difference_type operator-(randomAccessIterators<Iter1> const &lhs, randomAccessIterators<Iter2> const &rhs)
+	{
+		return  lhs.base() - rhs.base();
+	};
 
 	template <class T>
 	bool	operator<(randomAccessIterators<T> const& lhs, randomAccessIterators<T> const& rhs)
