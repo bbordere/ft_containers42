@@ -31,29 +31,6 @@ namespace ft
 
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef std::size_t												size_type;
-
-		private:
-		// public:
-			pointer		reserveNoDelete(size_type n, size_type &oldCap, size_type &oldSize)
-			{
-				pointer res = _arr;
-				oldCap = _capacity;
-				oldSize = _size;
-				if (n > max_size())
-					throw std::length_error("vector::reserve");
-				if (n <= _capacity)
-					return (NULL);
-				pointer newArr = _alloc.allocate(n, _arr + n);
-				for (size_type i = 0; i < _size; ++i)
-					_alloc.construct(newArr + i, _arr[i]);
-				_capacity = n;
-				_arr = newArr;
-				return (res);
-			}
-			allocator_type	_alloc;
-			pointer			_arr;
-			size_type 		_size;
-			size_type 		_capacity;
 		
 		public:
 			explicit vector(allocator_type const &alloc = allocator_type()): _alloc(alloc), _arr(NULL), _size(0), _capacity(0)  {}
@@ -83,7 +60,6 @@ namespace ft
 			vector (vector const &copy): _alloc(copy._alloc), _arr(_alloc.allocate(copy._size)),
 					_size(copy._size), _capacity(copy._size)
 			{
-				// _copy_element(_arr, _arr + _size, copy._arr);
 				for (size_type i = 0; i < _size; ++i)
 					_alloc.construct(_arr + i, copy[i]);
 			}
@@ -339,11 +315,11 @@ namespace ft
 				if (_size + diff >= _capacity)
 				{
 					if (!_capacity && diff == 1)
-						oldArr = reserveNoDelete(1, oldCap, oldSize);
+						oldArr = _reserveNoDelete(1, oldCap, oldSize);
 					else if (_size << 1 < _size + diff)
-						oldArr = reserveNoDelete(_size + diff, oldCap, oldSize);
+						oldArr = _reserveNoDelete(_size + diff, oldCap, oldSize);
 					else
-						oldArr = reserveNoDelete(_size << 1, oldCap, oldSize);
+						oldArr = _reserveNoDelete(_size << 1, oldCap, oldSize);
 				}
 				for (size_type i = diff + _size - 1; i > startIndex + diff - 1; --i)
 				{
@@ -415,11 +391,34 @@ namespace ft
 			}
 
 		private:
+
+			allocator_type	_alloc;
+			pointer			_arr;
+			size_type 		_size;
+			size_type 		_capacity;
+
 			void	_deleteArr(pointer arr)
 			{
 				for (size_type i = 0; i < _size; ++i)
 					_alloc.destroy(arr + i);
 				_alloc.deallocate(arr, _capacity);
+			}
+
+			pointer		_reserveNoDelete(size_type n, size_type &oldCap, size_type &oldSize)
+			{
+				pointer res = _arr;
+				oldCap = _capacity;
+				oldSize = _size;
+				if (n > max_size())
+					throw std::length_error("vector::reserve");
+				if (n <= _capacity)
+					return (NULL);
+				pointer newArr = _alloc.allocate(n, _arr + n);
+				for (size_type i = 0; i < _size; ++i)
+					_alloc.construct(newArr + i, _arr[i]);
+				_capacity = n;
+				_arr = newArr;
+				return (res);
 			}
 	};
 

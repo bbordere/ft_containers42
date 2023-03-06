@@ -43,7 +43,7 @@ namespace ft
 					{
 						node = y;
 						y = y->_parent;
-						}
+					}
 					node = y;
 				}
 				return node;
@@ -66,7 +66,7 @@ namespace ft
 					{
 						node = y;
 						y = y->_parent;
-						}
+					}
 					node = y;
 				}
 				return node;

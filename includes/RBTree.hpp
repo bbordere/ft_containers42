@@ -514,10 +514,6 @@ class RBTree
 	}
 
 
-
-
-
-
 	int	getBlackHeight(node_ptr node)
 	{
 		if (node == _nil)

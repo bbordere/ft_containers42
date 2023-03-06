@@ -58,18 +58,17 @@ namespace ft
 			typedef	node*						node_ptr;
 
 			typedef RBTree<value_type, value_compare, allocator_type> treeType;
-
-		public:
-			treeType _tree;
+			
+			treeType	_tree;
 
 		public:
 			map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_tree(treeType(value_compare(comp), alloc)) {}
+					_tree(RBTree<value_type, value_compare, allocator_type>(value_compare(comp), alloc)) {}
 
 			template <class InputIterator>
 			map (InputIterator first, InputIterator last,
 				const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_tree(treeType(value_compare(comp), alloc))
+					_tree(RBTree<value_type, value_compare, allocator_type>(value_compare(comp), alloc))
 			{
 				insert(first, last);
 			}
@@ -260,10 +259,6 @@ namespace ft
 
 			mapped_type	&operator[](key_type const &key)
 			{
-				// // node_ptr node = _tree.search(ft::make_pair(key, mapped_type()));
-				// // if (node == _tree._nil)
-				// 	return (insert(ft::make_pair(key, mapped_type())).first->second);
-				// // return (node->_val.second);
 				return (insert(ft::make_pair(key, mapped_type())).first->second);
 			}
 

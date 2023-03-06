@@ -62,16 +62,6 @@ namespace ft
 		}
 		return (true);
 	}
-
-	// template <typename T>
-	// inline void	swap(T &a, T &b)
-	// {
-	// 	T const	tmp = a;
-
-	// 	a = b;
-	// 	b = tmp;
-	// }
-
 }
 
 #endif

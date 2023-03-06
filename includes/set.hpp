@@ -37,10 +37,7 @@ namespace ft
 			typedef RBTree<value_type, value_compare, allocator_type>	treeType;
 			typedef	RBNode<value_type>*									node_ptr;
 
-
-		private:
-		// public:
-			treeType _tree;
+			treeType	_tree;
 		
 		public:
 			explicit set(key_compare const &comp = key_compare(), allocator_type const &alloc = allocator_type()): _tree(comp, alloc) {}
