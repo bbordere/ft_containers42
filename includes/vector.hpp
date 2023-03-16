@@ -64,7 +64,7 @@ namespace ft
 					_alloc.construct(_arr + i, copy[i]);
 			}
 
-			~vector(void)
+			virtual ~vector(void)
 			{
 				_deleteArr(_arr);
 			}

@@ -19,7 +19,8 @@ namespace ft
 
 			stack	&operator=(stack const &other)
 			{
-				c = other.c;
+				if (this != &other)
+					c = other.c;
 				return (*this);
 			}
 			
@@ -33,7 +34,7 @@ namespace ft
 				return (c.size());
 			}
 
-			~stack(void)
+			virtual ~stack(void)
 			{
 				c.clear();
 			}

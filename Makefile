@@ -1,7 +1,7 @@
 NAME = ft_containers
 STD_NAME = std_containers
 
-CXX = c++
+CXX = clang++
 
 CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -MMD
 

@@ -52,11 +52,12 @@ namespace ft
 
 			set &operator=(set const &assign)
 			{
-				_tree = assign._tree;
+				if (this != &assign)
+					_tree = assign._tree;
 				return (*this);
 			}
 
-			~set() {}
+			virtual ~set() {}
 
 			/*ITERATORS*/
 			iterator begin(void)

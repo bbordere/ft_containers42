@@ -37,7 +37,7 @@ namespace ft
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef std::size_t												size_type;
 
-			class value_compare: public std::binary_function<value_type, value_type, bool>
+			class value_compare//: public std::binary_function<value_type, value_type, bool>
 			{
 				private:
 					friend class map;
@@ -77,11 +77,12 @@ namespace ft
 
 			map &operator=(map const &assign)
 			{
-				_tree = assign._tree;
+				// if (this != &assign)
+					_tree = assign._tree;
 				return (*this);
 			}
 
-			~map() {}
+			virtual ~map() {}
 
 			iterator find(key_type const &key)
 			{

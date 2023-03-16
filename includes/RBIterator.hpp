@@ -24,6 +24,7 @@ namespace ft
 			bool	_isNil(node_ptr node) {return (!node->_right && !node->_left);}
 
 			RBIterator(void): _ptr(NULL) {}
+			RBIterator(RBIterator const &copy): _ptr(copy._ptr) {}
 			RBIterator(node_ptr ptr): _ptr(ptr) {}
 
 			node_ptr	_increment(node_ptr node)
@@ -189,10 +190,10 @@ namespace ft
 				return x.base() != y.base();
 			}
 
-			operator RBIterator<T const>(void) const
-			{
-				return (RBIterator<T const>(_ptr));
-			}
+			// operator RBIterator<T const>(void) const
+			// {
+			// 	return (RBIterator<T const>(_ptr));
+			// }
 	};
 }
 #endif
