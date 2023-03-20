@@ -1,6 +1,19 @@
-#include "ft_containers.hpp"
+#include <iostream>
+
+#ifndef NP
+	std::string const npName = "ft";
+	#define NP ft
+	#include "ft_containers.hpp"
+#else
+	std::string const npName = "std";
+	#include <vector>
+	#include <stack>
+	#include <map>
+	#include <set>
+#endif
+
+
 #include "test.hpp"
-#include <bits/stdc++.h>
 
 template <typename T>
 std::ostream &operator<<(std::ostream &stream, std::vector<T> const &vec)
@@ -60,15 +73,10 @@ void	stackTests(bool checkLeak)
 
 #include "RBTreePrinter.hpp"
 
+using namespace ft;
+
 int main(int ac, char **av)
 {
-	#ifndef NP
-		std::string const npName = "ft";
-		#define NP ft
-	#else
-		std::string const npName = "std";
-	#endif
-// 
 	std::string containers;
 	for (int i = 1; i < ac - 1; ++i)
 		containers += std::string(av[i]) + std::string(", ");
@@ -76,13 +84,13 @@ int main(int ac, char **av)
 		containers += std::string(av[ac - 1]);
 	for (std::size_t i = 0; i < containers.length(); ++i)
 		containers[i] = std::tolower(containers[i]);
-// 
+
 	double timeVector = -1.0;
 	double timeSet = -1.0;
 	double timeMap = -1.0;
 	double timeStack = -1.0;
 	clock_t	start, end;
-// 
+
 	bool	checkLeak = containers.find("leak") != std::string::npos;
 	bool	testAll = containers.empty() || containers == "leak";
 	if (testAll || containers.find("vector") != std::string::npos)
@@ -92,7 +100,7 @@ int main(int ac, char **av)
 		end = clock();
 		timeVector = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	}
-// 
+
 	if (testAll || containers.find("map") != std::string::npos)
 	{
 		start = clock();
@@ -100,7 +108,7 @@ int main(int ac, char **av)
 		end = clock();
 		timeMap = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	}
-// 
+
 	if (testAll || containers.find("stack") != std::string::npos)
 	{
 		start = clock();
@@ -108,7 +116,7 @@ int main(int ac, char **av)
 		end = clock();
 		timeStack = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	}
-// 
+
 	if (testAll || containers.find("set") != std::string::npos)
 	{
 		start = clock();
@@ -116,7 +124,7 @@ int main(int ac, char **av)
 		end = clock();
 		timeSet = static_cast<double>(end - start) / CLOCKS_PER_SEC;
 	}
-// 
+
 	if (timeVector != -1.0)
 		std::cout << npName << "::vector routine takes " << timeVector * 1000 << " ms" << '\n';
 	if (timeSet != -1.0)
@@ -125,17 +133,4 @@ int main(int ac, char **av)
 		std::cout << npName << "::map routine takes " << timeMap * 1000 << " ms" << '\n';
 	if (timeStack != -1.0)
 		std::cout << npName << "::stack routine takes " << timeStack * 1000 << " ms" << '\n';
-
-
-// (void)ac;
-// (void)av;
-// 	ft::vector<int> vec(5, 100);
-// 	vec.reserve(521);
-// 	int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-// 	// std::cout << vec << '\n';
-// 	vec.insert(vec.begin(), arr, arr+10);
-// 	vec.insert(vec.begin(), vec.begin(), vec.end());
-// 	std::cout << vec << '\n';
-// 
-
 }

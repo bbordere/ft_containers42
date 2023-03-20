@@ -63,18 +63,6 @@ namespace   ft
 		}
 		return res;
 	}
-
-	template<class InputIterator, class OutputIterator>
-	inline OutputIterator _copy_element (InputIterator first, InputIterator last, OutputIterator result)
-	{
-		while (first != last)
-		{
-			*result = *first;
-			++result;
-			++first;
-		}
-		return result;
-	}
 }
 
 #endif

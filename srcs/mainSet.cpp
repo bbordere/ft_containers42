@@ -1,35 +1,11 @@
-#include "ft_containers.hpp"
-#include <bits/stdc++.h>
-
-
-#ifndef NP
-	#define NP ft
-#endif
-using namespace NP;
-
-template <class T, class Compare, class Allocator>
-std::ostream &operator<<(std::ostream &stream, std::set<T, Compare, Allocator> const &set)
-{
-	if (set.empty())
-	{
-		stream << "{}";
-		return (stream);
-	}
-	stream << '{';
-	typename std::set<T, Compare, Allocator>::const_iterator val = set.begin();
-	for (std::size_t i = 0; i < set.size() - 1; i++)
-	{
-		stream << *val << ", ";
-		++val;
-	}
-	stream << *val << '}';
-	return (stream);
-}
+#include <iostream>
+#include <cstdlib>
+#include "printer.hpp"
 
 void	setCapacityTest(void)
 {
 	std::cout << "---- Capacity test ----" << std::endl;
-	set<char> set;
+	NP::set<char> set;
 	std::cout << (set.empty() ? "set is empty" : "set isn't empty") << std::endl;
 	for (char c = 'a'; c <= 'z'; c++)
 		set.insert(c);
@@ -41,11 +17,11 @@ void	setCapacityTest(void)
 void	setModifiersTest(void)
 {
 	std::cout << "---- Modifiers test ----" << std::endl;
-	set<int> set1;
+	NP::set<int> set1;
 	for (int i = 0; i < 15; i++)
 		set1.insert(i);
-	pair<set<int>::const_iterator, bool> inserted = set1.insert(42);
-	pair<set<int>::const_iterator, bool> dupInserted = set1.insert(42);
+	NP::pair<NP::set<int>::const_iterator, bool> inserted = set1.insert(42);
+	NP::pair<NP::set<int>::const_iterator, bool> dupInserted = set1.insert(42);
 	if (inserted.first != dupInserted.first || dupInserted.second == true)
 		std::cout << "Not good result" << std::endl;
 	else
@@ -56,8 +32,8 @@ void	setModifiersTest(void)
 	set1.insert(set1.end(), 4242);
 	std::cout << set1 << '\n';
 
-	set<int> set2(set1);
-	set<int> set3;
+	NP::set<int> set2(set1);
+	NP::set<int> set3;
 	set3 = set2;
 	std::cout << set1 << '\n';
 	std::cout << set2 << '\n';
@@ -66,7 +42,7 @@ void	setModifiersTest(void)
 	set1.erase(0);
 	set1.erase(11);
 	set2.erase(++set2.begin());
-	set<int>::iterator it = set3.begin();
+	NP::set<int>::iterator it = set3.begin();
 	++(++(++it));
 	set3.erase(set3.begin(), it);
 	it = set3.end();
@@ -91,16 +67,16 @@ void	setModifiersTest(void)
 void	setIteratorTest(void)
 {
 	std::cout << "---- Iterator test ----" << std::endl;
-	set<char> set1;
+	NP::set<char> set1;
 	for (char c = 'a'; c <= 'z'; c++)
 		set1.insert(c);
 	
 	std::cout << std::endl;
-	for (set<char, int>::const_iterator it = set1.begin(); it != set1.end(); it++)
+	for (NP::set<char, int>::const_iterator it = set1.begin(); it != set1.end(); it++)
 		std::cout << *it << " ";
 
 	std::cout << std::endl;
-	for (set<char, int>::const_reverse_iterator it = set1.rbegin(); it != set1.rend(); it++)
+	for (NP::set<char, int>::const_reverse_iterator it = set1.rbegin(); it != set1.rend(); it++)
 		std::cout << *it << " ";
 	std::cout << std::endl << std::endl;
 
@@ -110,14 +86,14 @@ void	setIteratorTest(void)
 void	setSpeed(void)
 {
 	std::cout << "---- Speed test ----" << std::endl;
-	set<unsigned long long>set1;
+	NP::set<unsigned long long>set1;
 	for (unsigned long long i = 0; i < 3000000; i++)
 		set1.insert(i);
 	set1.find(2500000);
 	set1.insert(25000);
-	set<unsigned long long>set2(set1);
+	NP::set<unsigned long long>set2(set1);
 	set2.find(2500000);
-	set<unsigned long long>set3;
+	NP::set<unsigned long long>set3;
 	set3 = set2;
 	set3.find(42);
 }

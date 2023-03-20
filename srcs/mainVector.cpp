@@ -1,28 +1,7 @@
 #include "ft_containers.hpp"
 #include <vector>
 #include <iostream>
-
-#ifndef NP
-	#define NP ft
-#endif
-
-template <typename T>
-std::ostream &operator<<(std::ostream &stream, std::vector<T> const &vec)
-{
-	if (vec.empty())
-	{
-		stream << "[]";
-		return (stream);
-	}
-	stream << '[';
-	for (typename std::vector<T>::const_iterator it = vec.begin(); it != vec.end() - 1; it++)
-		stream << *it << ", ";
-	stream << *(vec.end() - 1) << ']';
-	stream << ", size: " << vec.size() << ", capacity: " << vec.capacity();
-	return (stream);
-}
-
-using namespace NP;
+#include "printer.hpp"
 
 #define SIZE 10000000
 
@@ -30,27 +9,27 @@ void	insertVectorTest(void)
 {
 	{
 		std::cout << "Insert" << '\n';
-		vector<int> vec;
+		NP::vector<int> vec;
 		vec.insert(vec.begin(), 10, 42);
 		std::cout << vec << '\n';
-		vector<int>::const_iterator it = vec.insert(vec.end(), 24);
+		NP::vector<int>::const_iterator it = vec.insert(vec.end(), 24);
 		std::cout << *it << '\n';
 		std::cout << vec << '\n' << '\n';
 	}
 	{
 		std::cout << "Insert with array" << '\n';
-		vector<double> vec;
+		NP::vector<double> vec;
 		double arr[9] = {1.2, 2.3, 3.4, 4.5, 5.6, 6.7, 7.8, 8.9, 9.0};
 		vec.insert(vec.begin(), arr, arr + 9);
 		std::cout << vec << '\n' << '\n';
 	}
 	{
 		std::cout << "Copy and assign op" << '\n';
-		vector<int> vec;
+		NP::vector<int> vec;
 		for (int i = 0; i < 16; ++i)
 			vec.push_back(i);
-		vector<int> copy(vec);
-		vector<int> assign;
+		NP::vector<int> copy(vec);
+		NP::vector<int> assign;
 		assign = copy;
 		std::cout << "vec: " << vec << '\n';
 		std::cout << "copy: " << copy << '\n';
@@ -59,8 +38,8 @@ void	insertVectorTest(void)
 	}
 	{
 		std::cout << "Assign" << '\n';
-		vector<int> vec(5, 42);
-		vector<int> vec2;
+		NP::vector<int> vec(5, 42);
+		NP::vector<int> vec2;
 		std::cout << vec << '\n';
 		vec.assign(4, 21);
 		std::cout << vec << '\n';
@@ -73,7 +52,7 @@ void	insertVectorTest(void)
 void	accessVectorTest(void)
 {
 	std::cout << "Access" << '\n';
-	vector<std::string> vec;
+	NP::vector<std::string> vec;
 	vec.push_back("Hello world !");
 	vec.push_back("What's up ?");
 	vec.insert(vec.end(), 3, "Fine :)");
@@ -95,25 +74,25 @@ void	accessVectorTest(void)
 void	iteratorVectorTest(void)
 {
 	std::cout << "Iterator" << '\n';
-	vector<int> vec;
+	NP::vector<int> vec;
 	vec.reserve(21);
 	for (int i = 0; i < 21; ++i)
 		vec.push_back(i);
-	for (vector<int>::iterator it = vec.begin(); it != vec.end(); ++it)
+	for (NP::vector<int>::iterator it = vec.begin(); it != vec.end(); ++it)
 		std::cout << *it << ' ';
 	std::cout << '\n';
-	for (vector<int>::const_iterator it = vec.begin(); it != vec.end(); ++it)
+	for (NP::vector<int>::const_iterator it = vec.begin(); it != vec.end(); ++it)
 		std::cout << *it << ' ';
 	std::cout << '\n';
-	for (vector<int>::reverse_iterator it = vec.rbegin(); it != vec.rend(); ++it)
+	for (NP::vector<int>::reverse_iterator it = vec.rbegin(); it != vec.rend(); ++it)
 		std::cout << *it << ' ';
 	std::cout << '\n';
-	for (vector<int>::const_reverse_iterator it = vec.rbegin(); it != vec.rend(); ++it)
+	for (NP::vector<int>::const_reverse_iterator it = vec.rbegin(); it != vec.rend(); ++it)
 		std::cout << *it << ' ';
 	std::cout << '\n';
 	vec.resize(5);
 	std::cout << vec << '\n';
-	vector<int>::iterator it = vec.begin();
+	NP::vector<int>::iterator it = vec.begin();
 	for (int i = 0; i < 5; ++i)
 	{
 		*it += i;
@@ -126,7 +105,7 @@ void	iteratorVectorTest(void)
 void	capacitySwapVectorTest(void)
 {
 	std::cout << "Capacity" << '\n';
-	vector<std::string> vec;
+	NP::vector<std::string> vec;
 	std::string msg[] = {"Ceci", "est", "un", "message", "top", "secret", "/!\\"};
 	vec.insert(vec.begin(), msg, msg + 7);
 	std::cout << vec << " max size = " << vec.max_size() << '\n';
@@ -141,7 +120,7 @@ void	capacitySwapVectorTest(void)
 
 	vec.insert(vec.begin(), msg, msg + 7);
 	std::string msg2[] = {"Ceci", "n'est", "pas", "un", "message", "cache", "(:"};
-	vector<std::string> vec2;
+	NP::vector<std::string> vec2;
 	vec2.insert(vec2.begin(), msg2, msg2 + 7);
 
 	std::cout << vec << '\n';
@@ -150,14 +129,13 @@ void	capacitySwapVectorTest(void)
 	std::cout << vec << '\n';
 	std::cout << vec2 << '\n';
 	std::cout << '\n';
-
 }
 
 void	compVectorTest(void)
 {
 	std::cout << "Comp" << '\n';
-	vector<std::string> vec;
-	vector<std::string> vec2;
+	NP::vector<std::string> vec;
+	NP::vector<std::string> vec2;
 	vec.push_back("1");
 	vec.push_back("2");
 	vec.push_back("3");
@@ -194,11 +172,11 @@ struct uselessStruct
 
 void	speedVectorTest(void)
 {
-	vector<uselessStruct> vec;
-	vector<uselessStruct> assign;
+	NP::vector<uselessStruct> vec;
+	NP::vector<uselessStruct> assign;
 	for (int i = 0; i < SIZE; ++i)
 		vec.push_back(uselessStruct(i));
-	vector<uselessStruct> copy(vec);
+	NP::vector<uselessStruct> copy(vec);
 	assign = copy;
 	vec.clear();
 	vec.assign(copy.begin(), copy.end());

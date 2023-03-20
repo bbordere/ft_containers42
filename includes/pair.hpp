@@ -77,13 +77,6 @@ namespace ft
 	{
 		return (!(l < r));
 	}
-
-	template <class T, class U>
-	std::ostream &operator<<(std::ostream &stream, ft::pair<T, U> const &pair)
-	{
-		stream << '(' << pair.first << ", " << pair.second << ')';
-		return (stream);
-	}
 }
 
 #endif

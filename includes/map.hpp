@@ -19,6 +19,9 @@ namespace ft
 			typedef Key							key_type;
 			typedef T							mapped_type;
 			typedef	ft::pair<const Key, T>		value_type;
+			typedef std::size_t					size_type;
+			
+
 			typedef Compare						key_compare;
 			typedef Alloc						allocator_type;
 
@@ -33,11 +36,11 @@ namespace ft
 
 			typedef ft::reverseIterator<iterator>		reverse_iterator;
 			typedef ft::reverseIterator<const_iterator> const_reverse_iterator;
+			
+			typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
 
-			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
-			typedef std::size_t												size_type;
 
-			class value_compare//: public std::binary_function<value_type, value_type, bool>
+			class value_compare// :public std::binary_function<value_type, value_type, bool>
 			{
 				private:
 					friend class map;
@@ -47,7 +50,7 @@ namespace ft
 					value_compare	(key_compare c) : comp(c) {}
 
 				public:
-					bool operator()	(const value_type& x, const value_type& y) const
+					bool operator()	(value_type const &x, value_type const &y) const
 					{
 						return (comp(x.first, y.first));
 					}
@@ -56,13 +59,11 @@ namespace ft
 		private:
 			typedef	RBNode<value_type>			node;
 			typedef	node*						node_ptr;
-
-			typedef RBTree<value_type, value_compare, allocator_type> treeType;
-			
+			typedef RBTree<value_type, value_compare, allocator_type> treeType;			
 			treeType	_tree;
 
 		public:
-			map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
+			explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
 					_tree(RBTree<value_type, value_compare, allocator_type>(value_compare(comp), alloc)) {}
 
 			template <class InputIterator>
@@ -77,7 +78,7 @@ namespace ft
 
 			map &operator=(map const &assign)
 			{
-				// if (this != &assign)
+				if (this != &assign)
 					_tree = assign._tree;
 				return (*this);
 			}
@@ -336,24 +337,5 @@ namespace ft
 		return (!(x < y));
 	}
 
-}
-
-template <class Key, class T, class Compare, class Allocator>
-std::ostream &operator<<(std::ostream &stream, ft::map<Key, T, Compare, Allocator> const &map)
-{
-	stream << '{';
-	if (map.empty())
-	{
-		stream << '}';
-		return (stream);		
-	}
-	typename ft::map<Key, T, Compare, Allocator>::const_iterator pair = map.begin();
-	for (std::size_t i = 0; i < map.size() - 1; i++)
-	{
-		stream << '\'' << (*pair).first << "': " << (*pair).second << ", ";
-		++pair;
-	}
-	stream << '\'' << (*pair).first << "': " << (*pair).second << '}';
-	return (stream);
 }
 #endif

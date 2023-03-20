@@ -1,9 +1,9 @@
 NAME = ft_containers
 STD_NAME = std_containers
 
-CXX = clang++
+CXX = c++
 
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -MMD
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -MMD
 
 OBJ_DIR = obj/
 STD_OBJ_DIR = std_obj/
@@ -12,6 +12,7 @@ SRCS_DIR = srcs/
 INC_DIR = includes/
 
 FILES = $(SRCS_DIR)main.cpp $(SRCS_DIR)mainMap.cpp $(SRCS_DIR)mainSet.cpp $(SRCS_DIR)mainVector.cpp $(SRCS_DIR)mainStack.cpp
+
 OBJS = $(patsubst $(SRCS_DIR)%.cpp, $(OBJ_DIR)%.o, $(FILES))
 STD_OBJS = $(patsubst $(SRCS_DIR)%.cpp, $(STD_OBJ_DIR)%.o, $(FILES))
 
@@ -33,8 +34,6 @@ RESET = \033[0m
 GREEN =	\033[32m
 YELLOW = \033[33m
 
-# all: $(NAME) $(STD_NAME)
-
 all: $(NAME) $(STD_NAME)
 
 	@ printf "$(BLUE)    ____________   __________  _   ___________    _____   ____________  _____ $(RESET) \n"
@@ -43,8 +42,6 @@ all: $(NAME) $(STD_NAME)
 	@ printf "$(BLUE) / __/   / /    / /___/ /_/ / /|  / / / / ___ |_/ // /|  / /___/ _, _/___/ /  $(RESET) \n"
 	@ printf "$(BLUE)/_/     /_/     \____/\____/_/ |_/ /_/ /_/  |_/___/_/ |_/_____/_/ |_|/____/   $(RESET) \n"
                                                                              
-
-
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) -I $(INC_DIR) $(OBJS) -o $@
 

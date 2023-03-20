@@ -1,7 +1,7 @@
 #ifndef __RANDOM_ITERATOR_HP__
 #define __RANDOM_ITERATOR_HP__
 
-#include "iterator_utils.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft
 {
@@ -12,11 +12,12 @@ namespace ft
 			typedef ft::iterator<ft::random_access_iterator_tag, T> _type;
 	
 		public:
-			typedef typename _type::difference_type		difference_type;
-			typedef typename _type::pointer 			pointer;
-			typedef typename _type::reference			reference;
-			typedef typename _type::iterator_category	iterator_category;
-			typedef T	value_type;
+			typedef typename _type::iterator_category			iterator_category;
+			typedef typename _type::difference_type				difference_type;
+			typedef typename _type::pointer 					pointer;
+			typedef typename _type::reference					reference;
+			typedef T											value_type;
+
 
 		protected:
 			pointer	_ptr;

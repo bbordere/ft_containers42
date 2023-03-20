@@ -2,7 +2,7 @@
 #define __RBTREE_ITERATOR_HPP__
 
 #include "RBNode.hpp"
-#include "iterator_utils.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft
 {
@@ -10,22 +10,22 @@ namespace ft
 	class RBIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 	{
 		public:
-			typedef RBNode<T>		node;
-			typedef	node*			node_ptr;
 			typedef	T				value_type;
 			typedef	T&				reference;
 			typedef	T*				pointer;
+
+		private:
+			typedef RBNode<T>		node;
+			typedef	node*			node_ptr;
 			typedef RBIterator<T>	iterator;
-
-		public:
 			node_ptr _ptr;
-
-		public:
 			bool	_isNil(node_ptr node) {return (!node->_right && !node->_left);}
 
+		public:
+
 			RBIterator(void): _ptr(NULL) {}
-			RBIterator(RBIterator const &copy): _ptr(copy._ptr) {}
 			RBIterator(node_ptr ptr): _ptr(ptr) {}
+			RBIterator(RBIterator const &copy): _ptr(copy._ptr) {}
 
 			node_ptr	_increment(node_ptr node)
 			{
@@ -79,7 +79,8 @@ namespace ft
 
 			iterator &operator=(iterator const &assign)
 			{
-				_ptr = assign._ptr;
+				if (this != &assign)
+					_ptr = assign._ptr;
 				return (*this);
 			}
 
@@ -113,18 +114,18 @@ namespace ft
 				return (_ptr);
 			}
 
-			friend bool	operator==(iterator const& x, iterator const& y) {
-				return x.base() == y.base();
-			}
+			// friend bool	operator==(iterator const& x, iterator const& y) {
+			// 	return x.base() == y.base();
+			// }
 
-			friend bool	operator!=(iterator const& x, iterator const& y) {
-				return x.base() != y.base();
-			}
+			// friend bool	operator!=(iterator const& x, iterator const& y) {
+			// 	return x.base() != y.base();
+			// }
 
-			operator RBIterator<T const>(void) const
-			{
-				return (RBIterator<T const>(_ptr));
-			}
+			// operator RBIterator<T const>(void) const
+			// {
+			// 	return (RBIterator<T const>(_ptr));
+			// }
 	};
 
 
@@ -132,21 +133,24 @@ namespace ft
 	class RBConstIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
 	{
 		public:
-			typedef RBNode<T>				node;
-			typedef	node*					node_ptr;
-			typedef	T						value_type;
-			typedef	const T&				reference;
-			typedef	const T*				pointer;
+			typedef ft::bidirectional_iterator_tag	iterator_category;
+			typedef	T								value_type;
+			typedef	const T&						reference;
+			typedef	const T*						pointer;
+			typedef std::ptrdiff_t					difference_type;
+
+		private:
+			typedef RBNode<T>						node;
+			typedef	node*							node_ptr;
 			typedef RBIterator<T>			iterator;
 			typedef RBConstIterator<T>		const_iterator;
-
-		public:
 			node_ptr _ptr;
 
 		public:
 			RBConstIterator(void): _ptr(NULL) {}
 			RBConstIterator(node_ptr ptr): _ptr(ptr) {}
-			RBConstIterator(const iterator &it): _ptr(it._ptr) {}
+			RBConstIterator(const RBConstIterator &it): _ptr(it._ptr) {}
+			RBConstIterator(const iterator &it): _ptr(it.base()) {}
 
 			reference operator*(void) const { return (_ptr->_val);}
 
@@ -182,18 +186,58 @@ namespace ft
 				return (_ptr);
 			}
 
-			friend bool	operator==(const_iterator const& x, const_iterator const& y) {
-				return x.base() == y.base();
-			}
+			// friend bool	operator==(const_iterator const& x, const_iterator const& y) {
+			// 	return x.base() == y.base();
+			// }
 
-			friend bool	operator!=(const_iterator const& x, const_iterator const& y) {
-				return x.base() != y.base();
-			}
+			// friend bool	operator!=(const_iterator const& x, const_iterator const& y) {
+			// 	return x.base() != y.base();
+			// }
 
 			// operator RBIterator<T const>(void) const
 			// {
 			// 	return (RBIterator<T const>(_ptr));
 			// }
+	};
+
+	template <class ValueType1, class ValueType2>
+	bool operator == (const RBIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
+		return ( lhs.base() == rhs.base());
+	};
+
+	template <class ValueType1, class ValueType2>
+	bool operator == (const RBConstIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
+		return ( lhs.base() == rhs.base());
+	};
+
+	template <class ValueType1, class ValueType2>
+	bool operator == (const RBIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
+		return ( lhs.base() == rhs.base());
+	};
+
+	template <class ValueType1, class ValueType2>
+	bool operator == (const RBConstIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
+		return ( lhs.base() == rhs.base());
+	};
+
+	template <class ValueType1, class ValueType2>
+	bool operator != (const RBIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
+		return ( lhs.base() != rhs.base());
+	};
+
+	template <class ValueType1, class ValueType2>
+	bool operator != (const RBConstIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
+		return ( lhs.base() != rhs.base());
+	};
+
+	template <class ValueType1, class ValueType2>
+	bool operator != (const RBIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
+		return ( lhs.base() != rhs.base());
+	};
+
+	template <class ValueType1, class ValueType2>
+	bool operator != (const RBConstIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
+		return ( lhs.base() != rhs.base());
 	};
 }
 #endif

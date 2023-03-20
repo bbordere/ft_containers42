@@ -383,7 +383,6 @@ namespace ft
 				_size = 0;
 			}
 
-
 			/*ALLOCATOR*/
 			allocator_type get_allocator(void) const
 			{
@@ -421,68 +420,48 @@ namespace ft
 				return (res);
 			}
 	};
-
-
-
-/* RELATIONAL OP*/
-template <class T, class Alloc>
-bool operator==(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
-{
-	return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
-}
-
-template <class T, class Alloc>
-bool operator!=(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
-{
-	return (!(lhs == rhs));
-}
-
-template <class T, class Alloc>
-bool operator<(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
-{
-	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
-}
-
-template <class T, class Alloc>
-bool operator<=(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
-{
-	return (!(rhs < lhs));
-}
-
-template <class T, class Alloc>
-bool operator>(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
-{
-	return (rhs < lhs);
-}
-
-template <class T, class Alloc>
-bool operator>=(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
-{
-	return (!(lhs < rhs));
-}
-
-template <class T, class Alloc>
-void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)
-{
-	x.swap(y);
-}
-
-}
-
-template <typename T, class Alloc>
-std::ostream &operator<<(std::ostream &stream, ft::vector<T, Alloc> const &vec)
-{
-	if (vec.empty())
+	/* RELATIONAL OP*/
+	template <class T, class Alloc>
+	bool operator==(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
 	{
-		stream << "[]";
-		return (stream);
+		return (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 	}
-	stream << '[';
-	for (typename ft::vector<T>::const_iterator it = vec.begin(); it != vec.end() - 1; ++it)
-		stream << *it << ", ";
-	stream << *(vec.end() - 1) << ']';
-	stream << ", size: " << vec.size() << ", capacity: " << vec.capacity();
-	return (stream);	
+
+	template <class T, class Alloc>
+	bool operator!=(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
+	{
+		return (!(lhs == rhs));
+	}
+
+	template <class T, class Alloc>
+	bool operator<(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
+	{
+		return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	}
+
+	template <class T, class Alloc>
+	bool operator<=(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
+	{
+		return (!(rhs < lhs));
+	}
+
+	template <class T, class Alloc>
+	bool operator>(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
+	{
+		return (rhs < lhs);
+	}
+
+	template <class T, class Alloc>
+	bool operator>=(ft::vector<T,Alloc> const &lhs, ft::vector<T,Alloc> const &rhs)
+	{
+		return (!(lhs < rhs));
+	}
+
+	template <class T, class Alloc>
+	void swap (ft::vector<T,Alloc>& x, ft::vector<T,Alloc>& y)
+	{
+		x.swap(y);
+	}
 }
 
 #endif

@@ -9,27 +9,23 @@
 
 
 template <class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
-class RBTree
+struct RBTree
 {
+	typedef RBNode<T>	node;
+	typedef	node		*node_ptr;
+	typedef	T			value_type;
+	typedef	Alloc		alloc_type;
 
-	public:
-		typedef RBNode<T>	node;
-		typedef	node		*node_ptr;
-		typedef	T			value_type;
-		typedef	Alloc		alloc_type;
+	typedef	ft::RBIterator<value_type>			iterator;
+	typedef	ft::RBConstIterator<value_type>		const_iterator;
 
-		typedef	ft::RBIterator<value_type>			iterator;
-		typedef	ft::RBConstIterator<value_type>	const_iterator;
+	typedef typename Alloc::template rebind<RBNode<value_type> >::other	node_allocator;
 
-		typedef typename Alloc::template rebind<RBNode<value_type> >::other	node_allocator;
-
-
-		public:
-			node_ptr	_root;
-			node_ptr	_nil;
-			node_allocator	_alloc;
-			std::size_t	_size;
-			Compare		_comp;
+	node_ptr	_root;
+	node_ptr	_nil;
+	node_allocator	_alloc;
+	std::size_t	_size;
+	Compare		_comp;
 
 	RBTree(void): _alloc(node_allocator())
 	{
@@ -83,6 +79,7 @@ class RBTree
 		}
 		return (*this);
 	}
+
 	void	clearTree(node_ptr node)
 	{
 		if (node != _nil)
