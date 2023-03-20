@@ -12,7 +12,7 @@
 
 namespace ft
 {
-	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<Key, T> > >
+	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
 	class map
 	{
 		public:
@@ -262,6 +262,22 @@ namespace ft
 			mapped_type	&operator[](key_type const &key)
 			{
 				return (insert(ft::make_pair(key, mapped_type())).first->second);
+			}
+
+			mapped_type	&at(key_type const &key)
+			{
+				iterator i = find(key);
+				if (i == end())
+					throw (std::out_of_range("map::at"));
+				return ((*i).second);
+			}
+
+			const mapped_type	&at(key_type const &key) const
+			{
+				const_iterator i = find(key);
+				if (i == end())
+					throw (std::out_of_range("map::at"));
+				return ((*i).second);
 			}
 
 			ft::pair<iterator, iterator>	equal_range(key_type const &k)

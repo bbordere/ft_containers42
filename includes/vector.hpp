@@ -36,8 +36,13 @@ namespace ft
 			explicit vector(allocator_type const &alloc = allocator_type()): _alloc(alloc), _arr(NULL), _size(0), _capacity(0)  {}
 
 			explicit vector (size_type n, value_type const &val = value_type(), allocator_type const &alloc = allocator_type()):
-							_alloc(alloc), _arr(_alloc.allocate(n)), _size(n), _capacity(n)
+							_alloc(alloc), _arr(NULL), _size(0), _capacity(0)
 			{
+				if (n >= _alloc.max_size())
+					throw std::length_error("Too large bro ");
+				_arr = _alloc.allocate(n);
+				_capacity = n;
+				_size = n;
 				for (size_type i = 0; i < n; ++i)
 					_alloc.construct(_arr + i, val);			
 			}
@@ -244,8 +249,8 @@ namespace ft
 				while (first != last)
 				{
 					_alloc.construct(_arr + i, *first);
-					first++;
-					i++;
+					++first;
+					++i;
 				}
 				_size = i;
 			}
@@ -332,6 +337,8 @@ namespace ft
 					first++;
 				}
 				_size += diff;
+				if (!oldArr)
+					return;
 				for (size_type i = 0; i < oldSize; ++i)
 					_alloc.destroy(oldArr + i);
 				_alloc.deallocate(oldArr, oldCap);
@@ -398,9 +405,12 @@ namespace ft
 
 			void	_deleteArr(pointer arr)
 			{
+				if (!arr)
+					return;
 				for (size_type i = 0; i < _size; ++i)
 					_alloc.destroy(arr + i);
 				_alloc.deallocate(arr, _capacity);
+				arr = NULL;
 			}
 
 			pointer		_reserveNoDelete(size_type n, size_type &oldCap, size_type &oldSize)
