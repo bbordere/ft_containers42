@@ -11,8 +11,8 @@
 template <class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 struct RBTree
 {
-	typedef RBNode<T>	node;
-	typedef	node		*node_ptr;
+	typedef RBNode<T>	node_t;
+	typedef	node_t		*node_ptr;
 	typedef	T			value_type;
 	typedef	Alloc		alloc_type;
 

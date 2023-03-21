@@ -101,7 +101,7 @@ namespace ft
 			}
 
 			/*CAPACITY*/
-				bool	empty(void) const
+			bool	empty(void) const
 			{
 				return (_tree._root == _tree._nil);
 			}
@@ -230,6 +230,12 @@ namespace ft
 			friend bool	operator<(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y);
 			
 	};
+
+	template <class _T, class _Compare, class _Alloc>
+	void swap(set<_T, _Compare, _Alloc> &lhs,set<_T, _Compare, _Alloc> &rhs)
+	{
+		lhs.swap(rhs);
+	}
 
 	template <class _T, class _Compare, class _Alloc>
 	bool	operator==(set<_T, _Compare, _Alloc> const &x, set<_T, _Compare, _Alloc> const &y)

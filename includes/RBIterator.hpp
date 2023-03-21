@@ -15,8 +15,8 @@ namespace ft
 			typedef	T*				pointer;
 
 		private:
-			typedef RBNode<T>		node;
-			typedef	node*			node_ptr;
+			typedef RBNode<T>		node_t;
+			typedef	node_t*			node_ptr;
 			typedef RBIterator<T>	iterator;
 			node_ptr _ptr;
 			bool	_isNil(node_ptr node) {return (!node->_right && !node->_left);}
@@ -86,27 +86,27 @@ namespace ft
 
 			iterator	&operator++(void)
 			{
-				_ptr = node::_increment(_ptr);
+				_ptr = node_t::_increment(_ptr);
 				return (*this);
 			}
 
 			iterator	operator++(int)
 			{
 				iterator temp = *this;
-				_ptr = node::_increment(_ptr);
+				_ptr = node_t::_increment(_ptr);
 				return (temp);
 			}
 
 			iterator	&operator--(void)
 			{
-				_ptr = node::_decrement(_ptr);
+				_ptr = node_t::_decrement(_ptr);
 				return (*this);
 			}
 
 			iterator	operator--(int)
 			{
 				iterator temp = *this;
-				_ptr = node::_decrement(_ptr);
+				_ptr = node_t::_decrement(_ptr);
 				return (temp);
 			}
 			node_ptr base() const
@@ -140,8 +140,8 @@ namespace ft
 			typedef std::ptrdiff_t					difference_type;
 
 		private:
-			typedef RBNode<T>						node;
-			typedef	node*							node_ptr;
+			typedef RBNode<T>						node_t;
+			typedef	node_t*							node_ptr;
 			typedef RBIterator<T>			iterator;
 			typedef RBConstIterator<T>		const_iterator;
 			node_ptr _ptr;
@@ -158,27 +158,27 @@ namespace ft
 
 			const_iterator	&operator++(void)
 			{
-				_ptr = node::_increment(_ptr);
+				_ptr = node_t::_increment(_ptr);
 				return (*this);
 			}
 
 			const_iterator	operator++(int)
 			{
 				const_iterator temp = *this;
-				_ptr = node::_increment(_ptr);
+				_ptr = node_t::_increment(_ptr);
 				return (temp);
 			}
 
 			const_iterator	&operator--(void)
 			{
-				_ptr = node::_decrement(_ptr);
+				_ptr = node_t::_decrement(_ptr);
 				return (*this);
 			}
 
 			const_iterator	operator--(int)
 			{
 				const_iterator temp = *this;
-				_ptr = node::_decrement(_ptr);
+				_ptr = node_t::_decrement(_ptr);
 				return (temp);
 			}
 			node_ptr base() const
@@ -203,41 +203,41 @@ namespace ft
 	template <class ValueType1, class ValueType2>
 	bool operator == (const RBIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
 		return ( lhs.base() == rhs.base());
-	};
+	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator == (const RBConstIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
 		return ( lhs.base() == rhs.base());
-	};
+	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator == (const RBIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
 		return ( lhs.base() == rhs.base());
-	};
+	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator == (const RBConstIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
 		return ( lhs.base() == rhs.base());
-	};
+	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator != (const RBIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
 		return ( lhs.base() != rhs.base());
-	};
+	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator != (const RBConstIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
 		return ( lhs.base() != rhs.base());
-	};
+	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator != (const RBIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
 		return ( lhs.base() != rhs.base());
-	};
+	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator != (const RBConstIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
 		return ( lhs.base() != rhs.base());
-	};
+	}
 }
 #endif

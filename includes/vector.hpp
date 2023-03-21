@@ -50,16 +50,11 @@ namespace ft
 			template <class It>
 			vector(It first, It last, allocator_type const &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<It>::value, bool>::type = true)
 			{
-				difference_type size = ft::distance(first, last);
 				_alloc = alloc;
-				_size = size;
-				_capacity = size;
-				_arr = _alloc.allocate(_capacity);
-				for (size_type i = 0; first != last; ++i)
-				{
-					_alloc.construct(_arr + i, *first);
-					++first;
-				}
+				_size = 0;
+				_capacity = 0;
+				_arr = NULL;
+				assign(first, last);
 			}
 
 			vector (vector const &copy): _alloc(copy._alloc), _arr(_alloc.allocate(copy._size)),
@@ -236,31 +231,147 @@ namespace ft
 				return (_arr);
 			}
 
+			template <class It>
+			void	_assignDispatch(It first, It last, std::input_iterator_tag)
+			{
+				size_type oldSize = _size;
+				pointer tmp = _arr;
+				_size = 0;
+				while (first != last)
+				{
+					if (oldSize)
+					{
+						if (_size > _alloc.max_size())
+							throw (std::length_error("Too large Bro !"));
+						*tmp = *first;
+						++tmp;
+						--oldSize;
+						++_size;
+					}
+					else
+						push_back(*first);
+					++first;
+				}
+				for (size_type i = 0; i < oldSize; ++i, ++tmp)
+					_alloc.destroy(tmp);
+			}
+
+			template <class It>
+			void	_assignDispatch(It first, It last, ft::random_access_iterator_tag)
+{
+				size_type i = 0;
+				size_type len = last - first;
+				if (len > _alloc.max_size())
+					throw (std::length_error("Too large Bro !"));
+				if (_capacity < len)
+				{
+					_deleteArr(_arr);
+					_capacity = last - first;
+					if (_capacity)
+						_arr = _alloc.allocate(_capacity);
+					while (first != last)
+					{
+						_alloc.construct(_arr + i, *first);
+						++first;
+						++i;
+					}
+				}
+				else
+				{
+					pointer end = _arr + _size;
+					pointer tmp = _arr;
+					_size = 0;
+					while (first != last)
+					{
+						if (tmp < end)
+							*tmp = *first;
+						else
+							_alloc.construct(tmp, *first);
+						++tmp;
+						++first;
+						++i;
+					}
+					while (tmp < end)
+						_alloc.destroy(tmp++);
+				}
+				_size = i;
+			}
+
+			// template <class It>
+			// void	_assignDispatch(It first, It last, std::random_access_iterator_tag)
+			// {
+			// 	size_type i = 0;
+			// 	size_type len = ft::distance(first, last);
+			// 	if (_capacity < len)
+			// 	{
+			// 		// clear();
+			// 		// reserve(len);
+			// 		_deleteArr(_arr);
+			// 		_capacity = last - first;
+			// 		if (_capacity)
+			// 			_arr = _alloc.allocate(_capacity);
+			// 		while (first != last)
+			// 		{
+			// 			_alloc.construct(_arr + i, *first);
+			// 			++first;
+			// 			++i;
+			// 		}
+			// 	}
+			// 	else
+			// 	{
+			// 		pointer end = _arr + _size;
+			// 		pointer tmp = _arr;
+			// 		_size = 0;
+			// 		while (first != last)
+			// 		{
+			// 			if (tmp < tmp)
+			// 				*tmp = *first;
+			// 			else
+			// 				_alloc.construct(tmp, *first);
+			// 			++tmp;
+			// 			++first;
+			// 			++i;
+			// 		}
+			// 		while (tmp < end)
+			// 			_alloc.destroy(tmp++);
+			// 	}
+			// 	_size = i;
+			// }
 
 			/*MODIFIERS*/
 			template <class It> 
 			void assign (It first, It last, typename ft::enable_if<!ft::is_integral<It>::value, bool>::type = true)
 			{
-				clear();
-				size_type i = 0;
-				size_type len = ft::distance(first, last);
-				if (_capacity < len)
-					reserve(len);
-				while (first != last)
-				{
-					_alloc.construct(_arr + i, *first);
-					++first;
-					++i;
-				}
-				_size = i;
+				_assignDispatch(first, last, typename ft::iterator_traits<It>::iterator_category());
 			}
 
 			void	assign(size_type n, value_type const &val)
 			{
-				clear();
-				if (!n)
+				if (n > _alloc.max_size())
+					throw (std::length_error("Over max size"));
+				if (n > _capacity)
+				{
+					_deleteArr(_arr);
+					_arr = _alloc.allocate(n);
+					_capacity = n;
+					_size = n;
+					for (size_type i = 0; i < n; ++i)
+						_alloc.construct(_arr + i, val);
 					return;
-				resize(n, val);
+				} 
+				pointer tmp = _arr;
+				for (size_type i = 0; i < n; i++, tmp++) {
+					if (i < _size)
+						*tmp = val;
+					else
+						_alloc.construct(tmp, val);
+				}
+				if (_size >= n)
+				{
+					for (size_type i = n; i < _size; i++, tmp++)
+						_alloc.destroy(tmp);
+				}
+				_size = n;
 			}
 
 			void	push_back(value_type const &val)
@@ -360,19 +471,26 @@ namespace ft
 			iterator erase(iterator first, iterator last)
 			{
 				difference_type diff = last - first;
-
-				while (first != end() - diff)
+				if (first == last)
+					return (iterator(first));
+				if (last == end())
 				{
-					*first = first[diff];
-					++first;
+					for (difference_type i = 0; i < diff - 1; ++i)
+						_alloc.destroy(&(*first) + i);
+					_size -= diff;
+					return (iterator(first));
 				}
-				while (first != end())
+				iterator tmp(first);
+				while (last != end())
 				{
-					_alloc.destroy(&(*first));
-					++first;
+					*tmp = *last;
+					last++;
+					tmp++;
 				}
+				for (difference_type i = 0; i < diff - 1; ++i)
+					_alloc.destroy(&(*first) + i);
 				_size -= diff;
-				return (last - diff);
+				return (iterator(first));
 			}
 
 			void	swap(vector &other)
