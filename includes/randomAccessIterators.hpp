@@ -6,10 +6,10 @@
 namespace ft
 {
 	template<class T>
-	class randomAccessIterators: ft::iterator<ft::random_access_iterator_tag, T>
+	class randomAccessIterators: ft::iterator<std::random_access_iterator_tag, T>
 	{
 		private:
-			typedef ft::iterator<ft::random_access_iterator_tag, T> _type;
+			typedef ft::iterator<std::random_access_iterator_tag, T> _type;
 	
 		public:
 			typedef typename _type::iterator_category			iterator_category;

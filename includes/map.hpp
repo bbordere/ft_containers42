@@ -19,7 +19,6 @@ namespace ft
 			typedef Key							key_type;
 			typedef T							mapped_type;
 			typedef	ft::pair<const Key, T>		value_type;
-			typedef std::size_t					size_type;
 			
 
 			typedef Compare						key_compare;
@@ -38,9 +37,10 @@ namespace ft
 			typedef ft::reverseIterator<const_iterator> const_reverse_iterator;
 			
 			typedef typename ft::iterator_traits<iterator>::difference_type	difference_type;
+			typedef std::size_t	size_type;
 
 
-			class value_compare// :public std::binary_function<value_type, value_type, bool>
+			class value_compare: public std::binary_function<value_type, value_type, bool>
 			{
 				private:
 					friend class map;
@@ -50,6 +50,9 @@ namespace ft
 					value_compare	(key_compare c) : comp(c) {}
 
 				public:
+  					typedef bool		result_type;
+  					typedef value_type	first_argument_type;
+  					typedef value_type	second_argument_type;
 					bool operator()	(value_type const &x, value_type const &y) const
 					{
 						return (comp(x.first, y.first));
@@ -85,6 +88,107 @@ namespace ft
 
 			virtual ~map() {}
 
+			/*ITERATORS*/			
+			iterator begin(void)
+			{
+				return (_tree.begin());
+			}
+
+			const_iterator begin(void) const
+			{
+				return (_tree.begin());
+			}
+
+			iterator end(void)
+			{
+				return (_tree.end());
+			}
+
+			const_iterator end(void) const
+			{
+				return (_tree.end());
+			}
+
+			reverse_iterator rbegin(void)
+			{
+				return (reverse_iterator(end()));
+			}
+
+			const_reverse_iterator rbegin(void) const
+			{
+				return (const_reverse_iterator(end()));
+			}
+
+			reverse_iterator rend(void)
+			{
+				return (reverse_iterator(begin()));
+			}
+
+			const_reverse_iterator rend(void) const
+			{
+				return (const_reverse_iterator(begin()));
+			}
+
+			/*CAPACITY*/
+			bool	empty(void) const
+			{
+				return (_tree._root == _tree._nil);
+			}
+
+			size_type	size(void) const
+			{
+				return (_tree._size);
+			}
+
+			size_type	max_size(void) const
+			{
+				return (_tree._alloc.max_size());
+			}
+
+			/*ELEMENT ACCESS*/
+			mapped_type	&operator[](key_type const &key)
+			{
+				return (insert(ft::make_pair(key, mapped_type())).first->second);
+			}
+
+			mapped_type	&at(key_type const &key)
+			{
+				iterator i = find(key);
+				if (i == end())
+					throw (std::out_of_range("map::at"));
+				return ((*i).second);
+			}
+
+			const mapped_type	&at(key_type const &key) const
+			{
+				const_iterator i = find(key);
+				if (i == end())
+					throw (std::out_of_range("map::at"));
+				return ((*i).second);
+			}
+
+
+			/*MODIFIERS*/
+			ft::pair<iterator, bool> insert(value_type const &val)
+			{
+				node_ptr pos = _tree.insert(val);
+				if (pos == _tree._nil)
+					return (ft::make_pair(find(val.first), false));
+				return (ft::make_pair(iterator(pos), true));
+			}
+
+			iterator insert (iterator position, const value_type& val)
+			{
+				static_cast<void>(position);
+				return (insert(val).first);
+			}
+
+			template <class InputIterator>
+			void	insert(InputIterator first, InputIterator last)
+			{
+				_tree.insert(first, last);
+			}
+
 			iterator find(key_type const &key)
 			{
 				node_ptr ptr = _tree.search(ft::make_pair(key, T()));
@@ -104,26 +208,6 @@ namespace ft
 			size_type	count(key_type const &k) const
 			{
 				return (_tree.search(ft::make_pair(k, mapped_type())) == _tree._nil ? 0 : 1);
-			}
-
-			ft::pair<iterator, bool> insert(value_type const &val)
-			{
-				node_ptr pos = _tree.insert(val);
-				if (pos == _tree._nil)
-					return (ft::make_pair(find(val.first), false));
-				return (ft::make_pair(iterator(pos), true));
-			}
-
-			template <class InputIterator>
-			void	insert(InputIterator first, InputIterator last)
-			{
-				_tree.insert(first, last);
-			}
-
-			iterator insert (iterator position, const value_type& val)
-			{
-				static_cast<void>(position);
-				return (insert(val).first);
 			}
 
 			void	erase(iterator position)
@@ -178,63 +262,6 @@ namespace ft
 				_tree.swap(other._tree);
 			}
 
-			iterator begin(void)
-			{
-				return (_tree.begin());
-			}
-
-			iterator end(void)
-			{
-				return (_tree.end());
-			}
-
-			const_iterator begin(void) const
-			{
-				return (_tree.begin());
-			}
-
-			const_iterator end(void) const
-			{
-				return (_tree.end());
-			}
-
-
-			reverse_iterator rbegin(void)
-			{
-				return (reverse_iterator(end()));
-			}
-
-			reverse_iterator rend(void)
-			{
-				return (reverse_iterator(begin()));
-			}
-
-			const_reverse_iterator rbegin(void) const
-			{
-				return (const_reverse_iterator(end()));
-			}
-
-			const_reverse_iterator rend(void) const
-			{
-				return (const_reverse_iterator(begin()));
-			}
-
-
-			bool	empty(void) const
-			{
-				return (_tree._root == _tree._nil);
-			}
-
-			size_type	size(void) const
-			{
-				return (_tree._size);
-			}
-
-			size_type	max_size(void) const
-			{
-				return (_tree._alloc.max_size());
-			}
-
 			iterator lower_bound(key_type const &key)
 			{
 				iterator res = _tree.lower_bound(ft::make_pair(key, T()));
@@ -257,27 +284,6 @@ namespace ft
 			{
 				const_iterator res = _tree.upper_bound(ft::make_pair(key, T()));
 				return (res);
-			}
-
-			mapped_type	&operator[](key_type const &key)
-			{
-				return (insert(ft::make_pair(key, mapped_type())).first->second);
-			}
-
-			mapped_type	&at(key_type const &key)
-			{
-				iterator i = find(key);
-				if (i == end())
-					throw (std::out_of_range("map::at"));
-				return ((*i).second);
-			}
-
-			const mapped_type	&at(key_type const &key) const
-			{
-				const_iterator i = find(key);
-				if (i == end())
-					throw (std::out_of_range("map::at"));
-				return ((*i).second);
 			}
 
 			ft::pair<iterator, iterator>	equal_range(key_type const &k)

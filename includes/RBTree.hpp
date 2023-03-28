@@ -180,6 +180,7 @@ struct RBTree
 		else
 			parent->_right = newNode;
 		fixInsert(newNode);
+		_nil->_parent = getMax(_root);
 		_size++;
 		return (newNode);
 	}

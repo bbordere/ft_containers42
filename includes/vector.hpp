@@ -39,7 +39,7 @@ namespace ft
 							_alloc(alloc), _arr(NULL), _size(0), _capacity(0)
 			{
 				if (n >= _alloc.max_size())
-					throw std::length_error("Too large bro ");
+					throw std::length_error("Above the max size");
 				_arr = _alloc.allocate(n);
 				_capacity = n;
 				_size = n;
@@ -120,7 +120,6 @@ namespace ft
 				return (const_reverse_iterator(begin()));
 			}
 
-
 			/*CAPACITY*/
 			size_type size(void) const
 			{
@@ -140,7 +139,7 @@ namespace ft
 					return;
 				}
 				if (n > max_size())
-					throw std::length_error("Too large bro !");
+					throw std::length_error("Above the max size");
 				if (n < _size)
 				{
 					for (size_type i = n; i < _size; i++)
@@ -231,113 +230,6 @@ namespace ft
 				return (_arr);
 			}
 
-			template <class It>
-			void	_assignDispatch(It first, It last, std::input_iterator_tag)
-			{
-				size_type oldSize = _size;
-				pointer tmp = _arr;
-				_size = 0;
-				while (first != last)
-				{
-					if (oldSize)
-					{
-						if (_size > _alloc.max_size())
-							throw (std::length_error("Too large Bro !"));
-						*tmp = *first;
-						++tmp;
-						--oldSize;
-						++_size;
-					}
-					else
-						push_back(*first);
-					++first;
-				}
-				for (size_type i = 0; i < oldSize; ++i, ++tmp)
-					_alloc.destroy(tmp);
-			}
-
-			template <class It>
-			void	_assignDispatch(It first, It last, ft::random_access_iterator_tag)
-{
-				size_type i = 0;
-				size_type len = last - first;
-				if (len > _alloc.max_size())
-					throw (std::length_error("Too large Bro !"));
-				if (_capacity < len)
-				{
-					_deleteArr(_arr);
-					_capacity = last - first;
-					if (_capacity)
-						_arr = _alloc.allocate(_capacity);
-					while (first != last)
-					{
-						_alloc.construct(_arr + i, *first);
-						++first;
-						++i;
-					}
-				}
-				else
-				{
-					pointer end = _arr + _size;
-					pointer tmp = _arr;
-					_size = 0;
-					while (first != last)
-					{
-						if (tmp < end)
-							*tmp = *first;
-						else
-							_alloc.construct(tmp, *first);
-						++tmp;
-						++first;
-						++i;
-					}
-					while (tmp < end)
-						_alloc.destroy(tmp++);
-				}
-				_size = i;
-			}
-
-			// template <class It>
-			// void	_assignDispatch(It first, It last, std::random_access_iterator_tag)
-			// {
-			// 	size_type i = 0;
-			// 	size_type len = ft::distance(first, last);
-			// 	if (_capacity < len)
-			// 	{
-			// 		// clear();
-			// 		// reserve(len);
-			// 		_deleteArr(_arr);
-			// 		_capacity = last - first;
-			// 		if (_capacity)
-			// 			_arr = _alloc.allocate(_capacity);
-			// 		while (first != last)
-			// 		{
-			// 			_alloc.construct(_arr + i, *first);
-			// 			++first;
-			// 			++i;
-			// 		}
-			// 	}
-			// 	else
-			// 	{
-			// 		pointer end = _arr + _size;
-			// 		pointer tmp = _arr;
-			// 		_size = 0;
-			// 		while (first != last)
-			// 		{
-			// 			if (tmp < tmp)
-			// 				*tmp = *first;
-			// 			else
-			// 				_alloc.construct(tmp, *first);
-			// 			++tmp;
-			// 			++first;
-			// 			++i;
-			// 		}
-			// 		while (tmp < end)
-			// 			_alloc.destroy(tmp++);
-			// 	}
-			// 	_size = i;
-			// }
-
 			/*MODIFIERS*/
 			template <class It> 
 			void assign (It first, It last, typename ft::enable_if<!ft::is_integral<It>::value, bool>::type = true)
@@ -360,16 +252,18 @@ namespace ft
 					return;
 				} 
 				pointer tmp = _arr;
-				for (size_type i = 0; i < n; i++, tmp++) {
+				for (size_type i = 0; i < n; i++)
+				{
 					if (i < _size)
 						*tmp = val;
 					else
 						_alloc.construct(tmp, val);
+					++tmp;
 				}
 				if (_size >= n)
 				{
-					for (size_type i = n; i < _size; i++, tmp++)
-						_alloc.destroy(tmp);
+					for (size_type i = n; i < _size; ++i)
+						_alloc.destroy(tmp++);
 				}
 				_size = n;
 			}
@@ -394,65 +288,53 @@ namespace ft
 				return (iterator(_arr + offset));
 			}
 
-			void insert(iterator position, size_type n, value_type const &val)
+			void insert(iterator pos, size_type n, value_type const &val)
 			{
 				if (!n)
 					return;
-				size_type startIndex = position - begin();
-				if (_size + n >= _capacity)
+				if (_size + n > _alloc.max_size())
+					throw (std::length_error("Above the max size"));
+				if (!_size)
 				{
-					if (!_capacity && n == 1)
-						reserve(1);
-					else if (_size << 1 < _size + n)
-						reserve(_size + n);
+					assign(n, val);
+					return;
+				}
+				if (_capacity >= _size + n)
+				{
+					if (pos != end())
+						_insertRightWay(pos, n, val);
 					else
-						reserve(_size << 1);
+					{
+						for (size_type i = 0; i < n; ++i)
+							push_back(val);
+					}
 				}
-				for (size_type i = n + _size - 1; i > startIndex + n - 1; --i)
+				else
 				{
-					_alloc.construct(_arr + i, *(_arr + (i - n)));
-					_alloc.destroy(_arr + (i - n));
+					pointer oldArr = NULL;
+					size_type oldCap = 0;
+					size_type oldSize = 0;
+					difference_type index = pos - begin();
+					if ((_size << 1) < _size + n)
+						oldArr = _reserveNoDelete(_size + n, oldCap, oldSize);
+					else
+						oldArr = _reserveNoDelete(_size << 1, oldCap, oldSize);
+					_moveConstruct(n, val, index);
+					if (!oldArr)
+						return ;
+					for (size_type i = 0; i < oldSize; ++i)
+						_alloc.destroy(oldArr + i);
+					_alloc.deallocate(oldArr, oldCap);
 				}
-				for (size_type i = startIndex; i < startIndex + n; ++i)
-					_alloc.construct(_arr + i, val);
-				_size += n;
 			}
 
 			template<class It>
 			void	insert(iterator position, It first, It last, typename ft::enable_if<!ft::is_integral<It>::value, bool>::type = true)
 			{
-				size_type startIndex = position - begin();
-				size_type diff = ft::distance(first, last);
-
-				pointer oldArr = NULL;
-				size_type oldCap = 0;
-				size_type oldSize = 0;
-
-				if (_size + diff >= _capacity)
-				{
-					if (!_capacity && diff == 1)
-						oldArr = _reserveNoDelete(1, oldCap, oldSize);
-					else if (_size << 1 < _size + diff)
-						oldArr = _reserveNoDelete(_size + diff, oldCap, oldSize);
-					else
-						oldArr = _reserveNoDelete(_size << 1, oldCap, oldSize);
-				}
-				for (size_type i = diff + _size - 1; i > startIndex + diff - 1; --i)
-				{
-					_alloc.construct(_arr + i, *(_arr + (i - diff)));
-					_alloc.destroy(_arr + (i - diff));
-				}
-				for (size_type i = startIndex; i < startIndex + diff; ++i)
-				{
-					_alloc.construct(_arr + i, *first);
-					first++;
-				}
-				_size += diff;
-				if (!oldArr)
-					return;
-				for (size_type i = 0; i < oldSize; ++i)
-					_alloc.destroy(oldArr + i);
-				_alloc.deallocate(oldArr, oldCap);
+				if (_capacity)
+					_insertDispatch(position, first, last, typename ft::iterator_traits<It>::iterator_category());
+				else
+					assign(first, last);
 			}
 
 			iterator erase(iterator position)
@@ -473,23 +355,20 @@ namespace ft
 				difference_type diff = last - first;
 				if (first == last)
 					return (iterator(first));
+
 				if (last == end())
 				{
-					for (difference_type i = 0; i < diff - 1; ++i)
+					for (difference_type i = 0; i < diff; ++i)
 						_alloc.destroy(&(*first) + i);
 					_size -= diff;
 					return (iterator(first));
 				}
+
 				iterator tmp(first);
-				while (last != end())
-				{
-					*tmp = *last;
-					last++;
-					tmp++;
-				}
-				for (difference_type i = 0; i < diff - 1; ++i)
-					_alloc.destroy(&(*first) + i);
-				_size -= diff;
+				_copyRange(last, end(), tmp);
+				for (difference_type i = 0; i < diff; ++i)
+					_alloc.destroy(_arr + _size - 1 - i);
+				_size -= diff;	
 				return (iterator(first));
 			}
 
@@ -521,6 +400,17 @@ namespace ft
 			size_type 		_size;
 			size_type 		_capacity;
 
+			template<class It, class Ot>
+			void _copyRange(It first, It last, Ot destFirst)
+			{
+				while (first != last)
+				{
+					*destFirst = *first;
+					++destFirst;
+					++first;
+				}
+			}
+
 			void	_deleteArr(pointer arr)
 			{
 				if (!arr)
@@ -547,6 +437,216 @@ namespace ft
 				_arr = newArr;
 				return (res);
 			}
+
+			void	_insertRightWay(iterator pos, size_type n, value_type const &val)
+			{
+				pointer end = _arr + _size;
+				pointer tmp_end = end - 1;
+				pointer	new_end = end + n - 1;
+				while (tmp_end != pos.base())
+				{
+					if (end > new_end)
+						*new_end = *tmp_end;
+					else
+						_alloc.construct(new_end, *tmp_end);
+					--new_end;
+					--tmp_end;
+				}
+
+				if (end > new_end)
+					*new_end = *tmp_end;
+				else
+					_alloc.construct(new_end, *tmp_end);
+
+				pointer tmp = pos.base();
+				for (size_type i = 0; i < n; ++i)
+				{
+					if (end > tmp)
+						*tmp = val;
+					else
+						_alloc.construct(tmp, val);
+					++tmp;
+				}
+				_size += n;
+			}
+
+			template <class It>
+			void	_insertRightWay(size_type diff, iterator pos, It first, It last)
+			{
+				pointer end = _arr + _size;
+				pointer tmp_end = end - 1;
+				pointer	new_end = end + diff - 1;
+				while (tmp_end != pos.base())
+				{
+					if (end > new_end)
+						*new_end = *tmp_end;
+					else
+						_alloc.construct(new_end, *tmp_end);
+					--new_end;
+					--tmp_end;
+				}
+
+				if (end > new_end)
+					*new_end = *tmp_end;
+				else
+					_alloc.construct(new_end, *tmp_end);
+
+				pointer tmp = pos.base();
+				while (first != last)
+				{
+					if (end > tmp)
+						*tmp = *first;
+					else
+						_alloc.construct(tmp, *first);
+					++first;
+					++tmp;
+				}
+				_size += diff;
+			}
+
+			template <class It>
+			iterator	_insertDispatch(iterator pos, It first, It last, std::input_iterator_tag)
+			{
+				vector copy(first, last);
+				_insertDispatch(pos, copy.begin(), copy.end(), std::random_access_iterator_tag());
+				return (pos);
+			}
+
+
+			template <class It>
+			void	_moveConstruct(size_type diff, It first, size_type startIndex, typename ft::enable_if<!ft::is_integral<It>::value, bool>::type = true)
+			{
+				for (size_type i = diff + _size - 1; i > startIndex + diff - 1; --i)
+				{
+					_alloc.construct(_arr + i, *(_arr + (i - diff)));
+					_alloc.destroy(_arr + (i - diff));
+				}
+				for (size_type i = startIndex; i < startIndex + diff; ++i)
+					_alloc.construct(_arr + i, *first++);
+				_size += diff;
+			}
+
+			void	_moveConstruct(size_type n, value_type const &val, size_type startIndex)
+			{
+				for (size_type i = n + _size - 1; i > startIndex + n - 1; --i)
+				{
+					_alloc.construct(_arr + i, *(_arr + (i - n)));
+					_alloc.destroy(_arr + (i - n));
+				}
+				for (size_type i = startIndex; i < startIndex + n; ++i)
+					_alloc.construct(_arr + i, val);
+				_size += n;
+			}
+
+			template <class It>
+			iterator	_insertDispatch(iterator pos, It first, It last, std::random_access_iterator_tag)
+			{
+				if (first == last)
+					return (pos);
+				size_type diff = last - first;
+				if (_size + diff > _alloc.max_size())
+					throw (std::length_error("Above the max size"));
+				if (!_size)
+				{
+					assign(first, last);
+					return (begin());
+				}
+				if (_capacity >= _size + diff)
+				{
+					if (pos != end())
+						_insertRightWay(diff, pos, first, last);
+					else
+					{
+						while (first != last)
+							push_back(*first++);
+					}
+				}
+				else
+				{
+					pointer oldArr = NULL;
+					size_type oldCap = 0;
+					size_type oldSize = 0;
+					difference_type index = pos - begin();
+					if ((_size << 1) < _size + diff)
+						oldArr = _reserveNoDelete(_size + diff, oldCap, oldSize);
+					else
+						oldArr = _reserveNoDelete(_size << 1, oldCap, oldSize);
+					_moveConstruct(diff, first, index);
+					if (!oldArr)
+						return (pos);
+					for (size_type i = 0; i < oldSize; ++i)
+						_alloc.destroy(oldArr + i);
+					_alloc.deallocate(oldArr, oldCap);
+				}
+				return (pos);
+			}
+			
+			template <class It>
+			void	_assignDispatch(It first, It last, std::input_iterator_tag)
+			{
+				size_type oldSize = _size;
+				pointer tmp = _arr;
+				_size = 0;
+				while (first != last)
+				{
+					if (oldSize)
+					{
+						if (_size > _alloc.max_size())
+							throw (std::length_error("Above the max size"));
+						*tmp = *first;
+						++tmp;
+						--oldSize;
+						++_size;
+					}
+					else
+						push_back(*first);
+					++first;
+				}
+				for (size_type i = 0; i < oldSize; ++i, ++tmp)
+					_alloc.destroy(tmp);
+			}
+
+			template <class It>
+			void	_assignDispatch(It first, It last, std::random_access_iterator_tag)
+{
+				size_type i = 0;
+				size_type len = last - first;
+				if (len > _alloc.max_size())
+					throw (std::length_error("Above the max size"));
+				if (_capacity < len)
+				{
+					_deleteArr(_arr);
+					_capacity = len;
+					if (_capacity)
+						_arr = _alloc.allocate(_capacity);
+					while (first != last)
+					{
+						_alloc.construct(_arr + i, *first);
+						++first;
+						++i;
+					}
+				}
+				else
+				{
+					pointer end = _arr + _size;
+					pointer tmp = _arr;
+					_size = 0;
+					while (first != last)
+					{
+						if (tmp < end)
+							*tmp = *first;
+						else
+							_alloc.construct(tmp, *first);
+						++tmp;
+						++first;
+						++i;
+					}
+					while (tmp < end)
+						_alloc.destroy(tmp++);
+				}
+				_size = i;
+			}
+
 	};
 	/* RELATIONAL OP*/
 	template <class T, class Alloc>

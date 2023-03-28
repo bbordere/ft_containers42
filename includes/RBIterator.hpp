@@ -7,7 +7,7 @@
 namespace ft
 {
 	template <class T>
-	class RBIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
+	class RBIterator: public ft::iterator<std::bidirectional_iterator_tag, T>
 	{
 		public:
 			typedef	T				value_type;
@@ -130,10 +130,10 @@ namespace ft
 
 
 	template <class T>
-	class RBConstIterator: public ft::iterator<ft::bidirectional_iterator_tag, T>
+	class RBConstIterator: public ft::iterator<std::bidirectional_iterator_tag, T>
 	{
 		public:
-			typedef ft::bidirectional_iterator_tag	iterator_category;
+			typedef std::bidirectional_iterator_tag	iterator_category;
 			typedef	T								value_type;
 			typedef	const T&						reference;
 			typedef	const T*						pointer;

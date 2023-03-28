@@ -12,25 +12,7 @@
 	#include <set>
 #endif
 
-
 #include "test.hpp"
-// #include "printer.hpp"
-
-// template <typename T>
-// std::ostream &operator<<(std::ostream &stream, ft::vector<T> const &vec)
-// {
-// 	if (vec.empty())
-// 	{
-// 		stream << "[]";
-// 		return (stream);
-// 	}
-// 	stream << '[';
-// 	for (typename ft::vector<T>::const_iterator it = vec.begin(); it != vec.end() - 1; it++)
-// 		stream << *it << ", ";
-// 	stream << *(vec.end() - 1) << ']';
-// 	stream << ", size: " << vec.size() << ", capacity: " << vec.capacity();
-// 	return (stream);
-// }
 
 void	vectorTests(bool checkLeak)
 {
@@ -74,66 +56,61 @@ void	stackTests(bool checkLeak)
 
 int main(int ac, char **av)
 {
-	// std::string containers;
-	// for (int i = 1; i < ac - 1; ++i)
-	// 	containers += std::string(av[i]) + std::string(", ");
-	// if (ac != 1)
-	// 	containers += std::string(av[ac - 1]);
-	// for (std::size_t i = 0; i < containers.length(); ++i)
-	// 	containers[i] = std::tolower(containers[i]);
+	std::string containers;
+	for (int i = 1; i < ac - 1; ++i)
+		containers += std::string(av[i]) + std::string(", ");
+	if (ac != 1)
+		containers += std::string(av[ac - 1]);
+	for (std::size_t i = 0; i < containers.length(); ++i)
+		containers[i] = std::tolower(containers[i]);
 
-	// double timeVector = -1.0;
-	// double timeSet = -1.0;
-	// double timeMap = -1.0;
-	// double timeStack = -1.0;
-	// clock_t	start, end;
+	double timeVector = -1.0;
+	double timeSet = -1.0;
+	double timeMap = -1.0;
+	double timeStack = -1.0;
+	clock_t	start, end;
 
-	// bool	checkLeak = containers.find("leak") != std::string::npos;
-	// bool	testAll = containers.empty() || containers == "leak";
-	// if (testAll || containers.find("vector") != std::string::npos)
-	// {
-	// 	start = clock();
-	// 	vectorTests(checkLeak);
-	// 	end = clock();
-	// 	timeVector = static_cast<double>(end - start) / CLOCKS_PER_SEC;
-	// }
+	bool	checkLeak = containers.find("leak") != std::string::npos;
+	bool	testAll = containers.empty() || containers == "leak";
+	if (testAll || containers.find("vector") != std::string::npos)
+	{
+		start = clock();
+		vectorTests(checkLeak);
+		end = clock();
+		timeVector = static_cast<double>(end - start) / CLOCKS_PER_SEC;
+	}
 
-	// if (testAll || containers.find("map") != std::string::npos)
-	// {
-	// 	start = clock();
-	// 	mapTests(checkLeak);
-	// 	end = clock();
-	// 	timeMap = static_cast<double>(end - start) / CLOCKS_PER_SEC;
-	// }
+	if (testAll || containers.find("map") != std::string::npos)
+	{
+		start = clock();
+		mapTests(checkLeak);
+		end = clock();
+		timeMap = static_cast<double>(end - start) / CLOCKS_PER_SEC;
+	}
 
-	// if (testAll || containers.find("stack") != std::string::npos)
-	// {
-	// 	start = clock();
-	// 	stackTests(checkLeak);
-	// 	end = clock();
-	// 	timeStack = static_cast<double>(end - start) / CLOCKS_PER_SEC;
-	// }
+	if (testAll || containers.find("stack") != std::string::npos)
+	{
+		start = clock();
+		stackTests(checkLeak);
+		end = clock();
+		timeStack = static_cast<double>(end - start) / CLOCKS_PER_SEC;
+	}
 
-	// if (testAll || containers.find("set") != std::string::npos)
-	// {
-	// 	start = clock();
-	// 	setTests(checkLeak);
-	// 	end = clock();
-	// 	timeSet = static_cast<double>(end - start) / CLOCKS_PER_SEC;
-	// }
+	if (testAll || containers.find("set") != std::string::npos)
+	{
+		start = clock();
+		setTests(checkLeak);
+		end = clock();
+		timeSet = static_cast<double>(end - start) / CLOCKS_PER_SEC;
+	}
 
-	// if (timeVector != -1.0)
-	// 	std::cout << npName << "::vector routine takes " << timeVector * 1000 << " ms" << '\n';
-	// if (timeSet != -1.0)
-	// 	std::cout << npName << "::set routine takes " << timeSet * 1000 << " ms" << '\n';
-	// if (timeMap != -1.0)
-	// 	std::cout << npName << "::map routine takes " << timeMap * 1000 << " ms" << '\n';
-	// if (timeStack != -1.0)
-	// 	std::cout << npName << "::stack routine takes " << timeStack * 1000 << " ms" << '\n';
-	(void)ac;
-	(void)av;
-	NP::vector<int> vec;
-	for (int i = 0; i < 15; ++i)
-		vec.push_back(i);
-	std::cout << *(vec.erase(vec.begin() + 2, vec.end())) << '\n';
+	if (timeVector != -1.0)
+		std::cout << npName << "::vector routine takes " << timeVector * 1000 << " ms" << '\n';
+	if (timeSet != -1.0)
+		std::cout << npName << "::set routine takes " << timeSet * 1000 << " ms" << '\n';
+	if (timeMap != -1.0)
+		std::cout << npName << "::map routine takes " << timeMap * 1000 << " ms" << '\n';
+	if (timeStack != -1.0)
+		std::cout << npName << "::stack routine takes " << timeStack * 1000 << " ms" << '\n';
 }
+
