@@ -113,19 +113,6 @@ namespace ft
 			{
 				return (_ptr);
 			}
-
-			// friend bool	operator==(iterator const& x, iterator const& y) {
-			// 	return x.base() == y.base();
-			// }
-
-			// friend bool	operator!=(iterator const& x, iterator const& y) {
-			// 	return x.base() != y.base();
-			// }
-
-			// operator RBIterator<T const>(void) const
-			// {
-			// 	return (RBIterator<T const>(_ptr));
-			// }
 	};
 
 
@@ -185,59 +172,46 @@ namespace ft
 			{
 				return (_ptr);
 			}
-
-			// friend bool	operator==(const_iterator const& x, const_iterator const& y) {
-			// 	return x.base() == y.base();
-			// }
-
-			// friend bool	operator!=(const_iterator const& x, const_iterator const& y) {
-			// 	return x.base() != y.base();
-			// }
-
-			// operator RBIterator<T const>(void) const
-			// {
-			// 	return (RBIterator<T const>(_ptr));
-			// }
 	};
 
 	template <class ValueType1, class ValueType2>
 	bool operator == (const RBIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
-		return ( lhs.base() == rhs.base());
+		return (lhs.base() == rhs.base());
 	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator == (const RBConstIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
-		return ( lhs.base() == rhs.base());
+		return (lhs.base() == rhs.base());
 	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator == (const RBIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
-		return ( lhs.base() == rhs.base());
+		return (lhs.base() == rhs.base());
 	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator == (const RBConstIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
-		return ( lhs.base() == rhs.base());
+		return (lhs.base() == rhs.base());
 	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator != (const RBIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
-		return ( lhs.base() != rhs.base());
+		return (lhs.base() != rhs.base());
 	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator != (const RBConstIterator< ValueType1>& lhs, const RBIterator< ValueType2>& rhs) {
-		return ( lhs.base() != rhs.base());
+		return (lhs.base() != rhs.base());
 	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator != (const RBIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
-		return ( lhs.base() != rhs.base());
+		return (lhs.base() != rhs.base());
 	}
 
 	template <class ValueType1, class ValueType2>
 	bool operator != (const RBConstIterator< ValueType1>& lhs, const RBConstIterator< ValueType2>& rhs) {
-		return ( lhs.base() != rhs.base());
+		return (lhs.base() != rhs.base());
 	}
 }
 #endif

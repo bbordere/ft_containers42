@@ -67,12 +67,12 @@ namespace ft
 
 		public:
 			explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_tree(RBTree<value_type, value_compare, allocator_type>(value_compare(comp), alloc)) {}
+					_tree(treeType(value_compare(comp), alloc)) {}
 
 			template <class InputIterator>
 			map (InputIterator first, InputIterator last,
 				const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_tree(RBTree<value_type, value_compare, allocator_type>(value_compare(comp), alloc))
+					_tree(treeType(value_compare(comp), alloc))
 			{
 				insert(first, last);
 			}
@@ -159,7 +159,7 @@ namespace ft
 				return ((*i).second);
 			}
 
-			const mapped_type	&at(key_type const &key) const
+			mapped_type const	&at(key_type const &key) const
 			{
 				const_iterator i = find(key);
 				if (i == end())
@@ -189,33 +189,7 @@ namespace ft
 				_tree.insert(first, last);
 			}
 
-			iterator find(key_type const &key)
-			{
-				node_ptr ptr = _tree.search(ft::make_pair(key, T()));
-				if (ptr == _tree._nil)
-					return (_tree.end());
-				return (iterator(ptr));
-			}
-
-			const_iterator find(key_type const &key) const
-			{
-				node_ptr ptr = _tree.search(ft::make_pair(key, T()));
-				if (ptr == _tree._nil)
-					return (_tree.end());
-				return (const_iterator(ptr));
-			}
-
-			size_type	count(key_type const &k) const
-			{
-				return (_tree.search(ft::make_pair(k, mapped_type())) == _tree._nil ? 0 : 1);
-			}
-
 			void	erase(iterator position)
-			{
-				_tree.deleteNode(*position);
-			}
-
-			void	erase(const_iterator position)
 			{
 				_tree.deleteNode(*position);
 			}
@@ -238,15 +212,9 @@ namespace ft
 					erase(first++);
 			}
 
-			void	erase(const_iterator first, const_iterator last)
+			void	swap(map &other)
 			{
-				if (first == begin() && last == end())
-				{
-					clear();
-					return;
-				}
-				while (first != last)
-					erase(first++);
+				_tree.swap(other._tree);
 			}
 
 			void	clear(void)
@@ -257,9 +225,35 @@ namespace ft
 				_tree._size = 0;
 			}
 
-			void	swap(map &other)
+			key_compare key_comp(void) const
 			{
-				_tree.swap(other._tree);
+				return (key_compare());
+			}
+
+			value_compare value_comp(void) const
+			{
+				return (value_compare(key_comp()));
+			}
+
+			iterator find(key_type const &key)
+			{
+				node_ptr ptr = _tree.search(ft::make_pair(key, T()));
+				if (ptr == _tree._nil)
+					return (_tree.end());
+				return (iterator(ptr));
+			}
+
+			const_iterator find(key_type const &key) const
+			{
+				node_ptr ptr = _tree.search(ft::make_pair(key, T()));
+				if (ptr == _tree._nil)
+					return (_tree.end());
+				return (const_iterator(ptr));
+			}
+
+			size_type	count(key_type const &k) const
+			{
+				return (_tree.search(ft::make_pair(k, mapped_type())) == _tree._nil ? 0 : 1);
 			}
 
 			iterator lower_bound(key_type const &key)
@@ -267,16 +261,16 @@ namespace ft
 				iterator res = _tree.lower_bound(ft::make_pair(key, T()));
 				return (res);
 			}
+			
+			const_iterator lower_bound(key_type const &key) const
+			{
+				const_iterator res = _tree.lower_bound(ft::make_pair(key, T()));
+				return (res);
+			}
 
 			iterator upper_bound(key_type const &key)
 			{
 				iterator res = _tree.upper_bound(ft::make_pair(key, T()));
-				return (res);
-			}
-
-			const_iterator lower_bound(key_type const &key) const
-			{
-				const_iterator res = _tree.lower_bound(ft::make_pair(key, T()));
 				return (res);
 			}
 
@@ -294,16 +288,6 @@ namespace ft
 			ft::pair<const_iterator, const_iterator>	equal_range(key_type const &k) const
 			{
 				return (ft::make_pair(lower_bound(k), upper_bound(k)));
-			}
-
-			key_compare key_comp(void) const
-			{
-				return (key_compare());
-			}
-
-			value_compare value_comp(void) const
-			{
-				return (value_compare(key_comp()));
 			}
 
 			allocator_type get_allocator(void) const
@@ -358,6 +342,5 @@ namespace ft
 	{
 		return (!(x < y));
 	}
-
 }
 #endif

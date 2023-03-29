@@ -18,7 +18,6 @@ namespace ft
 			typedef typename _type::reference					reference;
 			typedef T											value_type;
 
-
 		protected:
 			pointer	_ptr;
 

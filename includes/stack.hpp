@@ -12,8 +12,8 @@ namespace ft
 			typedef Container 	container_type;
 			typedef T			value_type;
 			typedef	std::size_t	size_type;
-			typedef typename Container::reference reference;
-			typedef typename Container::const_reference const_reference;
+			typedef typename Container::reference		reference;
+			typedef typename Container::const_reference	const_reference;
 
 			explicit stack(container_type const &ct = container_type()): c(ct) {}
 
@@ -36,10 +36,7 @@ namespace ft
 				return (c.size());
 			}
 
-			virtual ~stack(void)
-			{
-				c.clear();
-			}
+			virtual ~stack(void) {}
 
 			value_type &top(void)
 			{

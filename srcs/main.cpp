@@ -113,4 +113,3 @@ int main(int ac, char **av)
 	if (timeStack != -1.0)
 		std::cout << npName << "::stack routine takes " << timeStack * 1000 << " ms" << '\n';
 }
-

@@ -16,12 +16,12 @@ namespace ft
 	class vector
 	{
 		public:
-			typedef T value_type;
-			typedef Alloc allocator_type;
-			typedef typename allocator_type::reference reference;
-			typedef typename allocator_type::const_reference const_reference;
-			typedef typename allocator_type::pointer pointer;
-			typedef typename allocator_type::const_pointer const_pointer;
+			typedef T		value_type;
+			typedef Alloc	allocator_type;
+			typedef typename allocator_type::reference			reference;
+			typedef typename allocator_type::const_reference	const_reference;
+			typedef typename allocator_type::pointer			pointer;
+			typedef typename allocator_type::const_pointer 		const_pointer;
 
 			typedef ft::randomAccessIterators<value_type>		iterator;
 			typedef ft::randomAccessIterators<value_type const>	const_iterator;
@@ -32,13 +32,19 @@ namespace ft
 			typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 			typedef std::size_t												size_type;
 		
+		private:
+			allocator_type	_alloc;
+			pointer			_arr;
+			size_type 		_size;
+			size_type 		_capacity;
+
 		public:
 			explicit vector(allocator_type const &alloc = allocator_type()): _alloc(alloc), _arr(NULL), _size(0), _capacity(0)  {}
 
 			explicit vector (size_type n, value_type const &val = value_type(), allocator_type const &alloc = allocator_type()):
 							_alloc(alloc), _arr(NULL), _size(0), _capacity(0)
 			{
-				if (n >= _alloc.max_size())
+				if (n > _alloc.max_size())
 					throw std::length_error("Above the max size");
 				_arr = _alloc.allocate(n);
 				_capacity = n;
@@ -240,7 +246,7 @@ namespace ft
 			void	assign(size_type n, value_type const &val)
 			{
 				if (n > _alloc.max_size())
-					throw (std::length_error("Over max size"));
+					throw (std::length_error("Above the max size"));
 				if (n > _capacity)
 				{
 					_deleteArr(_arr);
@@ -394,12 +400,6 @@ namespace ft
 			}
 
 		private:
-
-			allocator_type	_alloc;
-			pointer			_arr;
-			size_type 		_size;
-			size_type 		_capacity;
-
 			template<class It, class Ot>
 			void _copyRange(It first, It last, Ot destFirst)
 			{
@@ -608,7 +608,7 @@ namespace ft
 
 			template <class It>
 			void	_assignDispatch(It first, It last, std::random_access_iterator_tag)
-{
+			{
 				size_type i = 0;
 				size_type len = last - first;
 				if (len > _alloc.max_size())
@@ -646,7 +646,6 @@ namespace ft
 				}
 				_size = i;
 			}
-
 	};
 	/* RELATIONAL OP*/
 	template <class T, class Alloc>

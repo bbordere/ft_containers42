@@ -9,12 +9,12 @@
 
 namespace ft
 {
-	template <class T, class Compare=std::less<T>, class Alloc=std::allocator<T> >
+	template <class T, class Compare = std::less<T>, class Alloc = std::allocator<T> >
 	class set
 	{
 		public:
-			typedef	T 			value_type;
 			typedef	T 			key_type;
+			typedef	T 			value_type;
 			typedef Compare		key_compare;
 			typedef Compare		value_compare;
 			typedef Alloc 		allocator_type;
@@ -64,15 +64,15 @@ namespace ft
 			{
 				return (_tree.begin());
 			}
+			
+			const_iterator begin(void) const
+			{
+				return (_tree.begin());
+			}
 
 			iterator end(void)
 			{
 				return (_tree.end());
-			}
-
-			const_iterator begin(void) const
-			{
-				return (_tree.begin());
 			}
 
 			const_iterator end(void) const
@@ -85,14 +85,14 @@ namespace ft
 				return (reverse_iterator(end()));
 			}
 
-			reverse_iterator rend(void)
-			{
-				return (reverse_iterator(begin()));
-			}
-
 			const_reverse_iterator rbegin(void) const
 			{
 				return (_tree.end());
+			}
+
+			reverse_iterator rend(void)
+			{
+				return (reverse_iterator(begin()));
 			}
 
 			const_reverse_iterator rend(void) const
@@ -125,16 +125,16 @@ namespace ft
 				return (ft::make_pair(iterator(pos), true));
 			}
 
-			template <class InputIterator>			
-			void	insert(InputIterator first, InputIterator last)
-			{
-				_tree.insert(first, last);
-			}
-
 			iterator insert (iterator position, const value_type& val)
 			{
 				static_cast<void>(position);
 				return (insert(val).first);
+			}
+
+			template <class InputIterator>			
+			void	insert(InputIterator first, InputIterator last)
+			{
+				_tree.insert(first, last);
 			}
 
 			void	erase(iterator position)

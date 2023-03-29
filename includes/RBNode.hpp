@@ -117,5 +117,4 @@ std::ostream &operator<<(std::ostream &stream, RBNode<T> const &node)
 	return (stream); 
 }
 
-
 #endif

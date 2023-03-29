@@ -30,4 +30,5 @@ void	constructorStackTest(void);
 void	constructor2StackTest(void);
 void	compStackTest(void);
 void	speedStackTest(void);
+
 #endif

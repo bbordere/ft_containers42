@@ -14,9 +14,10 @@ namespace ft
 	{
 		private:
 			typedef typename ft::iterator_traits<Iter> _type;
+
 		public:
+			typedef Iter													iterator_type;
 			typedef typename ft::iterator_traits<Iter>::iterator_category	iterator_category;
-			typedef Iter								iterator_type;
 			typedef typename ft::iterator_traits<Iter>::value_type			value_type;
 			typedef typename ft::iterator_traits<Iter>::difference_type		difference_type;
 			typedef typename ft::iterator_traits<Iter>::pointer 			pointer;
@@ -28,9 +29,7 @@ namespace ft
 		public:
 			reverseIterator(void): _it() {}
 
-			reverseIterator(iterator_type it): _it(it) {}
-
-			reverseIterator(reverseIterator const &copy): _it(copy._it) {}
+			explicit reverseIterator(iterator_type it): _it(it) {}
 
 			template <class It>
 			reverseIterator(reverseIterator<It> const &copy): _it(copy.base()) {}
@@ -125,7 +124,6 @@ namespace ft
 	{
 		return  rhs.base() - lhs.base();
 	}
-		
 
 	template <class T>
 	bool	operator<(reverseIterator<T> const& lhs, reverseIterator<T> const& rhs)

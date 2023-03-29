@@ -50,12 +50,6 @@ namespace ft
 	template <>
 	struct is_integral<unsigned long> : true_type {};
 
-	// template <>
-	// struct is_integral<long long> : true_type {};
-
-	// template <>
-	// struct is_integral<unsigned long long> : true_type {};
-
 	template<bool condition, class T = void>
 	struct enable_if {};
 
@@ -76,8 +70,6 @@ namespace ft
 	{
 		static const bool value = true;		
 	};
-	
-
 }
 
 #endif

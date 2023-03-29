@@ -3,6 +3,7 @@
 #ifndef NP
 	#define NP ft
 	#include "ft_containers.hpp"
+	#include "RBNode.hpp"
 #else
 	#define NP std
 	#include <map>
