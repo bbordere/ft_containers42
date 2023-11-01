@@ -20,14 +20,14 @@ DEPS = $(OBJS:.o=.d)
 STD_DEPS = $(STD_OBJS:.o=.d)
 
 $(OBJ_DIR)%.o: $(SRCS_DIR)%.cpp
-	@mkdir -p $(OBJ_DIR)
-	@ printf "$(YELLOW)Compiling: " $@ $(RESET)
-	$(CXX) $(CXXFLAGS) -I $(INC_DIR) -c $< -o $@
+	@ mkdir -p $(OBJ_DIR)
+	@ printf "$(YELLOW)Compiling: %s$(RESET)\n" $@
+	@ $(CXX) $(CXXFLAGS) -I $(INC_DIR) -c $< -o $@
 
 $(STD_OBJ_DIR)%.o: $(SRCS_DIR)%.cpp
-	@mkdir -p $(STD_OBJ_DIR)
-	@ printf "$(YELLOW)Compiling: " $@ $(RESET)
-	$(CXX) $(CXXFLAGS) -D NP=std -I $(INC_DIR) -c $< -o $@
+	@ mkdir -p $(STD_OBJ_DIR)
+	@ printf "$(YELLOW)Compiling: %s$(RESET)\n" $@
+	@ $(CXX) $(CXXFLAGS) -D NP=std -I $(INC_DIR) -c $< -o $@
 
 BLUE = \033[34m
 RESET = \033[0m
@@ -43,10 +43,10 @@ all: $(NAME) $(STD_NAME)
 	@ printf "$(BLUE)/_/     /_/     \____/\____/_/ |_/ /_/ /_/  |_/___/_/ |_/_____/_/ |_|/____/   $(RESET) \n"
                                                                              
 $(NAME): $(OBJS)
-	$(CXX) $(CXXFLAGS) -I $(INC_DIR) $(OBJS) -o $@
+	@$(CXX) $(CXXFLAGS) -I $(INC_DIR) $(OBJS) -o $@
 
 $(STD_NAME): $(STD_OBJS)
-	$(CXX) $(CXXFLAGS) -D NP=std -I $(INC_DIR) $(STD_OBJS) -o $@
+	@$(CXX) $(CXXFLAGS) -D NP=std -I $(INC_DIR) $(STD_OBJS) -o $@
 
 clean:
 	@ rm -rf $(OBJ_DIR)
